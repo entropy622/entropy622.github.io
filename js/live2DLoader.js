@@ -3,11 +3,11 @@ const config = {
   // 资源路径
   path: {
     modelPath: "/Resources/",
-    cssPath: cdnPath + "/waifu.css",
-    tipsJsonPath: cdnPath + "/waifu-tips.json",
-    tipsJsPath: cdnPath + "/waifu-tips.js",
-    live2dCorePath: cdnPath + "/Core/live2dcubismcore.js",
-    live2dSdkPath: cdnPath + "/live2d-sdk.js"
+    cssPath: "css/waifu.css",
+    tipsJsonPath: "Resources/waifu-tips.json",
+    tipsJsPath: "js/waifu-tips.js",
+    live2dCorePath: "js/live2dcubismcore.js",
+    live2dSdkPath: "js/live2d-sdk.js"
   },
   // 工具栏
   tools: ["hitokoto", "asteroids", "express", "switch-model","info", "quit"],
