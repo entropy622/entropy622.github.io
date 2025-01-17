@@ -2,40 +2,40 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://entropy622.github.io/index.html/en/</loc>
+    <loc>https://entropy622.github.io/en/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://entropy622.github.io/index.html/"
+                href="https://entropy622.github.io/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://entropy622.github.io/index.html/en/"
+                href="https://entropy622.github.io/en/"
                 />
   </url><url>
-    <loc>https://entropy622.github.io/index.html/en/categories/</loc>
+    <loc>https://entropy622.github.io/en/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://entropy622.github.io/index.html/categories/"
+                href="https://entropy622.github.io/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://entropy622.github.io/index.html/en/categories/"
+                href="https://entropy622.github.io/en/categories/"
                 />
   </url><url>
-    <loc>https://entropy622.github.io/index.html/en/tags/</loc>
+    <loc>https://entropy622.github.io/en/tags/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh-cn"
-                href="https://entropy622.github.io/index.html/tags/"
+                href="https://entropy622.github.io/tags/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://entropy622.github.io/index.html/en/tags/"
+                href="https://entropy622.github.io/en/tags/"
                 />
   </url>
 </urlset>
