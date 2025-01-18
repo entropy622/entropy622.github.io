@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
     <head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="">
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="关注终焉的木兰花喵~">
 <title>Pages</title>
 
 <link rel='canonical' href='https://entropy622.github.io/page/'>
 
-<link rel="stylesheet" href="/scss/style.min.663803bebe609202d5b39d848f2d7c2dc8b598a2d879efa079fa88893d29c49c.css"><meta property='og:title' content="Pages">
-<meta property='og:description' content="">
+<link rel="stylesheet" href="/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="Pages">
+<meta property='og:description' content="关注终焉的木兰花喵~">
 <meta property='og:url' content='https://entropy622.github.io/page/'>
 <meta property='og:site_name' content='回首空城'>
 <meta property='og:type' content='website'><meta property='og:updated_time' content=' 2025-01-17T00:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="Pages">
-<meta name="twitter:description" content=""><link rel="alternate" type="application/rss&#43;xml" href="https://entropy622.github.io/page/index.xml">
+<meta name="twitter:description" content="关注终焉的木兰花喵~"><link rel="alternate" type="application/rss&#43;xml" href="https://entropy622.github.io/page/index.xml">
     <link rel="shortcut icon" href="/icon.ico" />
+
+  
+
 
     </head>
     <body class="">
@@ -56,7 +59,7 @@
                     
                     
                         
-                        <img src="/img/avatar_hu3911579687515700984.png" width="300"
+                        <img src="/img/avatar_hud9e0e7c4951e871acf83365066e399f1_1041756_300x0_resize_box_3.png" width="300"
                             height="300" class="site-logo" loading="lazy" alt="Avatar">
                     
                 
@@ -68,7 +71,7 @@
         
         <div class="site-meta">
             <h1 class="site-name"><a href="/">回首空城</a></h1>
-            <h2 class="site-description"></h2>
+            <h2 class="site-description">关注终焉的木兰花喵~</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -258,8 +261,6 @@
     </ol>
 </aside>
 
-
-
     <aside class="sidebar right-sidebar sticky">
         
             
@@ -360,9 +361,6 @@
     </aside>
 
 
-
-
-
             <main class="main full-width">
     <header>
         <h3 class="section-title">
@@ -437,14 +435,13 @@
         
             2020 - 
         
-        2025 Aentro
+        2025 回首空城
     </section>
     
     <section class="powerby">
         使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
-        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.29.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
-    
 </footer>
 
 
@@ -454,7 +451,7 @@
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e9a3bafd846ced4c345d084b355fb8c7bae75701c338f8a1f8a82c780137826.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -465,10 +462,77 @@
 
         document.head.appendChild(customFont);
     }());
-    
 </script>
 
-<script src="my_js/live2DLoader.js"></script> 
+<script>
+  
+const config = {
+  
+  path: {
+    modelPath: "/Resources/",
+    cssPath: "https://entropy622.github.io/my_css/waifu.css",
+    tipsJsonPath: "https://entropy622.github.io/Resources/waifu-tips.json",
+    tipsJsPath: "https://entropy622.github.io/my_js/waifu-tips.js",
+    live2dCorePath: "https://entropy622.github.io/my_js/live2dcubismcore.js",
+    live2dSdkPath: "https://entropy622.github.io/my_js/live2d-sdk.js"
+  },
+  
+  tools: ["hitokoto", "asteroids", "express", "switch-model","info", "quit"],
+  
+  drag: {
+    enable: true,
+    direction: ["x", "y"]
+  },
+  
+  switchType: "order"
+}
+
+
+
+if (screen.width >= 255) {
+  Promise.all([
+    loadExternalResource(config.path.cssPath, "css"),
+    loadExternalResource(config.path.live2dCorePath, "js"),
+    loadExternalResource(config.path.live2dSdkPath, "js"),
+    loadExternalResource(config.path.tipsJsPath, "js")
+  ]).then(() => {
+    initWidget({
+      waifuPath: config.path.tipsJsonPath,
+      cdnPath: config.path.modelPath,
+      tools: config.tools,
+      dragEnable: config.drag.enable,
+      dragDirection: config.drag.direction,
+      switchType: config.switchType
+    });
+  });
+}
+
+
+function loadExternalResource(url, type) {
+  return new Promise((resolve, reject) => {
+    let tag;
+    if (type === "css") {
+      tag = document.createElement("link");
+      tag.rel = "stylesheet";
+      tag.href = url;
+    }
+    else if (type === "js") {
+      tag = document.createElement("script");
+      tag.src = url;
+    }
+    if (tag) {
+      tag.onload = () => resolve(url);
+      tag.onerror = () => reject(url);
+      document.head.appendChild(tag);
+    }
+  });
+}
+</script>
+
+
+  
+  
+
 
     </body>
 </html>
