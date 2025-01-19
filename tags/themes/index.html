@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-cn" dir="ltr">
-    <head><meta charset='utf-8'>
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="关注终焉的木兰花喵~">
 <title>Tag: Themes - 回首空城</title>
 
-<link rel='canonical' href='https://entropy622.github.io/tags/themes/'>
+<link rel='canonical' href='http://localhost:1313/tags/themes/'>
 
 <link rel="stylesheet" href="/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="Tag: Themes - 回首空城">
 <meta property='og:description' content="关注终焉的木兰花喵~">
-<meta property='og:url' content='https://entropy622.github.io/tags/themes/'>
+<meta property='og:url' content='http://localhost:1313/tags/themes/'>
 <meta property='og:site_name' content='回首空城'>
 <meta property='og:type' content='website'><meta property='og:updated_time' content=' 2025-01-18T00:00:00&#43;00:00 '/>
 <meta name="twitter:title" content="Tag: Themes - 回首空城">
-<meta name="twitter:description" content="关注终焉的木兰花喵~"><link rel="alternate" type="application/rss&#43;xml" href="https://entropy622.github.io/tags/themes/index.xml">
+<meta name="twitter:description" content="关注终焉的木兰花喵~"><link rel="alternate" type="application/rss&#43;xml" href="http://localhost:1313/tags/themes/index.xml">
     <link rel="shortcut icon" href="/icon.ico" />
 
   
@@ -173,7 +173,7 @@
         
         
         <li >
-            <a href='/%E6%90%9C%E7%B4%A2/' >
+            <a href='/search/' >
                 
                 
                 
@@ -186,7 +186,7 @@
 
 
                 
-                <span>搜索</span>
+                <span>Search</span>
             </a>
         </li>
         
@@ -226,9 +226,9 @@
 
                             <select name="language" title="language" onchange="window.location.href = this.selectedOptions[0].value">
                                 
-                                    <option value="https://entropy622.github.io/en/" >English</option>
+                                    <option value="http://localhost:1313/en/" >English</option>
                                 
-                                    <option value="https://entropy622.github.io/" selected>中文</option>
+                                    <option value="http://localhost:1313/" selected>中文</option>
                                 
                             </select>
                         </li>
@@ -264,7 +264,23 @@
     <aside class="sidebar right-sidebar sticky">
         
             
-                
+                <form action="/search/" class="search-form widget" >
+        <p>
+            <label>搜索</label>
+            <input name="keyword" required placeholder="输入关键词..." />
+        
+            <button title="搜索">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+            </button>
+        </p>
+    </form>
             
         
             
@@ -446,11 +462,11 @@ const config = {
   
   path: {
     modelPath: "/Resources/",
-    cssPath: "https://entropy622.github.io/my_css/waifu.css",
-    tipsJsonPath: "https://entropy622.github.io/Resources/waifu-tips.json",
-    tipsJsPath: "https://entropy622.github.io/my_js/waifu-tips.js",
-    live2dCorePath: "https://entropy622.github.io/my_js/live2dcubismcore.js",
-    live2dSdkPath: "https://entropy622.github.io/my_js/live2d-sdk.js"
+    cssPath: "http://localhost:1313/my_css/waifu.css",
+    tipsJsonPath: "http://localhost:1313/Resources/waifu-tips.json",
+    tipsJsPath: "http://localhost:1313/my_js/waifu-tips.js",
+    live2dCorePath: "http://localhost:1313/my_js/live2dcubismcore.js",
+    live2dSdkPath: "http://localhost:1313/my_js/live2d-sdk.js"
   },
   
   tools: ["hitokoto", "asteroids", "express", "switch-model","info", "quit"],
