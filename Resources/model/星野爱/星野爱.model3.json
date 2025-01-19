@@ -3,8 +3,8 @@
 	"FileReferences": {
 		"Moc": "星野爱.moc3",
 		"Textures": [
-			"星野爱.8192/texture_00.png",
-			"星野爱.8192/texture_01.png"
+			"星野爱.8192/texture_00.webp",
+			"星野爱.8192/texture_01.webp"
 		],
 		"Physics": "星野爱.physics3.json",
 		"DisplayInfo": "星野爱.cdi3.json",

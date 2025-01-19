@@ -3,7 +3,7 @@
 	"FileReferences": {
 		"Moc": "ulk.moc3",
 		"Textures": [
-			"ulk.2048/texture_00.png"
+			"ulk.2048/texture_00.webp"
 		],
 		"Physics": "ulk.physics3.json",
 		"DisplayInfo": "ulk.cdi3.json"
