@@ -306,6 +306,145 @@ $$&lt;/p&gt;
         <description></description>
         </item>
         <item>
+        <title>DeepSeek</title>
+        <link>https://entropy622.github.io/deepseek/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        
+        <guid>https://entropy622.github.io/deepseek/</guid>
+        <description>&lt;style&gt;
+#deepseek-chat-container {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#deepseek-chat-container .chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+}
+
+#deepseek-chat-container .input-area {
+    display: flex;
+    padding: 10px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+#deepseek-chat-container .input-area select {
+    flex: 1;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#deepseek-chat-container .input-area input {
+    flex: 2;
+    margin-right: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#deepseek-chat-container .input-area button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#deepseek-chat-container .input-area button:hover {
+    background-color: #0056b3;
+}
+
+#deepseek-chat-container .message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+}
+
+#deepseek-chat-container .user-message {
+    background-color: #dcf8c6;
+    align-self: flex-end;
+}
+
+#deepseek-chat-container .assistant-message {
+    background-color: #e9ecef;
+    align-self: flex-start;
+}
+&lt;/style&gt;
+&lt;div class=&#34;chat-container&#34; id=&#34;deepseek-chat-container&#34;&gt;
+    &lt;div class=&#34;chat-box&#34; id=&#34;chat-box&#34;&gt;&lt;/div&gt;
+    &lt;div class=&#34;input-area&#34;&gt;
+        &lt;select id=&#34;model-selector&#34;&gt;
+            &lt;option value=&#34;deepseek-ai/DeepSeek-V2.5&#34;&gt;DeepSeek-V2.5&lt;/option&gt;
+            &lt;option value=&#34;deepseek-ai/DeepSeek-V3&#34;&gt;DeepSeek-V3&lt;/option&gt;
+            &lt;option value=&#34;deepseek-ai/DeepSeek-R1&#34;&gt;DeepSeek-R1&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;input type=&#34;text&#34; id=&#34;user-input&#34; placeholder=&#34;请输入您的问题...&#34; /&gt;
+        &lt;button onclick=&#34;sendMessage()&#34;&gt;发送&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+// 既然你翻到了这里，那也没办法了，这个密钥上面也没什么钱。
+const apiKey = &#39;sk-hyqfvwdisyofoklsbjabpxzgtrcludkcjapwsdsnwhmloolo&#39;;  // 替换为您的API密钥
+const apiUrl = &#39;https://api.siliconflow.cn/v1/chat/completions&#39;;
+
+async function sendMessage() {
+    const userInput = document.getElementById(&#39;user-input&#39;).value;
+    if (!userInput.trim()) return;  // 如果输入为空，直接返回
+
+    appendMessage(userInput, &#39;user&#39;);
+    document.getElementById(&#39;user-input&#39;).value = &#39;&#39;;  // 清空输入框
+
+    const selectedModel = document.getElementById(&#39;model-selector&#39;).value;  // 获取用户选择的模型
+    const options = {
+        method: &#39;POST&#39;,
+        headers: {
+            Authorization: `Bearer ${apiKey}`,
+            &#39;Content-Type&#39;: &#39;application/json&#39;
+        },
+        body: JSON.stringify({
+            model: selectedModel,  // 使用用户选择的模型
+            messages: [{ role: &#39;user&#39;, content: userInput }],
+            max_tokens: 512,
+            temperature: 0.7,
+            top_p: 0.7,
+            top_k: 50,
+            frequency_penalty: 0.5,
+            n: 1
+        })
+    };
+
+    const response = await fetch(apiUrl, options);
+    const data = await response.json();
+    const assistantMessage = data.choices[0].message.content;
+
+    appendMessage(assistantMessage, &#39;assistant&#39;);
+}
+
+function appendMessage(message, sender) {
+    const chatBox = document.getElementById(&#39;chat-box&#39;);
+    const messageElement = document.createElement(&#39;div&#39;);
+    messageElement.classList.add(&#39;message&#39;);
+    messageElement.classList.add(sender === &#39;user&#39; ? &#39;user-message&#39; : &#39;assistant-message&#39;);
+    messageElement.textContent = message;
+    chatBox.appendChild(messageElement);
+    chatBox.scrollTop = chatBox.scrollHeight;  // 始终保持在最底部
+}
+&lt;/script&gt;
+</description>
+        </item>
+        <item>
         <title>关于</title>
         <link>https://entropy622.github.io/%E5%85%B3%E4%BA%8E/</link>
         <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
