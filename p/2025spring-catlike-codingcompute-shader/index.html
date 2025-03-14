@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr">
+    <head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="【Catlike Coding】Compute Shader">
+<title>2025spring 【Catlike Coding】Compute Shader</title>
+
+<link rel='canonical' href='https://entropy622.github.io/p/2025spring-catlike-codingcompute-shader/'>
+
+<link rel="stylesheet" href="/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css"><meta property='og:title' content="2025spring 【Catlike Coding】Compute Shader">
+<meta property='og:description' content="【Catlike Coding】Compute Shader">
+<meta property='og:url' content='https://entropy622.github.io/p/2025spring-catlike-codingcompute-shader/'>
+<meta property='og:site_name' content='回首空城'>
+<meta property='og:type' content='article'><meta property='article:section' content='Post' /><meta property='article:published_time' content='2025-03-11T00:00:00&#43;00:00'/><meta property='article:modified_time' content='2025-03-11T00:00:00&#43;00:00'/><meta property='og:image' content='https://entropy622.github.io/p/2025spring-catlike-codingcompute-shader/Unity.png' />
+<meta name="twitter:title" content="2025spring 【Catlike Coding】Compute Shader">
+<meta name="twitter:description" content="【Catlike Coding】Compute Shader"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='https://entropy622.github.io/p/2025spring-catlike-codingcompute-shader/Unity.png' />
+    <link rel="shortcut icon" href="/icon.ico" />
+
+  
+
+
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hud9e0e7c4951e871acf83365066e399f1_1041756_300x0_resize_box_3.png" width="300"
+                            height="300" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">回首空城</a></h1>
+            <h2 class="site-description">染上满穗病毒了</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://space.bilibili.com/396797468'
+                        target="_blank"
+                        title="Bilibili"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-bilibili"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v6a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4v-6z" /><path d="M8 3l2 3" /><path d="M16 3l-2 3" /><path d="M9 13v-2" /><path d="M15 11v2" /></svg>
+                        
+                    </a>
+                </li>
+            
+                <li>
+                    <a 
+                        href='https://github.com/entropy622'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <polyline points="5 12 3 12 12 3 21 12 19 12" />
+  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+  <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+</svg>
+
+
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%85%B3%E4%BA%8E/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="7" r="4" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+</svg>
+
+
+
+                
+                <span>关于</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/deepseek/' >
+                
+                
+                
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-github-copilot"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 18v-5.5c0 -.667 .167 -1.333 .5 -2" /><path d="M12 7.5c0 -1 -.01 -4.07 -4 -3.5c-3.5 .5 -4 2.5 -4 3.5c0 1.5 0 4 3 4c4 0 5 -2.5 5 -4z" /><path d="M4 12c-1.333 .667 -2 1.333 -2 2c0 1 0 3 1.5 4c3 2 6.5 3 8.5 3s5.499 -1 8.5 -3c1.5 -1 1.5 -3 1.5 -4c0 -.667 -.667 -1.333 -2 -2" /><path d="M20 18v-5.5c0 -.667 -.167 -1.333 -.5 -2" /><path d="M12 7.5l0 -.297l.01 -.269l.027 -.298l.013 -.105l.033 -.215c.014 -.073 .029 -.146 .046 -.22l.06 -.223c.336 -1.118 1.262 -2.237 3.808 -1.873c2.838 .405 3.703 1.797 3.93 2.842l.036 .204c0 .033 .01 .066 .013 .098l.016 .185l0 .171l0 .49l-.015 .394l-.02 .271c-.122 1.366 -.655 2.845 -2.962 2.845c-3.256 0 -4.524 -1.656 -4.883 -3.081l-.053 -.242a3.865 3.865 0 0 1 -.036 -.235l-.021 -.227a3.518 3.518 0 0 1 -.007 -.215z" /><path d="M10 15v2" /><path d="M14 15v2" /></svg>
+                
+                <span>DeepSeek</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/archives/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <rect x="3" y="4" width="18" height="4" rx="2" />
+  <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" />
+  <line x1="10" y1="12" x2="14" y2="12" />
+</svg>
+
+
+
+                
+                <span>归档</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/search/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="10" cy="10" r="7" />
+  <line x1="21" y1="21" x2="15" y2="15" />
+</svg>
+
+
+
+                
+                <span>搜索</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/%E5%8F%8B%E6%83%85%E9%93%BE%E6%8E%A5/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" />
+  <path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" />
+</svg>
+
+
+
+                
+                <span>友情链接</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>暗色模式</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#gpugraphcs">GPUGraph.cs</a></li>
+    <li><a href="#graphcomputeshadercompute">GraphComputeShader.compute</a></li>
+    <li><a href="#proceduredrawshader">ProcedureDraw.shader</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="has-image main-article">
+    <header class="article-header">
+        <div class="article-image">
+            <a href="/p/2025spring-catlike-codingcompute-shader/">
+                <img src="/p/2025spring-catlike-codingcompute-shader/Unity_hu12310998fa897105b281302b8594aee5_487097_800x0_resize_box_3.png"
+                        srcset="/p/2025spring-catlike-codingcompute-shader/Unity_hu12310998fa897105b281302b8594aee5_487097_800x0_resize_box_3.png 800w, /p/2025spring-catlike-codingcompute-shader/Unity_hu12310998fa897105b281302b8594aee5_487097_1600x0_resize_box_3.png 1600w"
+                        width="800" 
+                        height="357" 
+                        loading="lazy"
+                        alt="Featured image of post 2025spring 【Catlike Coding】Compute Shader" />
+                
+            </a>
+        </div>
+    
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            <a href="/categories/catlike-coding/" >
+                Catlike Coding
+            </a>
+        
+            <a href="/categories/unity/" >
+                Unity
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/p/2025spring-catlike-codingcompute-shader/">2025spring 【Catlike Coding】Compute Shader</a>
+        </h2>
+    
+        
+        <h3 class="article-subtitle">
+            【Catlike Coding】Compute Shader
+        </h3>
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published">2025-03-11</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    阅读时长: 3 分钟
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h1 id="catlike-codingcompute-shader">【Catlike Coding】Compute Shader
+</h1><p>学了Catlike Coding的basic部分, compute shader部分有点收获,写个总结.</p>
+<p><img src="/p/2025spring-catlike-codingcompute-shader/Unity.png"
+	width="2109"
+	height="941"
+	srcset="/p/2025spring-catlike-codingcompute-shader/Unity_hu12310998fa897105b281302b8594aee5_487097_480x0_resize_box_3.png 480w, /p/2025spring-catlike-codingcompute-shader/Unity_hu12310998fa897105b281302b8594aee5_487097_1024x0_resize_box_3.png 1024w"
+	loading="lazy"
+	
+		alt="alt text"
+	
+	
+		class="gallery-image" 
+		data-flex-grow="224"
+		data-flex-basis="537px"
+	
+></p>
+<h2 id="gpugraphcs">GPUGraph.cs
+</h2><p>通过Shader.propertyToID把数据从C#脚本中传递到shader中(CPU To GPU).</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">using UnityEngine;
+</span></span><span class="line"><span class="cl">//This is a script to draw a 3D graph by GPU, using simple mesh.
+</span></span><span class="line"><span class="cl">public class GPUGraph : MonoBehaviour
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    // [SerializeField] Transform pointPrefab; // Unused in procedural rendering but kept for reference
+</span></span><span class="line"><span class="cl">    [SerializeField] int resolution = 200;
+</span></span><span class="line"><span class="cl">    [SerializeField, Range(0, 2)] private int functionIndex = 0;
+</span></span><span class="line"><span class="cl">    [SerializeField] ComputeShader positionComputeShader;
+</span></span><span class="line"><span class="cl">    [SerializeField] Material proceduralMaterial;
+</span></span><span class="line"><span class="cl">    [SerializeField] Mesh quadMesh;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    ComputeBuffer positionBuffer;
+</span></span><span class="line"><span class="cl">    static readonly int 
+</span></span><span class="line"><span class="cl">        PositionsID = Shader.PropertyToID(&#34;_Positions&#34;),
+</span></span><span class="line"><span class="cl">        ResolutionID = Shader.PropertyToID(&#34;_Resolution&#34;),
+</span></span><span class="line"><span class="cl">        TimeID = Shader.PropertyToID(&#34;_Time&#34;),
+</span></span><span class="line"><span class="cl">        FunctionIndexID = Shader.PropertyToID(&#34;_FunctionIndex&#34;); // Added for function selection
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    private void Awake()
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        // Initialize ComputeBuffer with resolution * resolution elements, each a Vector3 (3 floats)
+</span></span><span class="line"><span class="cl">        positionBuffer = new ComputeBuffer(resolution * resolution, 3 * sizeof(float));
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    void Update()
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        UpdatePositions();
+</span></span><span class="line"><span class="cl">        ProcedureDraw();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    void UpdatePositions()
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        // Calculate thread groups based on resolution, assuming Compute Shader uses 16x16 threads
+</span></span><span class="line"><span class="cl">        int threadGroupsX = Mathf.CeilToInt(resolution / 16.0f);
+</span></span><span class="line"><span class="cl">        int threadGroupsY = Mathf.CeilToInt(resolution / 16.0f);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        // Set Compute Shader parameters
+</span></span><span class="line"><span class="cl">        positionComputeShader.SetInt(ResolutionID, resolution);
+</span></span><span class="line"><span class="cl">        positionComputeShader.SetFloat(TimeID, Time.time);
+</span></span><span class="line"><span class="cl">        positionComputeShader.SetInt(FunctionIndexID, functionIndex); // Set the function index
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        // Set the buffer and dispatch the Compute Shader
+</span></span><span class="line"><span class="cl">        int kernel = positionComputeShader.FindKernel(&#34;CalculatePositions&#34;);
+</span></span><span class="line"><span class="cl">        positionComputeShader.SetBuffer(kernel, PositionsID, positionBuffer);
+</span></span><span class="line"><span class="cl">        positionComputeShader.Dispatch(kernel, threadGroupsX, threadGroupsY, 1);
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        // Vector3[] positions = new Vector3[resolution * resolution];
+</span></span><span class="line"><span class="cl">        // positionBuffer.GetData(positions);
+</span></span><span class="line"><span class="cl">        // Debug.Log(&#34;Position[0]: &#34; + positions[0]);
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    void ProcedureDraw()
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        // Ensure the material has the latest position buffer
+</span></span><span class="line"><span class="cl">        proceduralMaterial.SetBuffer(&#34;_Positions&#34;, positionBuffer);
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        // Draw instanced meshes procedurally
+</span></span><span class="line"><span class="cl">        Graphics.DrawMeshInstancedProcedural(
+</span></span><span class="line"><span class="cl">            quadMesh,
+</span></span><span class="line"><span class="cl">            0,
+</span></span><span class="line"><span class="cl">            proceduralMaterial,
+</span></span><span class="line"><span class="cl">            new Bounds(Vector3.zero, Vector3.one * 10f),
+</span></span><span class="line"><span class="cl">            resolution * resolution
+</span></span><span class="line"><span class="cl">        );
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    private void OnDestroy()
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        // Release the buffer to prevent memory leaks
+</span></span><span class="line"><span class="cl">        positionBuffer.Release();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="graphcomputeshadercompute">GraphComputeShader.compute
+</h2><p>compute shader 计算好坐标,并返回给缓冲区</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#pragma kernel CalculatePositions
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">RWStructuredBuffer&lt;float3&gt; _Positions;
+</span></span><span class="line"><span class="cl">uint _Resolution;
+</span></span><span class="line"><span class="cl">float _Time;
+</span></span><span class="line"><span class="cl">uint _FunctionIndex; // 注意：这里是 __FunctionIndex，与你的代码保持一致
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#define PI 3.14159265358979323846
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 函数1：原始的绘图函数
+</span></span><span class="line"><span class="cl">float3 Function1(float u, float v, float time)
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    float r1 = (7.0 + sin(PI * (6.0 * u + time / 2.0))) / 10.0;
+</span></span><span class="line"><span class="cl">    float r2 = (3.0 + sin(PI * (4.0 * v + 8.0 * u + 2.0 * time))) / 20.0;
+</span></span><span class="line"><span class="cl">    float s = r1 + r2 * cos(PI * v);
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    float3 position;
+</span></span><span class="line"><span class="cl">    position.x = s * sin(PI * u);
+</span></span><span class="line"><span class="cl">    position.z = s * cos(PI * u);
+</span></span><span class="line"><span class="cl">    position.y = r2 * sin(PI * v);
+</span></span><span class="line"><span class="cl">    return position;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 函数2：示例函数（简单平面）
+</span></span><span class="line"><span class="cl">float3 Function2(float u, float v, float time)
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    float3 position;
+</span></span><span class="line"><span class="cl">    position.x = u;
+</span></span><span class="line"><span class="cl">    position.y = 0.0;
+</span></span><span class="line"><span class="cl">    position.z = v;
+</span></span><span class="line"><span class="cl">    return position;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 函数3：示例函数（波浪面）
+</span></span><span class="line"><span class="cl">float3 Function3(float u, float v, float time)
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    float3 position;
+</span></span><span class="line"><span class="cl">    position.x = u;
+</span></span><span class="line"><span class="cl">    position.y = sin(u * 5.0 + time) * 0.5;
+</span></span><span class="line"><span class="cl">    position.z = v;
+</span></span><span class="line"><span class="cl">    return position;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 线程组配置
+</span></span><span class="line"><span class="cl">[numthreads(16, 16, 1)]
+</span></span><span class="line"><span class="cl">void CalculatePositions (uint3 id : SV_DispatchThreadID)
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    // 索引保护，避免越界
+</span></span><span class="line"><span class="cl">    if (id.x &gt;= _Resolution || id.y &gt;= _Resolution) return;
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    // 归一化计算，确保 u 和 v 在 [-4, 4] 范围内
+</span></span><span class="line"><span class="cl">    float step = 8.0 / (_Resolution - 1);
+</span></span><span class="line"><span class="cl">    float u = -4.0 + step * id.x;
+</span></span><span class="line"><span class="cl">    float v = -4.0 + step * id.y;
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    // 根据 __FunctionIndex 选择不同的绘图函数
+</span></span><span class="line"><span class="cl">    float3 position;
+</span></span><span class="line"><span class="cl">    switch (_FunctionIndex)
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">    case 0:
+</span></span><span class="line"><span class="cl">        position = Function1(u, v, _Time);
+</span></span><span class="line"><span class="cl">        break;
+</span></span><span class="line"><span class="cl">    case 1:
+</span></span><span class="line"><span class="cl">        position = Function2(u, v, _Time);
+</span></span><span class="line"><span class="cl">        break;
+</span></span><span class="line"><span class="cl">    case 2:
+</span></span><span class="line"><span class="cl">        position = Function3(u, v, _Time);
+</span></span><span class="line"><span class="cl">        break;
+</span></span><span class="line"><span class="cl">    default:
+</span></span><span class="line"><span class="cl">        position = float3(0, 0, 0); // 默认值，防止未定义行为
+</span></span><span class="line"><span class="cl">        break;
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    // 计算缓冲区索引并写入结果
+</span></span><span class="line"><span class="cl">    uint index = id.y * _Resolution + id.x; // 行优先存储
+</span></span><span class="line"><span class="cl">    _Positions[index] = position;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Catlike shader 是surface shader,在我2022 URP Unity中不能使用. 所以我让AI改为了
+URP shader.<br>
+通过</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
+</span></span><span class="line"><span class="cl">// Get the position for this instance
+</span></span><span class="line"><span class="cl">float3 position = _Positions[unity_InstanceID];
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>来获取缓冲区内的坐标,然后改变unity object to world 矩阵, 来改变坐标. 挺巧妙的.</p>
+<h2 id="proceduredrawshader">ProcedureDraw.shader
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Shader &#34;Custom/ProceduralSurfaceURP&#34; {
+</span></span><span class="line"><span class="cl">    Properties {
+</span></span><span class="line"><span class="cl">        _Scale (&#34;Instance Scale&#34;, Range(0.001, 0.05)) = 0.005
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    SubShader {
+</span></span><span class="line"><span class="cl">        Tags { &#34;RenderType&#34;=&#34;Opaque&#34; &#34;RenderPipeline&#34;=&#34;UniversalPipeline&#34; }
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        Pass {
+</span></span><span class="line"><span class="cl">            HLSLPROGRAM
+</span></span><span class="line"><span class="cl">            #include &#34;Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl&#34;
+</span></span><span class="line"><span class="cl">            #pragma vertex vert
+</span></span><span class="line"><span class="cl">            #pragma fragment frag
+</span></span><span class="line"><span class="cl">            #pragma multi_compile_instancing
+</span></span><span class="line"><span class="cl">            #pragma instancing_options procedural:ConfigureProcedural
+</span></span><span class="line"><span class="cl">            #pragma target 4.5
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            #if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
+</span></span><span class="line"><span class="cl">                StructuredBuffer&lt;float3&gt; _Positions; // Buffer to receive positions from C#
+</span></span><span class="line"><span class="cl">            #endif
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            float _Scale;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            struct Attributes {
+</span></span><span class="line"><span class="cl">                float4 positionOS : POSITION;
+</span></span><span class="line"><span class="cl">                UNITY_VERTEX_INPUT_INSTANCE_ID
+</span></span><span class="line"><span class="cl">            };
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            struct Varyings {
+</span></span><span class="line"><span class="cl">                float4 positionCS : SV_POSITION;
+</span></span><span class="line"><span class="cl">                float3 worldPos : TEXCOORD0;
+</span></span><span class="line"><span class="cl">            };
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            void ConfigureProcedural() {
+</span></span><span class="line"><span class="cl">                #if defined(UNITY_PROCEDURAL_INSTANCING_ENABLED)
+</span></span><span class="line"><span class="cl">                    // Get the position for this instance
+</span></span><span class="line"><span class="cl">                    float3 position = _Positions[unity_InstanceID];
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    // Build the transformation matrix: scale and translate
+</span></span><span class="line"><span class="cl">                    float4x4 mat = float4x4(
+</span></span><span class="line"><span class="cl">                        _Scale, 0,     0,     position.x,
+</span></span><span class="line"><span class="cl">                        0,     _Scale, 0,     position.y,
+</span></span><span class="line"><span class="cl">                        0,     0,     _Scale, position.z,
+</span></span><span class="line"><span class="cl">                        0,     0,     0,     1
+</span></span><span class="line"><span class="cl">                    );
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    // Apply the transformation to UNITY_MATRIX_M (object to world matrix)
+</span></span><span class="line"><span class="cl">                    UNITY_MATRIX_M = mat;
+</span></span><span class="line"><span class="cl">                #endif
+</span></span><span class="line"><span class="cl">            }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            Varyings vert(Attributes input) {
+</span></span><span class="line"><span class="cl">                Varyings output;
+</span></span><span class="line"><span class="cl">                UNITY_SETUP_INSTANCE_ID(input);
+</span></span><span class="line"><span class="cl">                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+</span></span><span class="line"><span class="cl">                output.worldPos = TransformObjectToWorld(input.positionOS.xyz);
+</span></span><span class="line"><span class="cl">                return output;
+</span></span><span class="line"><span class="cl">            }
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            half4 frag(Varyings input) : SV_Target {
+</span></span><span class="line"><span class="cl">                half3 color = 0.5 + 0.5 * sin(input.worldPos);
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                return half4(color, 1);
+</span></span><span class="line"><span class="cl">            }
+</span></span><span class="line"><span class="cl">            ENDHLSL
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="总结">总结
+</h2><p>这一套方案让CPU运算量大大降低. 戴森球的优化应该也采用类似的方法, 把各种CPU的计算转移到GPU中进行.
+大概效率提升了一个数量级.</p>
+<p>戴森球作者发的专栏
+<a><a class="link" href="https://www.zhihu.com/question/442555442/answer/1711890146?utm_psn=1883875216381432992"  target="_blank" rel="noopener"
+    >https://www.zhihu.com/question/442555442/answer/1711890146?utm_psn=1883875216381432992</a></a></p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+
+    </footer>
+
+
+    
+        <link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI&#43;WdtXRGWt2kTvGFasHpSy3SV"crossorigin="anonymous"
+            ><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG&#43;vnGctmUb0ZY0l8"crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"integrity="sha384-&#43;VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4&#43;/RRE05"crossorigin="anonymous"
+                defer
+                >
+            </script><script>
+    window.addEventListener("DOMContentLoaded", () => {
+        renderMathInElement(document.body, {
+            delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+            ],
+            ignoredClasses: ["gist"]
+        });})
+</script>
+    
+</article>
+
+    
+
+    
+
+     
+    
+        
+    <script src="https://utteranc.es/client.js" 
+        repo="entropy622/entropy622.github.io"
+        issue-term="pathname"
+        
+        crossorigin="anonymous"
+        async
+        >
+</script>
+
+<style>
+    .utterances {
+        max-width: unset;
+    }
+</style>
+
+<script>
+    let utterancesLoaded = false;
+
+    function setUtterancesTheme(theme) {
+        let utterances = document.querySelector('.utterances iframe');
+        if (utterances) {
+            utterances.contentWindow.postMessage(
+                {
+                    type: 'set-theme',
+                    theme: `github-${theme}`
+                },
+                'https://utteranc.es'
+            );
+        }
+    }
+
+    addEventListener('message', event => {
+        if (event.origin !== 'https://utteranc.es') return;
+
+        
+        utterancesLoaded = true;
+        setUtterancesTheme(document.documentElement.dataset.scheme)
+    });
+
+    window.addEventListener('onColorSchemeChange', (e) => {
+        if (!utterancesLoaded) return;
+        setUtterancesTheme(e.detail)
+    })
+</script>
+
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+            2020 - 
+        
+        2025 回首空城
+    </section>
+    
+    <section class="powerby">
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.26.0">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+<script>
+  
+const config = {
+  
+  path: {
+    modelPath: "/Resources/",
+    cssPath: "https://entropy622.github.io/my_css/waifu.css",
+    tipsJsonPath: "https://entropy622.github.io/Resources/waifu-tips.json",
+    tipsJsPath: "https://entropy622.github.io/my_js/waifu-tips.js",
+    live2dCorePath: "https://entropy622.github.io/my_js/live2dcubismcore.js",
+    live2dSdkPath: "https://entropy622.github.io/my_js/live2d-sdk.js"
+  },
+  
+  tools: ["hitokoto", "asteroids", "express", "switch-model","info", "quit"],
+  
+  drag: {
+    enable: true,
+    direction: ["x", "y"]
+  },
+  
+  switchType: "order"
+}
+
+
+
+if (screen.width >= 255) {
+  Promise.all([
+    loadExternalResource(config.path.cssPath, "css"),
+    loadExternalResource(config.path.live2dCorePath, "js"),
+    loadExternalResource(config.path.live2dSdkPath, "js"),
+    loadExternalResource(config.path.tipsJsPath, "js")
+  ]).then(() => {
+    initWidget({
+      waifuPath: config.path.tipsJsonPath,
+      cdnPath: config.path.modelPath,
+      tools: config.tools,
+      dragEnable: config.drag.enable,
+      dragDirection: config.drag.direction,
+      switchType: config.switchType
+    });
+  });
+}
+
+
+function loadExternalResource(url, type) {
+  return new Promise((resolve, reject) => {
+    let tag;
+    if (type === "css") {
+      tag = document.createElement("link");
+      tag.rel = "stylesheet";
+      tag.href = url;
+    }
+    else if (type === "js") {
+      tag = document.createElement("script");
+      tag.src = url;
+    }
+    if (tag) {
+      tag.onload = () => resolve(url);
+      tag.onerror = () => reject(url);
+      document.head.appendChild(tag);
+    }
+  });
+}
+</script>
+
+
+
+
+
+
+  
+  
+
+
+    </body>
+</html>
