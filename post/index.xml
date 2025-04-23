@@ -7,7 +7,43 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>回首空城</copyright>
-        <lastBuildDate>Tue, 01 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://entropy622.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 23 Apr 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://entropy622.github.io/post/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>2025spring 学期总结 下</title>
+        <link>https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8B/</link>
+        <pubDate>Wed, 23 Apr 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8B/</guid>
+        <description>&lt;img src="https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8B/img.png" alt="Featured image of post 2025spring 学期总结 下" /&gt;&lt;h1 id=&#34;2025spring-学期总结-下&#34;&gt;2025spring 学期总结 下
+&lt;/h1&gt;&lt;h2 id=&#34;tuan-chat&#34;&gt;tuan-chat
+&lt;/h2&gt;&lt;p&gt;第一件事肯定是跟着星爷去做这个项目了。是一个跑团平台。我的任务是react前端。与其说是实习，更像一个开源项目。&lt;/p&gt;
+&lt;p&gt;在这之前恶补了两个星期的react，在有压力的情况下效率还比较高。
+正式开始开发后，一开始是很紧张的，不过也很快适应了。几个星期的开发颇有收获，是在大一难得的经历。&lt;/p&gt;
+&lt;p&gt;关于软件工程中解耦内聚等概念，也是在开发这么一个较大的项目后才慢慢理解的。&lt;/p&gt;
+&lt;h2 id=&#34;学习&#34;&gt;学习
+&lt;/h2&gt;&lt;p&gt;继续学jyy的计算机系统，不过没时间做lab了。但是感觉光听课收获比较少。&lt;/p&gt;
+&lt;p&gt;花了几天快速过完了苍穹外卖。&lt;/p&gt;
+&lt;p&gt;恶补了react和tailwind相关的知识。&lt;/p&gt;
+&lt;h2 id=&#34;生活&#34;&gt;生活
+&lt;/h2&gt;&lt;p&gt;由于忙着做项目去了，摆的也少了。&lt;/p&gt;
+&lt;p&gt;看了《金牌得主》，看到了自己和别人的影子。&lt;/p&gt;
+&lt;p&gt;玩了《苍翼-混沌效应》，挺好的肉鸽横板动作，可惜最大的缺点就是肉鸽的随机性太差了。&lt;/p&gt;
+&lt;p&gt;玩了《图灵完备》，四小时的体验，从基础的逻辑电路到一台最简单的可编程计算机，是一段很开心的旅程，也是一次效率挺高的学习。
+之前没有做CS61c的作业，靠这个算补上一点。&lt;/p&gt;
+&lt;h2 id=&#34;总结&#34;&gt;总结
+&lt;/h2&gt;&lt;p&gt;由于忙于项目，有点压力，所以学习效率还挺高的。比上一个月的状态好多了。&lt;/p&gt;
+&lt;p&gt;比前半学期肯定更忙了，但也挺快活的。&lt;/p&gt;
+&lt;p&gt;有的时候其实也感觉来LGU挺好的。要是高考考得高一点去了别的学校，我估计就要忙于应付课内的任务了，
+也不可能在大一点了不少的技能树，也不太可能有时间跟着星爷做项目。&lt;/p&gt;
+&lt;h2 id=&#34;暑期&#34;&gt;暑期
+&lt;/h2&gt;&lt;p&gt;这个学期就要过完了。暑期有三个多月的时间。初步想了一点任务：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;接着在星爷那边做项目，暂时不确定做到多久。&lt;/li&gt;
+&lt;li&gt;用spout2把VTBcat的项目重构了，让它能成为一个真正好用的VTS插件。（这个时候感觉c/c++还是要学好）&lt;/li&gt;
+&lt;li&gt;补完jyy计算机系统上的lab。&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        </item>
+        <item>
         <title>不要变成AI大人的CV奴隶</title>
         <link>https://entropy622.github.io/p/%E4%B8%8D%E8%A6%81%E5%8F%98%E6%88%90ai%E5%A4%A7%E4%BA%BA%E7%9A%84cv%E5%A5%B4%E9%9A%B6/</link>
         <pubDate>Tue, 01 Apr 2025 00:00:00 +0000</pubDate>
@@ -1027,42 +1063,6 @@ URP shader.&lt;br&gt;
 &lt;h2 id=&#34;计划&#34;&gt;计划
 &lt;/h2&gt;&lt;p&gt;看《南明史》，今天开始学 catlike coding for unity and C#。
 继续跟着jyy2025年的课程学计算机系统。&lt;/p&gt;
-</description>
-        </item>
-        <item>
-        <title>2025spring 学期总结 上</title>
-        <link>https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8A/</link>
-        <pubDate>Tue, 11 Mar 2025 00:00:00 +0000</pubDate>
-        
-        <guid>https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8A/</guid>
-        <description>&lt;img src="https://entropy622.github.io/p/2025spring-%E5%AD%A6%E6%9C%9F%E6%80%BB%E7%BB%93-%E4%B8%8A/img.png" alt="Featured image of post 2025spring 学期总结 上" /&gt;&lt;h1 id=&#34;2025spring-学期总结-下&#34;&gt;2025spring 学期总结 下
-&lt;/h1&gt;&lt;h2 id=&#34;tuan-chat&#34;&gt;tuan-chat
-&lt;/h2&gt;&lt;p&gt;第一件事肯定是跟着星爷去做这个项目了。是一个跑团平台。我的任务是react前端。与其说是实习，更像一个开源项目。&lt;/p&gt;
-&lt;p&gt;在这之前恶补了两个星期的react，在有压力的情况下效率还比较高。
-正式开始开发后，一开始是很紧张的，不过也很快适应了。几个星期的开发颇有收获，是在大一难得的经历。&lt;/p&gt;
-&lt;p&gt;关于软件工程中解耦内聚等概念，也是在开发这么一个较大的项目后才慢慢理解的。&lt;/p&gt;
-&lt;h2 id=&#34;学习&#34;&gt;学习
-&lt;/h2&gt;&lt;p&gt;继续学jyy的计算机系统，不过没时间做lab了。但是感觉光听课收获比较少。&lt;/p&gt;
-&lt;p&gt;花了几天快速过完了苍穹外卖。&lt;/p&gt;
-&lt;p&gt;恶补了react和tailwind相关的知识。&lt;/p&gt;
-&lt;h2 id=&#34;生活&#34;&gt;生活
-&lt;/h2&gt;&lt;p&gt;由于忙着做项目去了，摆的也少了。&lt;/p&gt;
-&lt;p&gt;看了《金牌得主》，看到了自己和别人的影子。&lt;/p&gt;
-&lt;p&gt;玩了《苍翼-混沌效应》，挺好的肉鸽横板动作，可惜最大的缺点就是肉鸽的随机性太差了。&lt;/p&gt;
-&lt;p&gt;玩了《图灵完备》，四小时的体验，从基础的逻辑电路到一台最简单的可编程计算机，是一段很开心的旅程，也是一次效率挺高的学习。
-之前没有做CS61c的作业，靠这个算补上一点。&lt;/p&gt;
-&lt;h2 id=&#34;总结&#34;&gt;总结
-&lt;/h2&gt;&lt;p&gt;由于忙于项目，有点压力，所以学习效率还挺高的。比上一个月的状态好多了。&lt;/p&gt;
-&lt;p&gt;比前半学期肯定更忙了，但也挺快活的。&lt;/p&gt;
-&lt;p&gt;有的时候其实也感觉来LGU挺好的。要是高考考得高一点去了别的学校，我估计就要忙于应付课内的任务了，
-也不可能在大一点了不少的技能树，也不太可能有时间跟着星爷做项目。&lt;/p&gt;
-&lt;h2 id=&#34;暑期&#34;&gt;暑期
-&lt;/h2&gt;&lt;p&gt;这个学期就要过完了。暑期有三个多月的时间。初步想了一点任务：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;接着在星爷那边做项目，暂时不确定做到多久。&lt;/li&gt;
-&lt;li&gt;用spout2把VTBcat的项目重构了，让它能成为一个真正好用的VTS插件。（这个时候感觉c/c++还是要学好）&lt;/li&gt;
-&lt;li&gt;补完jyy计算机系统上的lab。&lt;/li&gt;
-&lt;/ol&gt;
 </description>
         </item>
         <item>
