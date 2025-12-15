@@ -7,7 +7,15 @@
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
         <copyright>回首空城</copyright>
-        <lastBuildDate>Mon, 10 Nov 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://entropy622.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 15 Dec 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://entropy622.github.io/categories/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>OpenGL</title>
+        <link>https://entropy622.github.io/categories/opengl/</link>
+        <pubDate>Mon, 15 Dec 2025 00:00:00 +0000</pubDate>
+        
+        <guid>https://entropy622.github.io/categories/opengl/</guid>
+        <description></description>
+        </item>
+        <item>
         <title>总结</title>
         <link>https://entropy622.github.io/categories/%E6%80%BB%E7%BB%93/</link>
         <pubDate>Mon, 10 Nov 2025 00:00:00 +0000</pubDate>
