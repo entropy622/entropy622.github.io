@@ -417,11 +417,8 @@
         document.head.appendChild(customFont);
     }());
 </script>
-
 <script>
-  
 const config = {
-  
   path: {
     modelPath: "/Resources/",
     cssPath: "https://entropy622.github.io/my_css/waifu.css",
@@ -430,20 +427,17 @@ const config = {
     live2dCorePath: "https://entropy622.github.io/my_js/live2dcubismcore.js",
     live2dSdkPath: "https://entropy622.github.io/my_js/live2d-sdk.js"
   },
-  
-  tools: ["hitokoto", "asteroids", "express", "switch-model","info", "quit"],
-  
+  tools: ["hitokoto", "asteroids", "express", "switch-model", "info", "quit"],
   drag: {
     enable: true,
     direction: ["x", "y"]
   },
-  
   switchType: "order"
-}
+};
 
+const showLive2D = window.matchMedia("(min-width: 769px)").matches;
 
-
-if (screen.width >= 255) {
+if (showLive2D) {
   Promise.all([
     loadExternalResource(config.path.cssPath, "css"),
     loadExternalResource(config.path.live2dCorePath, "js"),
@@ -461,19 +455,19 @@ if (screen.width >= 255) {
   });
 }
 
-
 function loadExternalResource(url, type) {
   return new Promise((resolve, reject) => {
     let tag;
+
     if (type === "css") {
       tag = document.createElement("link");
       tag.rel = "stylesheet";
       tag.href = url;
-    }
-    else if (type === "js") {
+    } else if (type === "js") {
       tag = document.createElement("script");
       tag.src = url;
     }
+
     if (tag) {
       tag.onload = () => resolve(url);
       tag.onerror = () => reject(url);
@@ -482,15 +476,6 @@ function loadExternalResource(url, type) {
   });
 }
 </script>
-
-
-
-
-
-
-  
-  
-
 
     </body>
 </html>
