@@ -240,7 +240,44 @@
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">目录</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ol>
+    <li><a href="#卡牌与战斗">卡牌与战斗</a></li>
+    <li><a href="#开发工具">开发工具</a>
+      <ol>
+        <li><a href="#web-ui系统">Web UI系统</a></li>
+        <li><a href="#mcp-与开发工具">MCP 与开发工具</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -292,7 +329,7 @@
 
 
                 <time class="article-time--reading">
-                    阅读时长: 1 分钟
+                    阅读时长: 2 分钟
                 </time>
             </div>
         
@@ -317,11 +354,19 @@
 	
 	
 ></p>
-<p>《纸韵长安》是一款基于 UE5、UnLua 的卡牌肉鸽 RPG，叙事部分由 LLM 驱动。我主要负责把卡牌、敌人意图和 Buff 等玩法需求拆成 DataTable 配置与运行时服务，统一玩家和敌人的出牌管线，支持 211 张卡牌及其演出配置落地，并搭建脱离 UE Editor 的 Lua 自动卡牌测试框架，用 7 组测试覆盖全部卡牌的核心机制。</p>
-<p>我还梳理了地图、战斗关卡和叙事 AI 之间的状态流转，设计 <code>Battle.Interface</code> 统一接口，处理跨关卡战斗、结果回传和结构化战斗摘要生成；同时配置 MCP 工具流、编写 skill，辅助玩法、场景和 UI 开发，并整理项目文件结构。</p>
-<h2 id="web-ui">Web UI
-</h2><p>前端项目使用 React、TypeScript 和 Vite 搭建。开发阶段保留热更新和独立调试入口，构建时则输出可以嵌入游戏的静态资源。</p>
-<p>接入游戏时，由 Lua 层负责建立消息通道和生命周期管理：启动时完成初始化握手，游戏侧把状态序列化后推送给 UI，UI 将玩家操作转换成命令回传。游戏逻辑始终是唯一事实来源，UI 只负责展示和收集输入；跨场景切换时重新同步完整状态，必要时通过命令确认、超时和错误提示保证交互可恢复。</p>
+<p>《纸韵长安》是心象矩阵开发的一款 UE5 卡牌肉鸽 RPG，结合了 LLM 驱动的多分支叙事。我在项目中做<strong>技术策划和客户端开发</strong>，主要使用 Lua / UnLua，负责卡牌玩法的部分规划与完整落地，也参与 Web UI 和开发工具的接入。</p>
+<h2 id="卡牌与战斗">卡牌与战斗
+</h2><p>卡牌玩法参考自《杀戮尖塔》。在此基础上，使得<strong>敌我双方的行动方式变得对等</strong>：敌方也拥有卡牌池，能量槽，每次行动都是打出一张卡牌。</p>
+<p>围绕项目中的 211 张卡牌，我搭建了<strong>可脱离 UE Editor 运行的 Lua 测试框架</strong>。配置检查遍历全部卡牌，行为测试验证代表性的结算与组合机制。测试依靠与表现层解耦的战斗逻辑层。</p>
+<h2 id="开发工具">开发工具
+</h2><h3 id="web-ui系统">Web UI系统
+</h3><p>Web UI 使用 <strong>React、TypeScript 和 Vite</strong>，开发时可以独立调试和热更新，再以静态资源接入游戏。Lua 负责消息通信：游戏把状态推给界面，界面把玩家操作传回来，战斗状态的修改仍留在游戏侧。</p>
+<p>具体实现上，插件基于 UE 的 WebBrowser 模块，<strong>在 Slate 控件中嵌入由 CEF（Chromium 嵌入式框架）驱动的浏览器</strong>。HTML、CSS 和 JavaScript 仍由浏览器完成布局、绘制和执行，开启透明背景后，网页中的透明区域便能露出下方的游戏场景，形成 HUD。</p>
+<p>页面加载分为<strong>开发和打包两种模式</strong>：开发时浏览器访问本地 Vite 服务，修改前端即可热更新；打包后由插件的本地资源处理器接管约定域名下的请求，从游戏内容目录读取网页、脚本、样式和图片。</p>
+<p>UE 与网页之间<strong>通过绑定到浏览器的 UObject 通信</strong>：JavaScript 调用它暴露的方法，把 JSON 消息传回 C++，再转发给 Lua；反向则由 C++ 执行 JavaScript，将经过 Base64 编码的 JSON 交给网页接收函数。</p>
+<p>整个Web UI系统通过一个<strong>可跨项目复用的插件</strong>来搭建。</p>
+<h3 id="mcp-与开发工具">MCP 与开发工具
+</h3><p>我也<strong>配置了 MCP 工具、编写开发 skill</strong>，辅助策划与其他开发者制作玩法、场景和 UI ，加快了团队的开发速度。</p>
 
 </section>
 
