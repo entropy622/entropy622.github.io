@@ -1,0 +1,70 @@
+---
+import ProjectSection from '@/components/projects/ProjectSection.astro'
+import PageLayout from '@/layouts/CommonPage.astro'
+
+const headings = [
+  { depth: 2, slug: 'games', text: '游戏 / 图形' },
+  { depth: 2, slug: 'ai', text: 'AI' },
+  { depth: 2, slug: 'web', text: 'Web' },
+  { depth: 2, slug: 'others', text: '其他' }
+]
+
+const games = [
+  {
+    name: 'Unity 仿崩铁卡通渲染',
+    description: 'Unity URP 卡通渲染，包含面部 SDF 阴影、Ramp 采样与描边优化。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters' }]
+  },
+  {
+    name: 'EntroRenderer',
+    description: '基于 C++ / OpenGL 的轻量级渲染器，支持模型、光照贴图与 Toon Shader。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622/EntroRenderer' }]
+  },
+  {
+    name: 'GameJam 作品',
+    description: 'LD56《八号仓库奇妙夜》与 LD58《Slime Dash》，负责 AI、玩法和协作推进。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622' }]
+  }
+]
+
+const ai = [
+  {
+    name: 'Blender Copilot',
+    description: '基于大语言模型的 Blender Shader 节点图插件，使用 Graph Code 进行持久化编辑。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622/blender_copilot' }]
+  }
+]
+
+const web = [
+  {
+    name: '团剧共创',
+    description: '线上剧本杀辅助创作平台，负责 React 核心模块、聊天室与 Galgame 演出。',
+    links: [{ type: 'site', href: 'https://tuan.chat' }]
+  },
+  {
+    name: '回首空城博客',
+    description: '由 Hugo 迁移至 Astro Pure 的个人博客，使用内容加载器保持 Markdown 原样。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622/entropy622.github.io' }]
+  }
+]
+
+const others = [
+  {
+    name: 'GitHub',
+    description: '回首空城的开源项目与实验记录。',
+    links: [{ type: 'github', href: 'https://github.com/entropy622' }]
+  }
+]
+---
+
+<PageLayout title='项目' description='游戏、图形、AI 与 Web 项目' {headings}>
+  <p>这里整理我参与或独立完成的项目，按技术方向分类。</p>
+  <h2 id='games'>游戏 / 图形</h2>
+  <ProjectSection projects={games} />
+  <h2 id='ai'>AI</h2>
+  <ProjectSection projects={ai} />
+  <h2 id='web'>Web</h2>
+  <ProjectSection projects={web} />
+  <h2 id='others'>其他</h2>
+  <ProjectSection projects={others} />
+</PageLayout>

@@ -1,0 +1,16 @@
+---
+import { getBlogCollection } from 'astro-pure/server'
+
+export const prerender = true
+
+export async function getStaticPaths() {
+  const posts = await getBlogCollection('blog')
+  // Hidden posts have a single intentional entry point (the About card). Do
+  // not generate legacy `/p/...` redirects for them, otherwise their old Hugo
+  // URL would remain another discoverable route.
+  return posts.filter((post) => !post.data.hidden).map((post) => ({ params: { slug: post.id } }))
+}
+
+// Response headers are ByteStrings, so percent-encode legacy Unicode slugs.
+return Astro.redirect(`/blog/${encodeURIComponent(Astro.params.slug || '')}`, 301)
+---

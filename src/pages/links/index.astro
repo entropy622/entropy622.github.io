@@ -1,0 +1,35 @@
+---
+import { Collapse } from 'astro-pure/user'
+
+import FriendList from '@/components/links/FriendList.astro'
+import PageLayout from '@/layouts/CommonPage.astro'
+import links from '@/public/links.json'
+
+const headings = [
+  { depth: 2, slug: 'common-links', text: '常用链接' },
+  { depth: 2, slug: 'live2d-credits', text: 'Live2D 作者' }
+]
+const { friends, live2dAuthors } = links
+---
+
+<PageLayout title='友情链接' description='我常访问的网站与朋友们' {headings}>
+  <p>记录一些朋友和常用资源，欢迎通过 GitHub 联系我交换友链。</p>
+  <h2 id='common-links'>常用链接</h2>
+  <FriendList list={friends[0]} />
+  {friends[1].link_list.length > 0 && <Collapse title='暂时不可用'><FriendList list={friends[1]} /></Collapse>}
+  {friends[2].link_list.length > 0 && (
+    <>
+      <h2 id='special-links'>特别链接</h2>
+      <FriendList list={friends[2]} />
+    </>
+  )}
+  <h2 id='live2d-credits'>本站 Live2D 作者</h2>
+  <ul class='space-y-2 text-muted-foreground'>
+    {live2dAuthors.map((author) => (
+      <li>
+        <strong>{author.name}</strong>：
+        {author.url ? <a href={author.url} target='_blank' rel='noreferrer'>{author.credit}</a> : author.credit}
+      </li>
+    ))}
+  </ul>
+</PageLayout>

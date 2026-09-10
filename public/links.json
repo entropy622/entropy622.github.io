@@ -1,0 +1,48 @@
+{
+  "friends": [
+    {
+      "id_name": "common-links",
+      "desc": "常用链接",
+      "link_list": [
+        {
+          "name": "skyzhou.top",
+          "intro": "Skyzhou 的个人博客。",
+          "link": "https://skyzhou.top",
+          "avatar": "https://avatars.githubusercontent.com/u/62292370?v=4"
+        },
+        {
+          "name": "Stack",
+          "intro": "本网站曾使用的 Hugo 主题。",
+          "link": "https://stack.jimmycai.com",
+          "avatar": "https://stack.jimmycai.com/logo.png"
+        },
+        {
+          "name": "CS 自学指南",
+          "intro": "计算机科学公开课资源网站。",
+          "link": "https://csdiy.wiki",
+          "avatar": "/友情链接/image.png"
+        }
+      ]
+    },
+    {
+      "id_name": "inactive-links",
+      "desc": "暂时不可用",
+      "link_list": []
+    },
+    {
+      "id_name": "special-links",
+      "desc": "特别链接",
+      "link_list": []
+    }
+  ],
+  "live2dAuthors": [
+    { "name": "草神", "credit": "天才设计学家" },
+    { "name": "椿", "credit": "涉谷芒" },
+    { "name": "符玄", "credit": "发布地址", "url": "https://www.bilibili.com/video/BV1Ej411h7oE" },
+    { "name": "星野爱", "credit": "天才设计学家" },
+    { "name": "ariu", "credit": "发布地址", "url": "https://www.bilibili.com/video/BV1S8411H7zf" },
+    { "name": "Miss", "credit": "发布地址", "url": "https://www.bilibili.com/video/BV1wV41137Lo" },
+    { "name": "U-Official", "credit": "泡芙妙妙屋" },
+    { "name": "yumi", "credit": "发布地址", "url": "https://www.bilibili.com/video/BV1LM41137vK" }
+  ]
+}

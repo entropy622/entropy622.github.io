@@ -1,0 +1,83 @@
+<!--
+  The widget is injected by waifu-tips.js after the page has rendered.  Keep
+  these layout rules in Astro's own stylesheet as a small, reliable fallback:
+  a missing/late external widget stylesheet must never make the widget take
+  up a slot in the page's flex layout.
+-->
+<style is:global>
+  @media (min-width: 769px) {
+    #waifu,
+    #waifu-toggle {
+      position: fixed !important;
+      z-index: 70;
+    }
+
+    #waifu {
+      bottom: env(safe-area-inset-bottom);
+      left: env(safe-area-inset-left);
+      margin-bottom: 0;
+      pointer-events: auto;
+    }
+
+    #waifu-toggle {
+      bottom: calc(66px + env(safe-area-inset-bottom)) !important;
+      z-index: 71;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #waifu,
+    #waifu-toggle {
+      display: none !important;
+    }
+  }
+</style>
+<script>
+  const desktop = window.matchMedia('(min-width: 769px)').matches
+  if (desktop && !document.documentElement.dataset.live2dLoaded) {
+    const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+    const asset = (path: string) => `${base}/${path}`
+
+    const load = (src: string) =>
+      new Promise<void>((resolve, reject) => {
+        if (document.querySelector(`script[src="${src}"]`)) return resolve()
+        const script = document.createElement('script')
+        script.src = src
+        script.onload = () => resolve()
+        script.onerror = () => reject(new Error(`Unable to load ${src}`))
+        document.head.appendChild(script)
+      })
+
+    const css = asset('live2d/waifu.css')
+    if (!document.querySelector(`link[rel="stylesheet"][href="${css}"]`)) {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.media = '(min-width: 769px)'
+      link.href = css
+      document.head.appendChild(link)
+    }
+
+    Promise.all([
+      load(asset('live2d/live2dcubismcore.js')),
+      load(asset('live2d/live2d-sdk.js')),
+      load(asset('live2d/waifu-tips.js'))
+    ])
+      .then(() => {
+        const win = window as typeof window & {
+          initWidget?: (options: Record<string, unknown>) => void
+        }
+        if (win.initWidget && !document.getElementById('waifu')) {
+          win.initWidget({
+            waifuPath: asset('live2d/waifu-tips.json'),
+            cdnPath: asset('Resources/'),
+            tools: ['hitokoto', 'express', 'switch-model', 'switch-texture', 'info', 'quit'],
+            dragEnable: true,
+            dragDirection: 'all',
+            switchType: 'order'
+          })
+        }
+        document.documentElement.dataset.live2dLoaded = 'true'
+      })
+      .catch((error) => console.warn('[Live2D] disabled:', error))
+  }
+</script>
