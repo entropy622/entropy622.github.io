@@ -2,10 +2,10 @@ import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/
 
 /** Personal site configuration. Keep template integrations opt-in. */
 export const theme: ThemeUserConfig = {
-  title: '回首空城',
-  author: '回首空城',
+  title: 'Aentro',
+  author: 'Aentro',
   description: '游戏、图形学与 Web 技术的学习记录。',
-  favicon: '/favicon/favicon.ico',
+  favicon: '/images/avatar.png',
   socialCard: '/images/social-card.png',
   locale: {
     lang: 'zh-CN',
@@ -13,7 +13,7 @@ export const theme: ThemeUserConfig = {
     dateLocale: 'zh-CN',
     dateOptions: { year: 'numeric', month: 'short', day: 'numeric' }
   },
-  logo: { src: '/images/avatar.png', alt: '回首空城' },
+  logo: { src: '/images/avatar.png', alt: 'Aentro' },
   titleDelimiter: '·',
   prerender: true,
   npmCDN: 'https://cdn.jsdelivr.net/npm',
@@ -28,7 +28,7 @@ export const theme: ThemeUserConfig = {
     ]
   },
   footer: {
-    year: `© ${new Date().getFullYear()} 回首空城`,
+    year: `© ${new Date().getFullYear()} Aentro`,
     links: [],
     credits: false,
     social: [
@@ -50,7 +50,7 @@ export const integ: IntegrationUserConfig = {
   links: {
     logbook: [],
     applyTip: [
-      { name: '名称', val: '回首空城' },
+      { name: '名称', val: 'Aentro' },
       { name: '简介', val: '游戏、图形学与 Web 技术的学习记录。' },
       { name: '链接', val: 'https://entropy622.github.io/' },
       { name: '头像', val: 'https://entropy622.github.io/images/avatar.png' }

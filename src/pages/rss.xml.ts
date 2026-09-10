@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ site }) => {
   const posts = sortPublicPosts(await getBlogCollection())
   return rss({
     title: config.title,
-    description: config.description ?? '回首空城的个人博客',
+    description: config.description ?? 'Aentro 的个人博客',
     site: site ?? import.meta.env.SITE,
     trailingSlash: false,
     items: posts.map((post) => ({

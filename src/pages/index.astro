@@ -4,23 +4,21 @@ import { PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection } from 'astro-pure/server'
 import { Button, Card } from 'astro-pure/user'
 
+import avatarImage from '@/assets/avatar.png'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
 import { sortPublicPosts } from '@/utils/blog'
 
-const avatar = import.meta.glob<{ default: ImageMetadata }>('/src/assets/avatar.png')
-const avatarImage = avatar['/src/assets/avatar.png']
-if (!avatarImage) throw new Error('Missing avatar asset')
 const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
 ---
 
 <PageLayout meta={{ title: '首页' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
     <section class='animate mb-12 flex flex-col items-center gap-y-6 text-center'>
-      <Image src={avatarImage()} alt={config.logo.alt || '回首空城'} class='h-28 w-28 rounded-full border p-1' loading='eager' />
+      <Image src={avatarImage} alt={config.logo.alt || 'Aentro'} class='h-28 w-28 rounded-full border p-1' loading='eager' />
       <div>
         <h1 class='text-3xl font-medium'>{config.author}</h1>
-        <p class='mt-2 text-muted-foreground'>游戏客户端 / 图形学 / Web UI</p>
+        <p class='mt-2 text-muted-foreground'>游戏客户端 / 图形 / Web</p>
       </div>
       <div class='flex gap-3'>
         <Button title='关于我' href='/about' variant='ahead' />

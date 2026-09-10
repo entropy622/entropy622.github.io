@@ -8,11 +8,14 @@ import { cn } from 'astro-pure/utils'
 
 interface Project {
   image?: string
+  cover?: string
+  year?: string
   name: string
   description: string
   links: {
     type: string
     href: string
+    label?: string
   }[]
 }
 
@@ -47,6 +50,14 @@ const projectIconSet: Record<string, IconsType> = {
 
         return (
           <div class='relative overflow-hidden rounded-xl border'>
+            {project.cover && (
+              <img
+                src={project.cover}
+                alt=''
+                loading='lazy'
+                class='h-32 w-full object-cover opacity-80 sm:h-36'
+              />
+            )}
             {imagePath && (
               <Image
                 class='absolute end-0 z-0 m-0 h-full w-1/2 object-cover opacity-40'
@@ -65,17 +76,22 @@ const projectIconSet: Record<string, IconsType> = {
             <div
               class={cn(
                 'relative z-10 flex flex-col gap-y-1 px-2 py-1.5 sm:px-3 sm:py-2',
-                imagePath && 'me-20'
+                imagePath && 'me-20',
+                project.cover && 'pt-3'
               )}
             >
+              <div class='flex flex-wrap items-baseline justify-between gap-x-2'>
               <a
-                class='line-clamp-1 font-medium text-foreground no-underline transition-colors'
+                class='font-medium text-foreground no-underline transition-colors'
                 href={project.links[0].href}
-                target='_blank'
+                target={project.links[0].href.startsWith('/') ? undefined : '_blank'}
+                rel={project.links[0].href.startsWith('/') ? undefined : 'noreferrer'}
               >
                 {project.name}
               </a>
-              <div class='line-clamp-2 leading-snug text-muted-foreground sm:h-12'>
+              {project.year && <span class='text-xs text-muted-foreground'>{project.year}</span>}
+              </div>
+              <div class='leading-snug text-muted-foreground'>
                 {project.description}
               </div>
               <div class='flex flex-row items-center gap-x-2 sm:gap-x-3'>
@@ -85,8 +101,10 @@ const projectIconSet: Record<string, IconsType> = {
                     <a
                       href={link.href}
                       class='rounded-full bg-muted p-1 text-muted-foreground transition-colors sm:p-1.5'
-                      aria-label={link.type}
-                      target='_blank'
+                      aria-label={link.label ?? link.type}
+                      title={link.label ?? link.type}
+                      target={link.href.startsWith('/') ? undefined : '_blank'}
+                      rel={link.href.startsWith('/') ? undefined : 'noreferrer'}
                     >
                       <Icon class='size-5' name={icon} />
                     </a>

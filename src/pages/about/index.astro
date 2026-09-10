@@ -5,15 +5,14 @@ import PageLayout from '@/layouts/CommonPage.astro'
 
 const headings = [
   { depth: 2, slug: 'education', text: '教育经历' },
-  { depth: 2, slug: 'experience', text: '工作经历' },
   { depth: 2, slug: 'projects', text: '项目经历' },
   { depth: 2, slug: 'skills', text: '专业技能' },
   { depth: 2, slug: 'interests', text: '兴趣' }
 ]
 ---
 
-<PageLayout title='关于我' description='回首空城的个人介绍' {headings}>
-  <p class='lead'>你好，我是回首空城，一名关注游戏客户端、图形学和 Web 工程的计算机科学学生。</p>
+<PageLayout title='关于我' description='Aentro 的个人介绍' {headings}>
+  <p class='lead'>你好，我是 Aentro，一名关注游戏客户端、图形学和 Web 工程的计算机科学学生。</p>
 
   <h2 id='education'>教育经历</h2>
   <Card heading='香港中文大学（深圳）' subheading='计算机科学与技术 / 本科' date='2024.09 - 2028.05'>
@@ -22,32 +21,6 @@ const headings = [
       <li>系统学习数据结构、算法、计算机系统、数据库、机器学习与<strong>图形学</strong>。</li>
     </ul>
   </Card>
-
-  <h2 id='experience'>工作经历</h2>
-  <div class='flex flex-col gap-6'>
-    <a href='/blog/paper-changan-internship' class='group rounded-2xl border bg-background p-4 no-underline transition-colors hover:bg-muted'>
-      <div class='grid gap-4 sm:grid-cols-[180px_1fr] sm:items-start'>
-        <img src='/关于/imgs/Shinsho.png' alt='《纸韵长安》项目截图' width='720' height='405' class='w-full rounded-xl object-cover' loading='lazy' />
-        <div>
-          <div class='flex flex-wrap items-baseline justify-between gap-2'>
-            <h3 class='text-lg font-medium group-hover:text-primary'>心象矩阵网络游戏有限公司</h3>
-            <span class='text-sm text-muted-foreground'>2025.12 - 2026.08</span>
-          </div>
-          <p class='mt-1 text-muted-foreground'><strong>技术策划 / 客户端开发</strong></p>
-          <p class='mt-3 text-sm text-muted-foreground'>《纸韵长安》是一款 UE5 卡牌肉鸽 RPG。我负责卡牌机制、Lua 测试框架、跨系统战斗接口，以及 Web UI 与 AI 工具链接入。</p>
-          <p class='mt-3 text-sm font-medium text-primary'>查看站内技术文章 →</p>
-        </div>
-      </div>
-    </a>
-
-    <Card as='a' heading='海南镜兔网络科技有限公司' subheading='前端开发实习生 · TypeScript / React / Tailwind / DaisyUI' date='2025.04 - 2025.08' href='https://tuan.chat'>
-      <ul class='ms-5 list-disc text-muted-foreground'>
-        <li>参与团剧共创在线剧本杀平台的核心模块拆分、接口对接与协作开发。</li>
-        <li>实现富文本编辑、聊天室交互与聊天记录转 Galgame 演出。</li>
-        <li>使用 OpenAPI 生成接口代码，搭建 CI/CD、ESLint 与飞书通知流程。</li>
-      </ul>
-    </Card>
-  </div>
 
   <h2 id='projects'>项目经历</h2>
   <div class='grid gap-3 sm:grid-cols-2'>
