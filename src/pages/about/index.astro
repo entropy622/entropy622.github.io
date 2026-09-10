@@ -11,18 +11,10 @@ const headings = [
 ]
 ---
 
-<PageLayout title='关于我' description='Aentro 的个人介绍' {headings}>
-  <p class='lead'>你好，我是 Aentro，一名关注游戏客户端、图形学和 Web 工程的计算机科学学生。</p>
+<PageLayout title='About' description='Aentro 的个人介绍' {headings}>
+  <p class='lead'>一名关注游戏客户端、图形学和 Web 工程的计算机科学本科生。香港中文大学（深圳）在读。</p>
 
-  <h2 id='education'>教育经历</h2>
-  <Card heading='香港中文大学（深圳）' subheading='计算机科学与技术 / 本科' date='2024.09 - 2028.05'>
-    <ul class='ms-5 list-disc text-muted-foreground'>
-      <li><strong>GPA</strong>：3.84/4.00（前 15%）</li>
-      <li>系统学习数据结构、算法、计算机系统、数据库、机器学习与<strong>图形学</strong>。</li>
-    </ul>
-  </Card>
-
-  <h2 id='projects'>项目经历</h2>
+  <h2 id='projects'>Projects</h2>
   <div class='grid gap-3 sm:grid-cols-2'>
     <Card as='a' heading='Unity 仿崩铁卡通渲染' subheading='Unity URP / HLSL / SDF · GitHub 80+ Stars' href='https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters' />
     <Card as='a' heading='Blender Copilot' subheading='Blender / Python / LLM · Graph Code 节点表示' href='https://github.com/entropy622/blender_copilot' />
@@ -30,14 +22,10 @@ const headings = [
     <Card heading='GameJam 作品' subheading='Unity / C# / Game AI · LD56、LD58' />
   </div>
 
-  <h2 id='skills'>专业技能</h2>
+  <h2 id='skills'>Skills</h2>
   <ul class='space-y-2 text-muted-foreground'>
-    <li><strong>游戏开发</strong>：UE5 / UnLua、Unity / C#、数据驱动玩法、状态机与 Shader。</li>
-    <li><strong>AI 工具</strong>：Agent、MCP 工具链、编辑器自动化与工作流优化。</li>
-    <li><strong>编程语言</strong>：Lua、C++、C#、Python、TypeScript。</li>
-    <li><strong>工程实践</strong>：Git、CI/CD、Lua 自动化测试、模块化设计。</li>
+    <li><strong>游戏开发</strong>：UE5 / UnLua、Unity / C#、Shader</li>
+    <li><strong>Web开发</strong>：React</li>
+    <li><strong>编程语言</strong>：Lua、C++、C#、Python、TypeScript</li>
   </ul>
-
-  <h2 id='interests'>兴趣</h2>
-  <p class='text-muted-foreground'>喜欢研究游戏系统与渲染技术，也持续体验肉鸽、类银河恶魔城、角色扮演和基地建设类游戏。</p>
 </PageLayout>

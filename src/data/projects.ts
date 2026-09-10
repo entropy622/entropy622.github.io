@@ -4,10 +4,12 @@ export const projectTracks = [
     "id": "games",
     "title": "游戏/图形",
     "projects": [
-      {"name":"心象矩阵《纸韵长安》研发实习","description":"担任技术策划与客户端开发，围绕卡牌肉鸽与 LLM 叙事落地数据驱动玩法、跨关卡战斗接口和 AI 辅助开发工具流，并为 211 张卡牌搭建自动化测试框架。","cover":"/关于/imgs/Shinsho.png","year":"2025.12 - 2026.08","links":[{"type":"site","href":"/blog/paper-changan-internship","label":"阅读实习复盘"}]},
+      {
+        "name":"心象矩阵《纸韵长安》研发实习","description":"担任技术策划与客户端开发，负责卡牌玩法开发和AI工作流提效。",
+        "year":"2025.12 - 2026.08","links":[{"type":"site","href":"/blog/paper-changan-internship","label":"阅读实习复盘"}]},
       {
         "name": "Unity 仿崩铁卡通渲染",
-        "description": "在 Unity URP 管线下复刻《崩坏：星穹铁道》的角色卡通渲染风格，编写 HLSL Shader，实现面部 SDF 阴影、Ramp 贴图采样和描边优化，GitHub 收获 70+ Stars。",
+        "description": "在 Unity URP 管线下复刻《崩坏：星穹铁道》的角色卡通渲染风格。",
         "links": [
           {
             "type": "github",
@@ -23,7 +25,7 @@ export const projectTracks = [
       },
       {
         "name": "EntroRenderer",
-        "description": "一个使用 OpenGL 编写的小型渲染器项目，用来实践图形管线、渲染流程组织与底层渲染器结构设计。",
+        "description": "使用 OpenGL 编写的小型渲染器，实践图形管线。",
         "links": [
           {
             "type": "github",
@@ -39,17 +41,17 @@ export const projectTracks = [
       },
       {
         "name": "两款 GameJam 作品",
-        "description": "在 LD56 和 LD58 中完成玩法逻辑、怪物 AI 寻路、行为状态机与团队协作推进。",
+        "description": "LD56 与 LD58作品, 完成玩法逻辑、行为状态机，与团队协作推进。",
         "links": [
           {
             "type": "site",
-            "href": "https://ldjam.com/users/aentro/games",
-            "label": "查看 Ludum Dare 主页"
+            "href": "https://www.bilibili.com/video/BV19s896SE2o",
+            "label": "LD56"
           },
           {
             "type": "site",
             "href": "https://www.bilibili.com/video/BV1uv28YsEg4",
-            "label": "B站视频展示"
+            "label": "LD58"
           }
         ]
       }
@@ -61,7 +63,7 @@ export const projectTracks = [
     "projects": [
       {
         "name": "Blender Copilot",
-        "description": "一个基于大语言模型的 Blender 插件，允许用户通过自然语言生成和修改 Shader 节点蓝图。",
+        "description": "Blender MCP插件，将蓝图转化为可编辑的文本，便于基于LLM进行开发",
         "links": [
           {
             "type": "github",
@@ -72,7 +74,7 @@ export const projectTracks = [
       },
       {
         "name": "LLM Live2D",
-        "description": "一个把 Live2D 接进 LLM 对话流程的实验项目，让大语言模型能够控制 Live2D 模型，并在前端完成交互与表情表现联动。",
+        "description": "把 Live2D 接进 LLM，让大语言模型能够控制 Live2D 模型。",
         "links": [
           {
             "type": "site",
@@ -110,7 +112,7 @@ export const projectTracks = [
     "projects": [
       {
         "name": "团剧共创平台 tuan.chat",
-        "description": "在海南镜兔网络科技有限公司担任前端开发实习生。作为前端核心开发者，参与核心模块拆分、接口对接与复杂交互功能实现。落地富文本编辑、聊天室交互、聊天记录转 Galgame、基于聊天上下文的 LLM 自动补全、CI/CD、以及聊天室的性能优化。",
+        "description": "担任前端开发实习生。落地富文本编辑、聊天室交互、聊天记录转 Galgame、基于聊天上下文的 LLM 自动补全、CI/CD、以及聊天室的性能优化。",
         "year": "2025.04 - 2025.08",
         "links": [
           {
@@ -127,7 +129,7 @@ export const projectTracks = [
       },
       {
         "name": "WebGAL 魔审分支开发",
-        "description": "作为主要贡献者之一，参与开发 WebGAL 的一个分支项目。上游 WebGAL 是 GitHub 上约 3.7k stars 的网页端视觉小说引擎。",
+        "description": "作为主要贡献者之一，参与开发 WebGAL 的一个分支。上游 WebGAL 是 GitHub 上约 3.7k stars 的网页端视觉小说引擎。",
         "links": [
           {
             "type": "github",
