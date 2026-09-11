@@ -1,12 +1,12 @@
 ---
 import ProjectSection from '@/components/projects/ProjectSection.astro'
-import PageLayout from '@/layouts/CommonPage.astro'
+import PageLayout from '@/layouts/DirectoryLayout.astro'
 import { projectTracks } from '@/data/projects'
 
 const headings = projectTracks.map(({ id, title }) => ({ depth: 2, slug: id, text: title }))
 ---
 
-<PageLayout title='项目' description='游戏、图形、AI 与 Web 项目' {headings}>
+<PageLayout title='项目' label='PROJECTS' number='02' description='游戏、图形、AI 与 Web 项目' {headings}>
   <section class='not-prose mb-10' aria-label='GitHub Activities'>
     <p class='activity-heading mb-4 text-muted-foreground'><span aria-hidden='true'>DEVELOPMENT LOG</span>GitHub Activities</p>
     <a href='https://github.com/entropy622' class='block rounded-2xl border p-5' target='_blank' rel='noreferrer' aria-label='查看 Aentro 的 GitHub 活跃度'>

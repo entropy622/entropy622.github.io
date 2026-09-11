@@ -1,0 +1,13 @@
+---
+import RhineOrbit from '@/components/RhineOrbit.astro'
+interface Props { title: string; label: string; number: string; description?: string }
+const { title, label, number, description } = Astro.props
+---
+<header class='directory-heading'>
+  <div>
+    <a class='directory-back' href='/'>← 首页 <span aria-hidden='true'>/ {number}</span></a>
+    <h1>{label}<span class='directory-title-cn'>{title}</span></h1>
+    {description && <p>{description}</p>}
+  </div>
+  <div class='directory-heading-art' aria-hidden='true'><RhineOrbit /><span>{number}</span></div>
+</header>

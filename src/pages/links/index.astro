@@ -2,7 +2,7 @@
 import { Collapse } from 'astro-pure/user'
 
 import FriendList from '@/components/links/FriendList.astro'
-import PageLayout from '@/layouts/CommonPage.astro'
+import PageLayout from '@/layouts/DirectoryLayout.astro'
 import links from '@/public/links.json'
 
 const headings = [
@@ -12,7 +12,7 @@ const headings = [
 const { friends, live2dAuthors } = links
 ---
 
-<PageLayout title='友情链接' description='我常访问的网站与朋友们' {headings}>
+<PageLayout title='友情链接' label='LINKS' number='03' description='我常访问的网站与朋友们' {headings}>
   <h2 id='common-links'>友情链接</h2>
   <FriendList list={friends[0]} />
   {friends[1].link_list.length > 0 && <Collapse title='暂时不可用'><FriendList list={friends[1]} /></Collapse>}

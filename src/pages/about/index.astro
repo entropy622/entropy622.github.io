@@ -1,20 +1,18 @@
 ---
 import { Card } from 'astro-pure/user'
 
-import PageLayout from '@/layouts/CommonPage.astro'
+import PageLayout from '@/layouts/DirectoryLayout.astro'
 
 const headings = [
-  { depth: 2, slug: 'education', text: '教育经历' },
   { depth: 2, slug: 'projects', text: '项目经历' },
-  { depth: 2, slug: 'skills', text: '专业技能' },
-  { depth: 2, slug: 'interests', text: '兴趣' }
+  { depth: 2, slug: 'skills', text: '专业技能' }
 ]
 ---
 
-<PageLayout title='About' description='Aentro 的个人介绍' {headings}>
+<PageLayout title='关于我' label='ABOUT' number='04' description='回首空城 / Aentro · 技术实践与创作' {headings}>
   <p class='lead'>一名关注游戏客户端、图形学和 Web 工程的计算机科学本科生。香港中文大学（深圳）在读。</p>
 
-  <h2 id='projects'>Projects</h2>
+  <h2 id='projects'>项目经历</h2>
   <div class='grid gap-3 sm:grid-cols-2'>
     <Card as='a' heading='Unity 仿崩铁卡通渲染' subheading='Unity URP / HLSL / SDF · GitHub 80+ Stars' href='https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters' />
     <Card as='a' heading='Blender Copilot' subheading='Blender / Python / LLM · Graph Code 节点表示' href='https://github.com/entropy622/blender_copilot' />
@@ -22,7 +20,7 @@ const headings = [
     <Card heading='GameJam 作品' subheading='Unity / C# / Game AI · LD56、LD58' />
   </div>
 
-  <h2 id='skills'>Skills</h2>
+  <h2 id='skills'>专业技能</h2>
   <ul class='space-y-2 text-muted-foreground'>
     <li><strong>游戏开发</strong>：UE5 / UnLua、Unity / C#、Shader</li>
     <li><strong>Web开发</strong>：React</li>

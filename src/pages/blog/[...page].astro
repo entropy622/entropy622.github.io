@@ -7,6 +7,8 @@ import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
 import { Button, Icon } from 'astro-pure/user'
 
 import PageLayout from '@/layouts/BaseLayout.astro'
+import DirectoryHeader from '@/components/DirectoryHeader.astro'
+import '@/assets/styles/directories.css'
 import config from '@/site-config'
 import { sortPublicPosts } from '@/utils/blog'
 
@@ -32,14 +34,11 @@ const meta = { description: '公开文章与学习记录', title: 'Blog' }
 ---
 
 <PageLayout {meta}>
-  <Button title='返回首页' href='/' variant='back' />
-  <main class='mt-6 lg:mt-10'>
-    <div id='content-header' class='animate'>
-      <h1 class='mb-6 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
-    </div>
-    <div class='grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
+  <main class='directory-page directory-blog'>
+    <DirectoryHeader title='文章' label='BLOG' number='01' description='公开文章与学习记录' />
+    <div class='directory-blog-grid'>
       <section aria-label='Blog posts list' class='animate' id='content'>
-        <div class='mb-3 text-sm text-muted-foreground sm:mb-5'>
+        <div class='directory-blog-meta'>
           共 {collectionsCount} 篇公开文章 · 第 {page.currentPage} 页
         </div>
         {page.data.length === 0 ? <p>还没有文章。</p> : <ul class='flex flex-col gap-y-4 text-start'>{page.data.map((post) => <PostPreview {post} detailed />)}</ul>}
