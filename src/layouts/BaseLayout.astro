@@ -5,6 +5,7 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import Live2D from '@/components/Live2D.astro'
 import OpeningSequence from '@/components/OpeningSequence.astro'
+import RhineOrbit from '@/components/RhineOrbit.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
@@ -39,6 +40,7 @@ const live2dStylesheet = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/live2d/
   <body class='flex justify-center bg-background text-foreground' {...props}>
     <OpeningSequence />
     <Live2D />
+    <div class='rhine-margin-orbit' aria-hidden='true'><RhineOrbit /></div>
     {
       highlightColor && (
         <div

@@ -34,7 +34,7 @@ html.dark {
 html body {
   font-family: 'Manrope Variable', 'Noto Sans SC Variable', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
-  background-image: linear-gradient(90deg, transparent calc(50% - 35rem), hsl(var(--border) / .35) calc(50% - 35rem), hsl(var(--border) / .35) calc(50% - 35rem + 1px), transparent calc(50% - 35rem + 1px), transparent calc(50% + 35rem - 1px), hsl(var(--border) / .35) calc(50% + 35rem - 1px), hsl(var(--border) / .35) calc(50% + 35rem), transparent calc(50% + 35rem));
+  background-image: none;
 }
 ::selection { background: #cbb397; color: #151713; }
 :where(a, button, input, summary):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 4px; }
@@ -42,11 +42,11 @@ body #highlight-gradient { display: none; }
 html header-component {
   border-radius: 0;
   border: 0;
-  border-bottom: 1px solid hsl(var(--border));
   padding-block: 1rem;
   background: hsl(var(--background) / .97);
 }
 html header-component.not-top {
+  border: 0;
   margin-inline: 0;
   border-radius: 0;
   background: hsl(var(--background) / .97);
@@ -75,7 +75,26 @@ main a.border:not(.rounded-full):hover { background: hsl(var(--card)); border-co
 .prose blockquote { border-radius: 0; border-inline-start: 3px solid var(--rhine-accent); box-shadow: none; background: hsl(var(--muted) / .5); }
 .prose blockquote::before { display: none; }
 .prose a { text-underline-offset: .25em; }
-footer { border-top: 1px solid hsl(var(--border)); }
+html footer { border-top: 0; }
+/* Display-only typography: intentionally never targets prose, strong or b. */
+.rhine-hero { position: relative; isolation: isolate; width: 100%; padding-block: 2rem; }
+.rhine-display { position: absolute; left: 1rem; top: 5.5rem; text-align: left; display: flex; flex-direction: column; align-items: flex-start; }
+.rhine-display-top { font-size: clamp(1.8rem, 3.5vw, 2.65rem); font-weight: 800; letter-spacing: -.055em; line-height: 1.05; }
+.rhine-display-inverse { margin-top: .4rem; padding: .2rem .45rem .3rem; background: hsl(var(--foreground)); color: hsl(var(--background)); font-size: .95rem; font-weight: 800; letter-spacing: -.025em; }
+.rhine-display-sub { margin-top: .5rem; font-size: .58rem; font-weight: 600; letter-spacing: .16em; }
+.rhine-hero .hero-orbit { position: absolute; right: -1rem; top: 0; width: 330px; max-width: 34%; z-index: -1; opacity: .65; }
+.rhine-section-label { display: inline-block; margin-left: .65rem; font: 800 .6rem/1.5 'Manrope Variable', sans-serif; letter-spacing: .1em; color: hsl(var(--muted-foreground)); vertical-align: middle; }
+.rhine-margin-orbit { display: none; pointer-events: none; }
+@media (min-width: 1600px) {
+  .rhine-margin-orbit { display: block; position: fixed; right: 0; top: 35vh; width: min(17vw, 330px); opacity: .2; overflow: hidden; }
+  .rhine-margin-orbit svg { width: 150%; max-width: none; }
+}
+@media (max-width: 900px) {
+  .rhine-display { position: static; align-items: center; text-align: center; margin-bottom: .5rem; }
+  .rhine-display-top { font-size: 1.65rem; }
+  .rhine-display-inverse { font-size: .75rem; }
+  .rhine-hero .hero-orbit { right: 0; top: 7rem; width: 260px; max-width: 45%; opacity: .22; }
+}
 @media (max-width: 640px) {
   header-component > a { font-size: clamp(.9rem, 4vw, 1.2rem); letter-spacing: -.04em; }
   html header-component { padding-block: .75rem; }

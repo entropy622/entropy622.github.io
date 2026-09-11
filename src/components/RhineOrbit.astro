@@ -1,0 +1,23 @@
+---
+interface Props { class?: string }
+const { class: className } = Astro.props
+---
+
+<!-- Original orbital diagram inspired by the reference's open arcs and satellites. -->
+<svg class:list={['rhine-orbit', className]} viewBox='0 0 480 480' fill='none' aria-hidden='true' focusable='false'>
+  <circle cx='240' cy='240' r='210' stroke='currentColor' stroke-width='1.2' stroke-dasharray='1080 240' transform='rotate(38 240 240)' />
+  <circle class='orbit-light' cx='240' cy='240' r='153' stroke-width='2.5' stroke-dasharray='760 202' transform='rotate(138 240 240)' />
+  <circle cx='240' cy='240' r='58' stroke='currentColor' stroke-width='1' stroke-dasharray='122 60' transform='rotate(-50 240 240)' />
+  <circle cx='405' cy='370' r='12' fill='currentColor' />
+  <circle class='orbit-light' cx='126' cy='342' r='5' />
+  <circle class='orbit-signal' cx='190' cy='198' r='3.5' />
+  <circle class='orbit-signal' cx='288' cy='277' r='3.5' />
+  <path d='M234 240h12M240 234v12' stroke='currentColor' stroke-width='1' />
+</svg>
+
+<style>
+  .rhine-orbit { display: block; pointer-events: none; color: hsl(var(--foreground)); }
+  .orbit-light { stroke: hsl(var(--card)); fill: hsl(var(--card)); }
+  circle.orbit-light[r='153'] { fill: none; }
+  .orbit-signal { fill: var(--rhine-accent); }
+</style>

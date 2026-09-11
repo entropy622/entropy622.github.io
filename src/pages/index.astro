@@ -5,6 +5,7 @@ import { getBlogCollection } from 'astro-pure/server'
 import { Button, Card } from 'astro-pure/user'
 
 import avatarImage from '@/assets/avatar.png'
+import RhineOrbit from '@/components/RhineOrbit.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import config from '@/site-config'
 import { sortPublicPosts } from '@/utils/blog'
@@ -14,7 +15,13 @@ const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
 
 <PageLayout meta={{ title: '首页' }} highlightColor='#659EB9'>
   <main class='flex w-full flex-col items-center'>
-    <section class='animate mb-12 flex flex-col items-center gap-y-6 text-center'>
+    <section class='rhine-hero animate mb-12 flex flex-col items-center gap-y-6 text-center'>
+      <div class='rhine-display' aria-hidden='true'>
+        <span class='rhine-display-top'>AENTRO</span>
+        <span class='rhine-display-inverse'>PERSONAL BLOG</span>
+        <span class='rhine-display-sub'>CODE / ART / NOTES</span>
+      </div>
+      <RhineOrbit class='hero-orbit' />
       <Image src={avatarImage} alt={config.logo.alt || 'Aentro'} class='h-28 w-28 rounded-full border p-1' loading='eager' />
       <div>
         <h1 class='text-3xl font-medium'>{config.author}</h1>
@@ -28,7 +35,7 @@ const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
 
     <div id='content' class='animate flex w-full flex-col gap-y-12 md:w-4/5 lg:w-5/6'>
       <section class='flex flex-col gap-y-4'>
-        <h2 class='text-xl font-medium'>关于我</h2>
+        <h2 class='text-xl font-medium'>关于我 <span class='rhine-section-label' aria-hidden='true'>PROFILE</span></h2>
         <p class='text-muted-foreground'>
           香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。
         </p>
@@ -36,7 +43,7 @@ const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
 
       <section class='flex flex-col gap-y-4'>
         <div class='flex items-center justify-between'>
-          <h2 class='text-xl font-medium'>项目</h2>
+          <h2 class='text-xl font-medium'>项目 <span class='rhine-section-label' aria-hidden='true'>SELECTED WORKS</span></h2>
           <a href='/projects' class='text-sm text-muted-foreground hover:text-primary'>全部项目 →</a>
         </div>
         <div class='grid gap-3 sm:grid-cols-2'>
@@ -47,7 +54,7 @@ const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
 
       <section class='flex flex-col gap-y-4'>
         <div class='flex items-center justify-between'>
-          <h2 class='text-xl font-medium'>最近文章</h2>
+          <h2 class='text-xl font-medium'>最近文章 <span class='rhine-section-label' aria-hidden='true'>FIELD NOTES</span></h2>
           <a href='/blog' class='text-sm text-muted-foreground hover:text-primary'>查看全部 →</a>
         </div>
         <ul class='flex flex-col gap-y-2'>
