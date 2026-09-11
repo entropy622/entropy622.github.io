@@ -4,12 +4,16 @@ import Header from '../../packages/pure/components/basic/Header.astro'
 import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import Live2D from '@/components/Live2D.astro'
+import OpeningSequence from '@/components/OpeningSequence.astro'
 import config from '@/site-config'
 
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/global.css'
 import '@/assets/styles/app.css'
+import '@fontsource-variable/manrope'
+import '@fontsource-variable/noto-sans-sc'
+import '@/assets/styles/rhine.css'
 
 interface Props {
   meta: SiteMeta
@@ -25,7 +29,7 @@ const {
 const live2dStylesheet = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/live2d/waifu.css`
 ---
 
-<html lang={config.locale.lang}>
+<html lang={config.locale.lang} data-ark-theme='rhine' data-ark-depth='moderate'>
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <link rel='stylesheet' href={live2dStylesheet} media='(min-width: 769px)' />
@@ -33,6 +37,7 @@ const live2dStylesheet = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/live2d/
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
+    <OpeningSequence />
     <Live2D />
     {
       highlightColor && (

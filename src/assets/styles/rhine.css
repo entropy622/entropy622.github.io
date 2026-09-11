@@ -1,0 +1,89 @@
+/* Original interpretation of RhineLabUI's paper / ink / olive visual language.
+ * Reference: https://github.com/LBEILC/RhineLabUI (MIT, LBEILC).
+ * OpeningSequence uses the user-requested reference mark; see /licenses/RhineLabUI-MIT.txt.
+ * No reference fonts or animation source are bundled.
+ * Fontsource's Manrope and Noto Sans SC are self-hosted, SIL OFL fonts.
+ */
+:root {
+  --primary: 37 32% 34%;
+  --foreground: 100 9% 10%;
+  --muted-foreground: 60 6% 35%;
+  --background: 34 13% 90%;
+  --muted: 36 16% 86%;
+  --card: 38 23% 94%;
+  --border: 37 12% 73%;
+  --input: 37 12% 73%;
+  --ring: 37 32% 34%;
+  --radius: 0.125rem;
+  --rhine-accent: #a67d48;
+  --rhine-olive: #565c46;
+}
+html.dark {
+  --primary: 36 38% 70%;
+  --foreground: 38 18% 89%;
+  --muted-foreground: 40 10% 70%;
+  --background: 90 8% 11%;
+  --muted: 80 7% 16%;
+  --card: 80 7% 15%;
+  --border: 60 6% 30%;
+  --input: 60 6% 30%;
+  --ring: 36 38% 70%;
+  --rhine-accent: #cbb397;
+  --rhine-olive: #a6ad8e;
+}
+html body {
+  font-family: 'Manrope Variable', 'Noto Sans SC Variable', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(90deg, transparent calc(50% - 35rem), hsl(var(--border) / .35) calc(50% - 35rem), hsl(var(--border) / .35) calc(50% - 35rem + 1px), transparent calc(50% - 35rem + 1px), transparent calc(50% + 35rem - 1px), hsl(var(--border) / .35) calc(50% + 35rem - 1px), hsl(var(--border) / .35) calc(50% + 35rem), transparent calc(50% + 35rem));
+}
+::selection { background: #cbb397; color: #151713; }
+:where(a, button, input, summary):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 4px; }
+body #highlight-gradient { display: none; }
+html header-component {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid hsl(var(--border));
+  padding-block: 1rem;
+  background: hsl(var(--background) / .97);
+}
+html header-component.not-top {
+  margin-inline: 0;
+  border-radius: 0;
+  background: hsl(var(--background) / .97);
+  box-shadow: none;
+}
+header-component > a { letter-spacing: -.04em; font-weight: 750; }
+#headerExpandContent a { font-size: .8rem; letter-spacing: .055em; }
+#headerExpandContent a[aria-current='page'] { color: hsl(var(--primary)); text-decoration: underline; text-underline-offset: .6rem; text-decoration-thickness: 2px; }
+html #toggleDarkMode, html #toggleMenu { border-radius: 2px; min-width: 24px; min-height: 24px; }
+main h1 { letter-spacing: -.045em; font-weight: 650; }
+main h2 { letter-spacing: -.02em; }
+main > section:first-child h1 { font-size: clamp(2.2rem, 5vw, 3.2rem); }
+#content > section > h2, #content > section > div > h2 {
+  border-inline-start: 3px solid var(--rhine-accent);
+  padding-inline-start: .8rem;
+}
+main :is(.rounded-xl, .rounded-2xl, .rounded-lg), .astro-code { border-radius: 2px; }
+main :is(a, div).border:not(.rounded-full) { box-shadow: none; }
+main a.border:not(.rounded-full) { background: hsl(var(--card) / .55); transition: background .2s, border-color .2s; }
+main a.border:not(.rounded-full):hover { background: hsl(var(--card)); border-color: var(--rhine-accent); }
+.project-card { background: hsl(var(--card) / .5); border-top: 2px solid var(--rhine-olive); }
+.project-card > div { padding: 1rem; }
+.project-card .leading-snug { line-height: 1.8; font-size: .9rem; }
+.project-card a[aria-label] { border-radius: 2px; min-width: 36px; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; }
+.prose { line-height: 1.95; }
+.prose blockquote { border-radius: 0; border-inline-start: 3px solid var(--rhine-accent); box-shadow: none; background: hsl(var(--muted) / .5); }
+.prose blockquote::before { display: none; }
+.prose a { text-underline-offset: .25em; }
+footer { border-top: 1px solid hsl(var(--border)); }
+@media (max-width: 640px) {
+  header-component > a { font-size: clamp(.9rem, 4vw, 1.2rem); letter-spacing: -.04em; }
+  html header-component { padding-block: .75rem; }
+  html #headerExpandContent { border-radius: 0; background: hsl(var(--background)); }
+  html header-component.expanded #headerExpandContent { padding: .75rem 1rem; border: 1px solid hsl(var(--border)); box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html .animate { animation: none; opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+  html header-component, html a, html button { transition: none; }
+}
