@@ -54,6 +54,10 @@ html header-component.not-top {
 }
 header-component > a { letter-spacing: -.04em; font-weight: 750; }
 #headerExpandContent a { font-size: .8rem; letter-spacing: .055em; }
+.nav-index { display: inline-block; margin-right: .45rem; font-size: .5rem; vertical-align: super; color: hsl(var(--muted-foreground)); font-weight: 700; }
+.activity-heading { display: flex; flex-direction: column; gap: .35rem; }
+.activity-heading > span { font-size: .6rem; font-weight: 800; letter-spacing: .12em; }
+.project-sequence { display: block; font-size: .55rem; font-weight: 750; letter-spacing: .12em; color: hsl(var(--muted-foreground)); margin-bottom: .5rem; }
 #headerExpandContent a[aria-current='page'] { color: hsl(var(--primary)); text-decoration: underline; text-underline-offset: .6rem; text-decoration-thickness: 2px; }
 html #toggleDarkMode, html #toggleMenu { border-radius: 2px; min-width: 24px; min-height: 24px; }
 main h1 { letter-spacing: -.045em; font-weight: 650; }
@@ -76,6 +80,12 @@ main a.border:not(.rounded-full):hover { background: hsl(var(--card)); border-co
 .prose blockquote::before { display: none; }
 .prose a { text-underline-offset: .25em; }
 html footer { border-top: 0; }
+html footer > .border-t { border-top: 0; }
+/* Keep the optional desktop companion out of the new left-aligned reading area. */
+@media (min-width: 769px) and (max-width: 1450px) {
+  #waifu { zoom: .55; }
+  #waifu:not(:hover) #waifu-tips { visibility: hidden; }
+}
 /* Display-only typography: intentionally never targets prose, strong or b. */
 .rhine-hero { position: relative; isolation: isolate; width: 100%; padding-block: 2rem; }
 .rhine-display { position: absolute; left: 1rem; top: 5.5rem; text-align: left; display: flex; flex-direction: column; align-items: flex-start; }

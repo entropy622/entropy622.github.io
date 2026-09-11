@@ -1,0 +1,77 @@
+/* Homepage composition only. No article typography selectors. */
+.dossier-home { padding-top: 1rem; }
+.dossier-home a:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 5px; }
+.dossier-intro { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: 1rem; padding: 1.5rem 0 5rem; }
+.dossier-eyebrow { font-size: .65rem; font-weight: 750; letter-spacing: .15em; color: hsl(var(--muted-foreground)); }
+.dossier-home #home-title { display: flex; flex-direction: column; align-items: flex-start; gap: .35rem; margin: 1.6rem 0 2rem; font-size: clamp(3.8rem, 7.4vw, 6.3rem); font-weight: 800; line-height: .95; letter-spacing: -.075em; }
+.dossier-inverse { display: inline-block; padding: .22em .27em .28em; font-size: .34em; letter-spacing: -.035em; background: hsl(var(--foreground)); color: hsl(var(--background)); }
+.dossier-bio { max-width: 29rem; }
+.dossier-name { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6rem 1rem; margin-bottom: .9rem; font-size: 1.1rem; font-weight: 650; }
+.dossier-name span { font-size: .72rem; color: hsl(var(--muted-foreground)); font-weight: 400; }
+.dossier-bio > p:last-child { font-size: .88rem; line-height: 1.95; color: hsl(var(--muted-foreground)); }
+.dossier-actions { display: flex; gap: 1.8rem; align-items: center; margin-top: 1.8rem; }
+.dossier-actions a { display: inline-flex; align-items: center; gap: 2.4rem; min-height: 44px; font-size: .8rem; }
+.dossier-actions .dossier-action-primary { padding: .65rem 1rem; background: hsl(var(--foreground)); color: hsl(var(--background)); }
+.dossier-actions .dossier-action-primary:hover { background: var(--rhine-olive); color: hsl(var(--background)); }
+.dossier-portrait { position: relative; aspect-ratio: 1; display: grid; place-items: center; isolation: isolate; }
+.dossier-portrait .dossier-orbit { position: absolute; inset: 0; width: 100%; opacity: .8; z-index: -1; }
+.portrait-frame { width: 42%; aspect-ratio: 1; padding: 6px; border: 1px solid hsl(var(--foreground) / .35); border-radius: 50%; background: hsl(var(--background)); }
+.portrait-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; filter: saturate(.7); }
+.portrait-caption { position: absolute; bottom: 0; right: 0; font-size: .62rem; line-height: 1.8; font-weight: 800; letter-spacing: .08em; }
+.portrait-caption span { font-size: .62rem; font-weight: 400; letter-spacing: .12em; color: hsl(var(--muted-foreground)); }
+.portrait-plus { position: absolute; left: 5%; top: 10%; font-size: 1.8rem; font-weight: 300; }
+.dossier-section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 1.8rem; }
+.dossier-home h2 { margin-top: .6rem; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; letter-spacing: -.05em; line-height: 1.5; }
+.dossier-home h2 > span { color: var(--rhine-accent); }
+.dossier-section-heading > a, .notes-heading > a { display: inline-flex; align-items: center; gap: 1.5rem; min-height: 44px; font-size: .75rem; }
+.dossier-work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.dossier-work-card { min-width: 0; display: block; }
+.work-illustration { position: relative; height: 225px; overflow: hidden; background: hsl(var(--muted)); color: var(--rhine-olive); }
+.shader .work-illustration { background: var(--rhine-olive); color: hsl(var(--background)); }
+.work-illustration svg { width: 100%; height: 100%; transition: transform .45s ease; }
+.dossier-work-card:hover .work-illustration svg { transform: scale(1.045); }
+.work-index { position: absolute; top: .85rem; left: 1rem; font-size: .7rem; font-weight: 700; }
+.work-medium { position: absolute; bottom: .75rem; right: 1rem; font-size: .52rem; letter-spacing: .13em; font-weight: 750; }
+.work-card-caption { display: flex; justify-content: space-between; align-items: center; gap: .7rem; padding: 1rem 0; }
+.work-card-caption h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -.03em; }
+.work-card-caption p { margin-top: .3rem; font-size: .7rem; color: hsl(var(--muted-foreground)); }
+.work-arrow { display: grid; place-items: center; width: 36px; height: 36px; background: hsl(var(--muted)); }
+.dossier-notes { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; margin-top: 5rem; }
+.notes-heading h2 { margin-bottom: 1.5rem; }
+.notes-index { list-style: none; padding: 0; margin: 0; }
+.notes-index li + li { margin-top: .3rem; }
+.notes-index a { display: grid; grid-template-columns: 1.5rem 1fr 1rem; align-items: center; gap: 1rem; padding: 1rem; background: hsl(var(--card) / .35); transition: background .2s; }
+.notes-index a:hover { background: hsl(var(--card)); }
+.note-number { align-self: start; padding-top: .15rem; font-size: .6rem; color: hsl(var(--muted-foreground)); }
+.notes-index time { font-size: .6rem; letter-spacing: .045em; color: hsl(var(--muted-foreground)); }
+.notes-index h3 { font-size: .85rem; margin-top: .3rem; font-weight: 500; overflow-wrap: anywhere; }
+.note-arrow { font-size: .85rem; }
+.dossier-colophon { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: 4.5rem 0 2rem; }
+.dossier-colophon > span:first-child { font-size: 1.2rem; font-weight: 800; letter-spacing: -.05em; }
+.colophon-square { display: inline-block; width: .45rem; height: .45rem; margin-left: .75rem; background: var(--rhine-accent); }
+.dossier-colophon > span:last-child { font-size: .5rem; letter-spacing: .12em; color: hsl(var(--muted-foreground)); }
+@media (max-width: 760px) {
+  .dossier-home { padding-top: 0; }
+  .dossier-intro { grid-template-columns: 1fr; padding-top: 0; padding-bottom: 3rem; }
+  .dossier-home #home-title { font-size: clamp(3.8rem, 16vw, 6rem); margin-top: 1rem; }
+  .dossier-portrait { width: min(100%, 360px); justify-self: center; margin: 1rem 0; }
+  .dossier-bio { max-width: none; }
+  .dossier-work-grid { gap: 1rem; }
+  .work-illustration { height: 160px; }
+  .work-medium { display: none; }
+  .work-card-caption h3 { font-size: .9rem; }
+  .work-arrow { display: none; }
+  .dossier-notes { grid-template-columns: 1fr; gap: 1.5rem; margin-top: 3rem; }
+  .notes-heading h2 br { display: none; }
+  .notes-heading h2 { margin-bottom: .5rem; }
+}
+@media (max-width: 420px) {
+  .dossier-work-grid { grid-template-columns: 1fr; }
+  .work-illustration { height: 190px; }
+  .work-arrow { display: grid; }
+  .dossier-colophon > span:last-child { max-width: 10rem; text-align: right; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-illustration svg, .notes-index a { transition: none; }
+  .dossier-work-card:hover .work-illustration svg { transform: none; }
+}

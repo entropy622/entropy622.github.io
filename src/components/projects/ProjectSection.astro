@@ -38,7 +38,7 @@ const projectIconSet: Record<string, IconsType> = {
 <div class={className} {...props}>
   <div class='grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 sm:gap-y-4'>
     {
-      projects.map((project) => {
+      projects.map((project, index) => {
         var imagePath = null
         if (project.image) {
           imagePath = '/src/assets/projects/' + project.image
@@ -80,6 +80,7 @@ const projectIconSet: Record<string, IconsType> = {
                 project.cover && 'pt-3'
               )}
             >
+              <span class='project-sequence' aria-hidden='true'>{String(index + 1).padStart(2, '0')} / PROJECT</span>
               <div class='flex flex-wrap items-baseline justify-between gap-x-2'>
               <a
                 class='font-medium text-foreground no-underline transition-colors'
