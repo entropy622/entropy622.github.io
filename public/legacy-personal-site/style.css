@@ -1,0 +1,254 @@
+/* 重置浏览器默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 页面基础样式 */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #eee;
+    background: linear-gradient(to bottom, #0a0a0a, #202020); /* 科幻风格渐变背景 */
+    overflow-x: hidden;
+}
+
+/* 容器样式 */
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+/* 页首样式 */
+header {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 2px solid #00bfff; /* 蓝色底边 */
+    position: relative;
+    z-index: 10;
+}
+
+header h1 {
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    color: #00bfff; /* 亮蓝色 */
+}
+
+header .intro {
+    font-size: 1.2em;
+    margin-top: 10px;
+}
+
+/* 手风琴样式 */
+.accordion {
+    margin-bottom: 20px;
+    border: 1px solid #00bfff; /* 蓝色边框 */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+    backdrop-filter: blur(10px); /* 胶囊效果 */
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.accordion-button {
+    background: #00bfff; /* 蓝色背景 */
+    color: #fff;
+    border: none;
+    padding: 15px;
+    width: 100%;
+    text-align: left;
+    font-size: 1.5em;
+    cursor: pointer;
+    outline: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* 半透明底边 */
+    transition: background 0.3s ease;
+}
+
+.accordion-button:hover {
+    background: #1e90ff; /* 更亮的蓝色 */
+}
+
+.accordion-content {
+    display: none;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.2); /* 半透明背景 */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); /* 半透明顶边 */
+}
+
+/* 项目展示样式 */
+.project {
+    background: rgba(255, 255, 255, 0.2); /* 半透明背景 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 半透明边框 */
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.project:hover {
+    transform: scale(1.05); /* 鼠标悬停时放大 */
+}
+
+.project img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.project h3 {
+    margin-top: 10px;
+    font-size: 1.3em;
+    color: #00bfff; /* 蓝色字体 */
+}
+
+/* 页脚样式 */
+footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    border-top: 2px solid #00bfff; /* 蓝色顶部边框 */
+    z-index: 10;
+}
+
+footer p {
+    margin: 0;
+}
+
+/* 几何体容器样式 */
+.geometry-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* 使其不干扰其他元素的交互 */
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* 空心几何体样式 */
+.geometry {
+    position: absolute;
+    border: 2px solid rgba(0, 255, 255, 0.7); /* 亮青色边框 */
+    pointer-events: none;
+    animation: fall 1s ease forwards, fadeOut 1.5s ease forwards; /* 设置消失动画 */
+}
+
+.geometry.circle {
+    border-radius: 50%; /* 圆形 */
+}
+
+.geometry.square {
+    border-radius: 0; /* 方形 */
+}
+
+.geometry.triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid rgba(0, 255, 255, 0.7); /* 亮青色 */
+}
+
+@keyframes fall {
+    0% {
+        opacity: 1;
+        transform: translateY(-150px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* 实验阶段 */
+/* 动漫小人样式 */
+.character {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 150px;
+    z-index: 2;
+    cursor: pointer; /* 添加指针光标 */
+}
+
+.character .eyes {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.character .eye {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    position: relative;
+    border: 2px solid #000;
+}
+
+.character .eye::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s; /* 眼睛移动的过渡效果 */
+}
+
+.character .body img {
+    width: 100%;
+    height: auto;
+}
+
+/* 对话框样式 */
+.dialog {
+    display: none;
+    position: fixed;
+    bottom: 170px; /* 调整对话框的垂直位置，避免遮挡角色 */
+    right: 120px; /* 调整对话框的水平位置，靠近角色 */
+    background: #ffe4e1; /* 柔和的背景色 */
+    border: 1px solid #ffb6c1; /* 边框颜色 */
+    border-radius: 12px; /* 圆润的边角 */
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+    padding: 15px;
+    z-index: 1000;
+    font-family: 'Comic Sans MS', sans-serif; /* 轻松活泼的字体 */
+    color: #ff69b4; /* 甜美的字体颜色 */
+    text-align: center;
+}
+
+.dialog.show {
+    display: block;
+}
+
+.dialog p {
+    margin: 0;
+    font-size: 16px;
+}
