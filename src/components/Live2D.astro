@@ -82,6 +82,9 @@
         .catch((error) => console.warn('[Live2D] disabled:', error))
     }
 
-    window.setTimeout(boot, 3000)
+    // Parsing the Cubism runtime stalls the exit frames, so wait until the opening is gone.
+    if (document.getElementById('opening-sequence')) {
+      document.addEventListener('aentro-opening-done', () => window.setTimeout(boot, 700), { once: true })
+    } else window.setTimeout(boot, 1500)
   }
 </script>

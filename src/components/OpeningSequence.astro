@@ -29,14 +29,20 @@
     const root = document.getElementById('opening-sequence')
     if (!root) return
     try {
+      const release = () => document.dispatchEvent(new Event('aentro-opening-done'))
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || sessionStorage.getItem('aentro-opening-seen')) {
         root.remove()
+        release()
         return
       }
       sessionStorage.setItem('aentro-opening-seen', '1')
+      // The overlay stays opaque through the hold, so the page backdrop can wait.
+      document.documentElement.classList.add('rl-booting')
 
       const SKIP_TO = 2.8
-      const END = 4
+      const ERASE_END = 3.55
+      const FADE_AT = 3.15
+      const END = 4.05
       const contour = root.querySelector('.op-contour')
       const plus = root.querySelector('.op-plus')
       const minus = root.querySelector('.op-minus')
@@ -50,68 +56,86 @@
       const p = (t, a, b) => clamp((t - a) / (b - a))
       const lerp = (a, b, k) => a + (b - a) * k
       const expoOut = (k) => (k >= 1 ? 1 : 1 - Math.pow(2, -10 * k))
-      const cubicIn = (k) => k * k * k
       const quartInOut = (k) => (k < 0.5 ? 8 * k ** 4 : 1 - (-2 * k + 2) ** 4 / 2)
       const smooth = (k) => k * k * (3 - 2 * k)
       const spring = (k) => (k >= 1 ? 1 : 1 - Math.exp(-6.5 * k) * Math.cos(10.5 * k))
 
       const frame = (t) => {
         // One continuous contour: its head outruns its tail, leaving the mark's small printed gap.
-        const erase = cubicIn(p(t, 2.8, 3.5))
+        const erase = smooth(p(t, 2.8, ERASE_END))
         const head = 1.184 * expoOut(p(t, 0.25, 1.75))
         const tail = 0.2115 * expoOut(p(t, 0.32, 1.82))
-        const start = erase ? lerp(0.1835, 0.9365, erase) + 0.0275 : tail
-        const len = erase ? 0.9725 * (1 - erase) : Math.max(0, head - tail)
-        contour.style.strokeDasharray = `${len} ${1 - len}`
-        contour.style.strokeDashoffset = String(-start)
-        contour.setAttribute('stroke-width', String(26 * expoOut(p(t, 0.25, 0.6))))
+        // The drawn mark holds still from 1.85s to 2.8s, so leave its geometry alone.
+        if (t < 1.85 || erase) {
+          const start = erase ? lerp(0.1835, 0.9365, erase) + 0.0275 : tail
+          const len = erase ? 0.9725 * (1 - erase) : Math.max(0, head - tail)
+          contour.style.strokeDasharray = `${len} ${1 - len}`
+          contour.style.strokeDashoffset = String(-start)
+          if (t < 0.6) contour.setAttribute('stroke-width', String(26 * expoOut(p(t, 0.25, 0.6))))
+        }
 
         const pop = p(t, 1.0, 1.7)
         const turn = p(t, 1.35, 2.1)
-        const out = smooth(p(t, 3.0, 3.5))
-        const scale = spring(pop) * (1 - out)
-        plus.style.opacity = minus.style.opacity = pop > 0 ? '1' : '0'
-        plus.setAttribute('transform',
-          `translate(${lerp(155, 72.6, expoOut(pop))} 70) rotate(${-90 * spring(turn)}) scale(${scale}) translate(-69 -70)`)
-        const mw = lerp(15, 46, expoOut(turn))
-        minus.setAttribute('d', `M${-mw / 2} 0h${mw}`)
-        minus.setAttribute('transform', `translate(${lerp(155, 237.1, expoOut(pop))} 70) scale(${scale})`)
+        const out = smooth(p(t, 3.0, ERASE_END))
+        if (t < 2.15 || out) {
+          const scale = spring(pop) * (1 - out)
+          plus.style.opacity = minus.style.opacity = pop > 0 ? '1' : '0'
+          plus.setAttribute('transform',
+            `translate(${lerp(155, 72.6, expoOut(pop))} 70) rotate(${-90 * spring(turn)}) scale(${scale}) translate(-69 -70)`)
+          const mw = lerp(15, 46, expoOut(turn))
+          minus.setAttribute('d', `M${-mw / 2} 0h${mw}`)
+          minus.setAttribute('transform', `translate(${lerp(155, 237.1, expoOut(pop))} 70) scale(${scale})`)
+          letters.style.opacity = String(1 - out)
+        }
 
         const text = t < 1.4 ? '' : 'AENTRO'.slice(0, 1 + Math.floor(p(t, 1.4, 2.0) * 5))
         if (letters.textContent !== text) letters.textContent = text
-        letters.style.opacity = String(1 - out)
 
         // Loading runs in two surges with a short stall between them, then completes before the hold.
-        const load = 0.62 * expoOut(p(t, 0.3, 1.3)) + 0.38 * quartInOut(p(t, 1.5, 2.5))
-        bar.style.transform = `scaleX(${load})`
-        percent.textContent = `${String(Math.round(load * 100)).padStart(3, '0')}%`
-        progress.style.opacity = String(p(t, 0.2, 0.45) * (1 - out))
+        if (t < 2.55 || out) {
+          const load = 0.62 * expoOut(p(t, 0.3, 1.3)) + 0.38 * quartInOut(p(t, 1.5, 2.5))
+          bar.style.transform = `scaleX(${load})`
+          const shown = `${String(Math.round(load * 100)).padStart(3, '0')}%`
+          if (percent.textContent !== shown) percent.textContent = shown
+          progress.style.opacity = String(p(t, 0.2, 0.45) * (1 - out))
+        }
 
-        brand.forEach((node, i) => {
+        if (t < 1.9) brand.forEach((node, i) => {
           const k = p(t, 0.5 + i * 0.1, 1.5 + i * 0.1)
           node.style.opacity = String(p(t, 0.5 + i * 0.1, 0.75 + i * 0.1))
           node.style.transform = `translateX(${48 * (1 - expoOut(k))}px)`
         })
-
-        root.style.opacity = String(1 - quartInOut(p(t, 3.3, END)))
       }
 
       let begin = 0
       let offset = 0
       let raf = 0
+      let fading = false
+      let finished = false
       const now = () => (performance.now() - begin) / 1000 + offset
       const skip = () => {
         if (begin && now() < SKIP_TO) offset += SKIP_TO - now()
       }
       const finish = () => {
+        if (finished) return
+        finished = true
         cancelAnimationFrame(raf)
         removeEventListener('keydown', skip, true)
         root.remove()
+        document.documentElement.classList.remove('rl-booting')
+        release()
       }
       const tick = (ms) => {
         if (!begin) begin = ms
         const t = now()
-        frame(t)
+        // Paint the page once while the overlay is still opaque, then fade on the compositor.
+        if (t >= 2.6) document.documentElement.classList.remove('rl-booting')
+        if (t >= FADE_AT && !fading) {
+          fading = true
+          root.style.transition = 'opacity .9s cubic-bezier(.4, 0, .2, 1)'
+          root.style.opacity = '0'
+        }
+        if (t < ERASE_END) frame(t)
         if (t >= END) finish()
         else raf = requestAnimationFrame(tick)
       }
@@ -125,6 +149,8 @@
       document.addEventListener('astro:before-swap', finish, { once: true })
     } catch {
       root.remove()
+      document.documentElement.classList.remove('rl-booting')
+      document.dispatchEvent(new Event('aentro-opening-done'))
     }
   })()
 </script>
@@ -146,7 +172,7 @@
   :global(html.dark) #opening-sequence {
     background: radial-gradient(ellipse at 50% 48%, #1d1d1b 0%, var(--rl-paper) 72%), var(--rl-paper);
   }
-  #opening-sequence.is-playing { display: grid; }
+  #opening-sequence.is-playing { display: grid; will-change: opacity; contain: layout paint; }
 
   .op-brand {
     position: absolute;
