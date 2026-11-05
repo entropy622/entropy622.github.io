@@ -247,6 +247,8 @@ body:has(article #content) .rl-backdrop-bars { opacity: calc(var(--rl-bars-opaci
 .rl-footer-meta::after { content: ''; width: 1.4rem; height: 1px; background: var(--rl-ink); }
 
 /* Fixed backdrop and HUD */
+/* Skip painting the page backdrop while the opaque opening covers it. */
+html.rl-booting .rl-backdrop { content-visibility: hidden; }
 .rl-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .rl-backdrop-dots {
   position: absolute; inset: 0;

@@ -48,36 +48,40 @@
         document.head.appendChild(script)
       })
 
-    const css = asset('live2d/waifu.css')
-    if (!document.querySelector(`link[rel="stylesheet"][href="${css}"]`)) {
-      const link = document.createElement('link')
-      link.rel = 'stylesheet'
-      link.media = '(min-width: 769px)'
-      link.href = css
-      document.head.appendChild(link)
+    const boot = () => {
+      const css = asset('live2d/waifu.css')
+      if (!document.querySelector(`link[rel="stylesheet"][href="${css}"]`)) {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.media = '(min-width: 769px)'
+        link.href = css
+        document.head.appendChild(link)
+      }
+
+      Promise.all([
+        load(asset('live2d/live2dcubismcore.js')),
+        load(asset('live2d/live2d-sdk.js')),
+        load(asset('live2d/waifu-tips.js'))
+      ])
+        .then(() => {
+          const win = window as typeof window & {
+            initWidget?: (options: Record<string, unknown>) => void
+          }
+          if (win.initWidget && !document.getElementById('waifu')) {
+            win.initWidget({
+              waifuPath: asset('live2d/waifu-tips.json'),
+              cdnPath: asset('Resources/'),
+              tools: ['hitokoto', 'express', 'switch-model', 'switch-texture', 'info', 'quit'],
+              dragEnable: true,
+              dragDirection: 'all',
+              switchType: 'order'
+            })
+          }
+          document.documentElement.dataset.live2dLoaded = 'true'
+        })
+        .catch((error) => console.warn('[Live2D] disabled:', error))
     }
 
-    Promise.all([
-      load(asset('live2d/live2dcubismcore.js')),
-      load(asset('live2d/live2d-sdk.js')),
-      load(asset('live2d/waifu-tips.js'))
-    ])
-      .then(() => {
-        const win = window as typeof window & {
-          initWidget?: (options: Record<string, unknown>) => void
-        }
-        if (win.initWidget && !document.getElementById('waifu')) {
-          win.initWidget({
-            waifuPath: asset('live2d/waifu-tips.json'),
-            cdnPath: asset('Resources/'),
-            tools: ['hitokoto', 'express', 'switch-model', 'switch-texture', 'info', 'quit'],
-            dragEnable: true,
-            dragDirection: 'all',
-            switchType: 'order'
-          })
-        }
-        document.documentElement.dataset.live2dLoaded = 'true'
-      })
-      .catch((error) => console.warn('[Live2D] disabled:', error))
+    window.setTimeout(boot, 3000)
   }
 </script>

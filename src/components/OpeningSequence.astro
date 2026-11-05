@@ -38,20 +38,35 @@
         return
       }
       sessionStorage.setItem('aentro-opening-seen', '1')
+      const root = document.documentElement
+      // The overlay is opaque until it fades, so the page backdrop can wait.
+      root.classList.add('rl-booting')
       opening.classList.add('is-playing')
       const count = document.getElementById('opening-count')
       const start = performance.now()
+      let shown = ''
       const step = (now) => {
         const t = Math.min(1, (now - start) / 1500)
-        if (count) count.textContent = String(Math.round((1 - Math.pow(1 - t, 3)) * 100)).padStart(3, '0')
+        const next = String(Math.round((1 - Math.pow(1 - t, 3)) * 100)).padStart(3, '0')
+        if (count && next !== shown) {
+          shown = next
+          count.textContent = next
+        }
         if (t < 1 && opening.isConnected) requestAnimationFrame(step)
       }
       requestAnimationFrame(step)
+      const finish = () => {
+        opening.remove()
+        root.classList.remove('rl-booting')
+      }
+      // Paint the page underneath before the overlay starts fading.
+      setTimeout(() => root.classList.remove('rl-booting'), 1400)
       // CSS also hides the overlay, even if subsequent JS fails.
-      setTimeout(() => opening.remove(), 2400)
-      document.addEventListener('astro:before-swap', () => opening.remove(), { once: true })
+      setTimeout(finish, 2400)
+      document.addEventListener('astro:before-swap', finish, { once: true })
     } catch {
       opening.remove()
+      document.documentElement.classList.remove('rl-booting')
     }
   })()
 </script>
@@ -63,12 +78,14 @@
     background-image: radial-gradient(var(--rl-dot) 1px, transparent 1.3px);
     background-size: 22px 22px;
     font-family: var(--rl-mono);
+    contain: layout paint;
   }
   #opening-sequence::before {
     content: ''; position: absolute; inset: 0;
     background: var(--rl-bars) right bottom / cover no-repeat; opacity: var(--rl-bars-opacity);
     -webkit-mask-image: linear-gradient(105deg, transparent 25%, #000 75%);
     mask-image: linear-gradient(105deg, transparent 25%, #000 75%);
+    transform: translateZ(0);
   }
   #opening-sequence.is-playing { display: grid; place-items: center; animation: opening-exit .55s 1.75s ease-in-out forwards; }
   .op-corner { position: absolute; width: 22px; height: 22px; border: 0 solid var(--rl-line-strong); }
@@ -86,7 +103,7 @@
   .op-ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: orbit-reveal 1.2s ease-out both; }
   .op-arc { stroke-dasharray: .22 .78; transform-origin: 200px 200px; animation: arc-sweep 1.7s cubic-bezier(.6, 0, .2, 1) both; }
   .opening-identity { display: flex; flex-direction: column; align-items: center; position: relative; }
-  .opening-identity > svg { width: clamp(120px, 26vw, 170px); margin-bottom: 20px; }
+  .opening-identity > svg { width: clamp(120px, 26vw, 170px); margin-bottom: 20px; contain: paint; }
   .opening-identity > svg path:first-child { stroke-dasharray: 1; animation: mark-draw 1.1s ease-out both; }
   .opening-name { padding: .1em .35em .15em; background: var(--rl-ink); color: var(--rl-paper); font-family: var(--rl-sans); font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 800; letter-spacing: .2em; padding-left: .55em; clip-path: inset(0 100% 0 0); animation: plate-wipe .5s .55s cubic-bezier(.6, 0, .2, 1) forwards; }
   .opening-caption { margin-top: 10px; font-size: .62rem; letter-spacing: .32em; color: hsl(var(--muted-foreground)); animation: op-fade .4s .9s both; }
@@ -95,7 +112,7 @@
   .op-caution i { width: 26px; height: 8px; background: repeating-linear-gradient(-45deg, var(--rl-accent) 0 4px, var(--rl-ink) 4px 8px); }
   .op-count { display: flex; align-items: baseline; gap: .7rem; width: 100%; justify-content: space-between; font-size: .7rem; color: hsl(var(--muted-foreground)); }
   .op-count small { font-size: .58rem; letter-spacing: .2em; }
-  .op-count b { margin-left: auto; font-size: 2.2rem; font-weight: 300; color: hsl(var(--foreground)); }
+  .op-count b { margin-left: auto; font-size: 2.2rem; font-weight: 300; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
   .opening-rule { width: 100%; height: 2px; background: var(--rl-accent); transform-origin: left; animation: rule-reveal 1.5s cubic-bezier(.3, 0, .2, 1) both; }
   @keyframes mark-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
   @keyframes orbit-reveal { from { opacity: 0; transform: scale(.88) rotate(-25deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
