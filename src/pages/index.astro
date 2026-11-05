@@ -2,88 +2,105 @@
 import { Image } from 'astro:assets'
 import { getBlogCollection } from 'astro-pure/server'
 import avatarImage from '@/assets/avatar.png'
-import RhineOrbit from '@/components/RhineOrbit.astro'
+import RhineTerminal from '@/components/home/RhineTerminal.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { sortPublicPosts } from '@/utils/blog'
 import '@/assets/styles/home-dossier.css'
 
 const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
-const dateLabel = (date: Date) => new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(date)
+const postDate = (post: (typeof posts)[number]) => post.data.updatedDate ?? post.data.publishDate
+const dateLabel = (date: Date) => {
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+}
 const featured = [
-  { title: 'Blender Copilot', stack: 'Blender / Python / LLM', href: 'https://github.com/entropy622/blender_copilot', kind: 'copilot' },
-  { title: 'Unity 卡通渲染', stack: 'URP / HLSL / SDF', href: 'https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters', kind: 'shader' }
+  { title: 'Blender Copilot', stack: 'Blender / Python / LLM', href: 'https://github.com/entropy622/blender_copilot', kind: 'copilot', medium: 'GENERATIVE TOOLS' },
+  { title: 'Unity 卡通渲染', stack: 'URP / HLSL / SDF', href: 'https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters', kind: 'shader', medium: 'REAL-TIME GRAPHICS' }
 ]
 ---
 
 <PageLayout meta={{ title: '首页' }}>
-  <main class='dossier-home'>
-    <section class='dossier-intro animate' aria-labelledby='home-title'>
-      <div class='dossier-profile'>
-        <p class='dossier-eyebrow'>CODE / ART / NOTES</p>
-        <h1 id='home-title'><span>AENTRO</span><span class='dossier-inverse'>PERSONAL BLOG</span></h1>
-        <div class='dossier-bio'>
-          <p class='dossier-name'>回首空城 <span>游戏客户端 / 图形 / Web</span></p>
-          <p>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。</p>
-        </div>
-        <div class='dossier-actions'>
-          <a href='/projects' class='dossier-action-primary'>探索项目 <span aria-hidden='true'>↗</span></a>
-          <a href='/about'>关于我 <span aria-hidden='true'>→</span></a>
-        </div>
-      </div>
-      <div class='dossier-portrait'>
-        <RhineOrbit class='dossier-orbit' />
-        <div class='portrait-frame'><Image src={avatarImage} alt='Aentro 的头像' width={224} height={224} loading='eager' /></div>
-        <span class='portrait-plus' aria-hidden='true'>+</span>
-        <p class='portrait-caption' aria-hidden='true'>PERSONAL PERSPECTIVE<br /><span>技术实践 · 创作记录</span></p>
+  <main class='rl-home'>
+    <section class='rl-hero animate' aria-labelledby='home-title'>
+      <p class='rl-kicker'>ACCESS LEVEL // PUBLIC</p>
+      <h1 id='home-title'><span class='rl-plate'>AENTRO</span><span class='sr-only'> 个人博客</span></h1>
+      <div class='rl-hero-link' aria-hidden='true'></div>
+      <p class='rl-hero-name'>
+        <Image src={avatarImage} alt='' width={64} height={64} loading='eager' />
+        回首空城 <span>游戏客户端 / 图形 / Web</span>
+      </p>
+      <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。</p>
+      <div class='rl-hero-actions'>
+        <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
+        <a href='/projects' class='rl-btn'>探索项目 <span aria-hidden='true'>↗</span></a>
       </div>
     </section>
 
-    <section class='dossier-work' aria-labelledby='work-title'>
-      <div class='dossier-section-heading'>
-        <div><p class='dossier-eyebrow'>01 / SELECTED WORKS</p><h2 id='work-title'>从想法到实现<span aria-hidden='true'>.</span></h2></div>
-        <a href='/projects'>全部项目 <span aria-hidden='true'>↗</span></a>
-      </div>
-      <div class='dossier-work-grid'>
+    <section class='rl-term-wrap animate' aria-label='交互式终端'>
+      <RhineTerminal />
+    </section>
+
+    <section class='rl-section' aria-labelledby='work-title'>
+      <header class='rl-section-head'>
+        <div>
+          <p class='rl-kicker'>01 / SELECTED WORKS</p>
+          <h2 id='work-title'>从想法到实现<span aria-hidden='true'>.</span></h2>
+        </div>
+        <a href='/projects' class='rl-more'>全部项目 <span aria-hidden='true'>↗</span></a>
+      </header>
+      <div class='rl-works'>
         {featured.map((project, index) => (
-          <a href={project.href} class:list={['dossier-work-card', project.kind]}>
-            <div class='work-illustration' aria-hidden='true'>
-              <span class='work-index'>0{index + 1}</span>
+          <a href={project.href} class:list={['rl-work', project.kind]}>
+            <div class='rl-work-art' aria-hidden='true'>
+              <span class='rl-work-index'>PANEL-0{index + 1}</span>
+              <span class='rl-work-medium'>{project.medium}</span>
               {project.kind === 'copilot' ? (
                 <svg viewBox='0 0 420 220' fill='none'>
                   <g stroke='currentColor' stroke-width='1.2'>
                     <path d='M210 28 296 76V158L210 206 124 158V76ZM124 76 210 125 296 76M210 125V206' />
                     <path d='M167 52 253 101V182M253 52 167 101V182M124 117 210 166 296 117' opacity='.35' />
                     <circle cx='210' cy='117' r='99' stroke-dasharray='2 7' opacity='.5' />
-                    <path d='M58 118H104M316 118H362M81 108V128M339 108V128' />
                   </g>
-                  <circle cx='210' cy='125' r='5' fill='currentColor' />
+                  <rect x='205' y='120' width='10' height='10' fill='var(--rl-accent)' />
                 </svg>
               ) : (
                 <svg viewBox='0 0 420 220' fill='none'>
                   <circle cx='210' cy='110' r='86' stroke='currentColor' stroke-width='1.2' />
                   <path d='M210 24A86 86 0 0 1 210 196C255 154 255 66 210 24Z' fill='currentColor' opacity='.85' />
                   <path d='M210 24C165 66 165 154 210 196' stroke='currentColor' />
-                  <ellipse cx='210' cy='110' rx='120' ry='31' stroke='currentColor' transform='rotate(-28 210 110)' />
-                  <path d='M70 190H128M78 181V199M310 36H360' stroke='currentColor' />
-                  <circle cx='312' cy='55' r='5' fill='currentColor' />
+                  <ellipse cx='210' cy='110' rx='120' ry='31' stroke='var(--rl-accent)' stroke-width='1.4' transform='rotate(-28 210 110)' />
                 </svg>
               )}
-              <span class='work-medium'>{project.kind === 'copilot' ? 'GENERATIVE TOOLS' : 'REAL-TIME GRAPHICS'}</span>
             </div>
-            <div class='work-card-caption'><div><h3>{project.title}</h3><p>{project.stack}</p></div><span class='work-arrow' aria-hidden='true'>↗</span></div>
+            <div class='rl-work-caption'>
+              <div><h3>{project.title}</h3><p>{project.stack}</p></div>
+              <span class='rl-work-arrow' aria-hidden='true'>↗</span>
+            </div>
           </a>
         ))}
       </div>
     </section>
 
-    <section class='dossier-notes' aria-labelledby='notes-title'>
-      <div class='notes-heading'><p class='dossier-eyebrow'>02 / FIELD NOTES</p><h2 id='notes-title'>记录，<br />也是思考<span aria-hidden='true'>.</span></h2><a href='/blog'>全部文章 <span aria-hidden='true'>↗</span></a></div>
-      <ol class='notes-index'>
-        {posts.map((post, index) => (
-          <li><a href={`/blog/${post.id}`}><span class='note-number' aria-hidden='true'>{String(index + 1).padStart(2, '0')}</span><div><time datetime={(post.data.updatedDate ?? post.data.publishDate).toISOString()}>{dateLabel(post.data.updatedDate ?? post.data.publishDate)}</time><h3>{post.data.title}</h3></div><span class='note-arrow' aria-hidden='true'>↗</span></a></li>
+    <section class='rl-section' aria-labelledby='notes-title'>
+      <header class='rl-section-head'>
+        <div>
+          <p class='rl-kicker'>02 / FIELD NOTES</p>
+          <h2 id='notes-title'>记录，也是思考<span aria-hidden='true'>.</span></h2>
+        </div>
+        <a href='/blog' class='rl-more'>全部文章 <span aria-hidden='true'>↗</span></a>
+      </header>
+      <ol class='rl-log'>
+        {posts.map((post) => (
+          <li>
+            <a href={`/blog/${post.id}`}>
+              <time datetime={postDate(post).toISOString()}>{dateLabel(postDate(post))}</time>
+              <h3>{post.data.title}</h3>
+              {post.data.tags[0] && <span class='rl-log-tag'>{post.data.tags[0]}</span>}
+              <span class='rl-log-arrow' aria-hidden='true'>→</span>
+            </a>
+          </li>
         ))}
       </ol>
     </section>
-    <div class='dossier-colophon' aria-hidden='true'><span>AENTRO<span class='colophon-square'></span></span><span>END OF INDEX / CONTINUE EXPLORING</span></div>
   </main>
 </PageLayout>

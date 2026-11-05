@@ -4,8 +4,9 @@ import type { CollectionEntry } from 'astro:content'
 
 import { Paginator, PostPreview } from 'astro-pure/components/pages'
 import { getBlogCollection, getUniqueTags } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
+import DirectoryHeader from '@/components/DirectoryHeader.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import '@/assets/styles/directories.css'
 import config from '@/site-config'
 import { sortPublicPosts } from '@/utils/blog'
 
@@ -53,16 +54,10 @@ const paginationProps = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' variant='back' />
-  <main class='mt-6 lg:mt-10'>
-    <div id='content-header' class='animate'>
-      <h1 class='mb-6 flex items-end gap-x-2 text-3xl font-medium'>
-        Tags:
-        <span class='text-2xl'>#{tag}</span>
-      </h1>
-    </div>
-
+  <main class='directory-page directory-blog'>
+    <DirectoryHeader title={`#${tag}`} label='TAG' number='05' description={`标签「${tag}」下的全部文章`} />
     <section id='content' class='animate' aria-label='Blog post list'>
+      <div class='directory-blog-meta'>共 {page.total} 篇 · 第 {page.currentPage} 页 · <a href='/tags'>全部标签 →</a></div>
       <ul class='flex flex-col gap-y-3 text-start'>
         {page.data.map((post) => <PostPreview {post} detailed />)}
       </ul>

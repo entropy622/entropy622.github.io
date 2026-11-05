@@ -1,8 +1,8 @@
 ---
 import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
-import { Button } from 'astro-pure/user'
-import { cn } from 'astro-pure/utils'
+import DirectoryHeader from '@/components/DirectoryHeader.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
+import '@/assets/styles/directories.css'
 import { filterPublicPosts } from '@/utils/blog'
 
 const allPosts = filterPublicPosts(await getBlogCollection())
@@ -15,36 +15,35 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <Button title='Back' href='/blog' variant='back' />
-  <main class='mt-6 lg:mt-10'>
-    <div id='content-header' class='animate'>
-      <h1 class='mb-6 text-3xl font-medium'>Tags</h1>
-    </div>
-
+  <main class='directory-page directory-tags'>
+    <DirectoryHeader title='标签' label='TAGS' number='05' description='按主题索引全部公开文章' />
     <div id='content' class='animate'>
       {
         allTags.length > 0 ? (
-          <ul class='flex flex-wrap gap-4'>
-            {allTags.map(([tag, val]) => (
+          <ul class='tag-index'>
+            {allTags.map(([tag, val], index) => (
               <li>
-                <Button
-                  href={`/tags/${tag}`}
-                  variant='pill'
-                  class={cn(
-                    'items-start gap-x-1',
-                    val > 2 ? 'rounded-xl px-3 py-1 text-xl' : val > 1 && 'text-lg'
-                  )}
-                >
-                  {tag}
-                  <span class={val > 2 ? 'text-base' : 'text-xs'}>{val}</span>
-                </Button>
+                <a href={`/tags/${tag}`}>
+                  <span class='tag-index-id' aria-hidden='true'>T-{String(index + 1).padStart(2, '0')}</span>
+                  <b>{tag}</b>
+                  <span class='tag-index-count'>{String(val).padStart(2, '0')}</span>
+                </a>
               </li>
             ))}
           </ul>
         ) : (
-          <p>Any tag yet.</p>
+          <p>还没有标签。</p>
         )
       }
     </div>
   </main>
 </PageLayout>
+
+<style>
+  .tag-index { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .6rem; list-style: none; padding: 0; margin: 0; }
+  .tag-index a { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .8rem; padding: 1rem; border: 1px solid var(--rl-line-strong); background: var(--rl-glass); transition: background .2s, color .2s; }
+  .tag-index a:hover { background: var(--rl-ink); color: var(--rl-paper); border-color: var(--rl-ink); }
+  .tag-index-id { font: 500 .55rem/1 var(--rl-mono); letter-spacing: .12em; color: var(--rl-accent-ink); }
+  .tag-index b { font-weight: 700; overflow-wrap: anywhere; }
+  .tag-index-count { font: 300 1.3rem/1 var(--rl-mono); }
+</style>

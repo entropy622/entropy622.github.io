@@ -1,0 +1,483 @@
+---
+import { getBlogCollection, getUniqueTags } from 'astro-pure/server'
+import { projectTracks } from '@/data/projects'
+import { sortPublicPosts } from '@/utils/blog'
+
+interface FsNode {
+  name: string
+  dir?: boolean
+  href?: string
+  info?: string[]
+  children?: FsNode[]
+}
+
+const posts = sortPublicPosts(await getBlogCollection())
+const pad = (n: number) => String(n).padStart(2, '0')
+const fmt = (d: Date) => `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())}`
+const fileName = (s: string) => s.trim().replace(/[\s/]+/g, '-')
+const postDate = (post: (typeof posts)[number]) => post.data.updatedDate ?? post.data.publishDate
+
+const fs: FsNode = {
+  name: '',
+  dir: true,
+  href: '/',
+  children: [
+    {
+      name: 'blog',
+      dir: true,
+      href: '/blog',
+      children: posts.map((post) => ({
+        name: `${fileName(post.id)}.md`,
+        href: `/blog/${post.id}`,
+        info: [
+          post.data.title,
+          `${fmt(postDate(post))}  ·  ${post.data.tags.map((tag) => `#${tag}`).join(' ')}`,
+          post.data.description ?? ''
+        ]
+      }))
+    },
+    {
+      name: 'projects',
+      dir: true,
+      href: '/projects',
+      children: projectTracks.map((track) => ({
+        name: track.id,
+        dir: true,
+        href: `/projects#${track.id}`,
+        children: track.projects.map((project) => ({
+          name: fileName(project.name),
+          href: project.links[0]?.href,
+          info: [project.name, project.year ?? '', project.description]
+        }))
+      }))
+    },
+    {
+      name: 'tags',
+      dir: true,
+      href: '/tags',
+      children: getUniqueTags(posts).map((tag) => ({
+        name: fileName(tag),
+        href: `/tags/${tag}`,
+        info: posts.filter((post) => post.data.tags.includes(tag)).map((post) => `${fmt(postDate(post))}  ${post.data.title}`)
+      }))
+    },
+    {
+      name: 'about.md',
+      href: '/about',
+      info: ['回首空城 / Aentro', '香港中文大学（深圳）计算机科学与技术本科生', '游戏客户端 · 渲染技术 · AI 辅助工具链 · Web 工程']
+    },
+    { name: 'links.md', href: '/links', info: ['友情链接，以及本站 Live2D 模型的作者名单'] }
+  ]
+}
+---
+
+<div class='rt' data-rl-term>
+  <script type='application/json' set:html={JSON.stringify(fs)} />
+  <div class='rt-bar' role='button' tabindex='0' aria-expanded='false' aria-controls='rt-body'>
+    <span class='rt-title'><i aria-hidden='true'></i>RL-TERM</span>
+    <span class='rt-peek' aria-hidden='true'><span class='rt-sigil'>$</span><span class='rt-peek-text'></span><span class='rt-caret'></span></span>
+    <span class='rt-name'>aentro@rhine — terminal</span>
+    <span class='rt-hint'><span class='rt-hint-closed'>点击或按 <kbd>`</kbd> 打开</span><span class='rt-hint-open'>Esc 收起</span></span>
+    <span class='rt-ctrl' aria-hidden='true'><span></span><span></span><span></span></span>
+  </div>
+  <div class='rt-body' id='rt-body' inert>
+    <div class='rt-scroll'>
+      <div class='rt-banner'>
+        <b>RL-TERM v1.0</b> · 莱茵生命公开档案终端<br />
+        <span>输入 <code>help</code> 查看命令，<code>Tab</code> 补全，<code>↑ ↓</code> 翻阅历史。</span>
+      </div>
+      <div class='rt-log' aria-live='polite'></div>
+      <label class='rt-input-row'>
+        <span class='rt-prompt'><span class='rt-user'>aentro</span>@<span class='rt-host'>rhine</span>:<span class='rt-cwd'>~</span>$</span>
+        <input type='text' spellcheck='false' autocomplete='off' autocapitalize='off' aria-label='终端输入' />
+      </label>
+    </div>
+  </div>
+</div>
+
+<script>
+  interface FsNode {
+    name: string
+    dir?: boolean
+    href?: string
+    info?: string[]
+    children?: FsNode[]
+  }
+  type Tone = 'fg' | 'muted' | 'accent' | 'ok' | 'err'
+  type Ctx = { args: string[]; arg: string }
+
+  const root = document.querySelector<HTMLElement>('[data-rl-term]')
+  if (root) init(root)
+
+  function init(root: HTMLElement) {
+    const fs = JSON.parse(root.querySelector('script[type="application/json"]')!.textContent || '{}') as FsNode
+    const bar = root.querySelector<HTMLElement>('.rt-bar')!
+    const body = root.querySelector<HTMLElement>('.rt-body')!
+    const scroll = root.querySelector<HTMLElement>('.rt-scroll')!
+    const log = root.querySelector<HTMLElement>('.rt-log')!
+    const input = root.querySelector<HTMLInputElement>('input')!
+    const cwdLabel = root.querySelector<HTMLElement>('.rt-input-row .rt-cwd')!
+    const peekText = root.querySelector<HTMLElement>('.rt-peek-text')!
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let cwd: string[] = []
+    const history: string[] = []
+    let historyIndex = -1
+
+    const pathLabel = (path: string[]) => (path.length ? `~/${path.join('/')}` : '~')
+    const nodeAt = (path: string[]) => {
+      let node: FsNode | undefined = fs
+      for (const part of path) node = node?.children?.find((child) => child.name === part)
+      return node
+    }
+    const resolve = (raw = '') => {
+      const text = raw.trim()
+      const parts = text.startsWith('/') || text.startsWith('~') ? [] : [...cwd]
+      for (const seg of text.replace(/^~/, '').split('/')) {
+        if (!seg || seg === '.') continue
+        if (seg === '..') parts.pop()
+        else parts.push(seg)
+      }
+      const node = nodeAt(parts)
+      return node ? { node, path: parts } : null
+    }
+
+    const el = (tag: string, cls?: string, text?: string) => {
+      const node = document.createElement(tag)
+      if (cls) node.className = cls
+      if (text !== undefined) node.textContent = text
+      return node
+    }
+    const print = (text: string, tone: Tone = 'fg') => {
+      log.append(el('div', `rt-line is-${tone}`, text || '\u00a0'))
+    }
+    const printNodes = (...nodes: Node[]) => {
+      const line = el('div', 'rt-line is-fg')
+      line.append(...nodes)
+      log.append(line)
+    }
+    const link = (text: string, href?: string, cls = 'rt-link') => {
+      if (!href) return el('span', cls, text)
+      const a = el('a', cls, text) as HTMLAnchorElement
+      a.href = href
+      if (/^https?:/.test(href)) a.target = '_blank'
+      return a
+    }
+    const echoInput = (raw: string) => {
+      const line = el('div', 'rt-line is-fg')
+      line.append(el('span', 'rt-prompt', `aentro@rhine:${pathLabel(cwd)}$ `), document.createTextNode(raw))
+      log.append(line)
+    }
+
+    const setTheme = (mode: string) => {
+      const html = document.documentElement
+      const next = mode === 'dark' || mode === 'light' ? mode : html.classList.contains('dark') ? 'light' : 'dark'
+      html.classList.toggle('dark', next === 'dark')
+      localStorage.setItem('theme', next)
+      const toggle = document.getElementById('toggleDarkMode')
+      if (toggle) toggle.dataset.theme = next
+      return next
+    }
+
+    const commands: Record<string, { desc: string; usage?: string; run: (ctx: Ctx) => void }> = {
+      help: {
+        desc: '列出全部命令',
+        run: () => {
+          print('可用命令：', 'muted')
+          for (const [name, spec] of Object.entries(commands)) {
+            const line = el('div', 'rt-line rt-help')
+            line.append(el('span', 'rt-help-name', spec.usage ?? name), el('span', 'rt-help-desc', spec.desc))
+            log.append(line)
+          }
+        }
+      },
+      whoami: {
+        desc: '简短的自我介绍',
+        run: () => {
+          print('回首空城 / Aentro', 'accent')
+          print('ROLE   游戏客户端 · 图形 · Web')
+          print('BASE   香港中文大学（深圳）· 计算机科学与技术')
+          print('FOCUS  UE / Unity · 实时渲染 · AI 辅助工具链')
+          printNodes(document.createTextNode('LINK   '), link('github.com/entropy622', 'https://github.com/entropy622'))
+        }
+      },
+      ls: {
+        desc: '列出目录内容',
+        usage: 'ls [path]',
+        run: ({ arg }) => {
+          const hit = resolve(arg)
+          if (!hit) return print(`ls: ${arg}: 没有这个文件或目录`, 'err')
+          if (!hit.node.dir) return print(hit.node.name)
+          const grid = el('div', 'rt-line rt-ls')
+          for (const child of hit.node.children ?? []) {
+            if (child.dir) {
+              const button = el('button', 'rt-link is-dir', `${child.name}/`) as HTMLButtonElement
+              button.type = 'button'
+              button.addEventListener('click', () => run(`cd ${pathLabel([...hit.path, child.name])}`))
+              grid.append(button)
+            } else grid.append(link(child.name, child.href))
+          }
+          log.append(grid)
+        }
+      },
+      cd: {
+        desc: '切换目录',
+        usage: 'cd [path]',
+        run: ({ arg }) => {
+          const hit = resolve(arg || '~')
+          if (!hit) return print(`cd: ${arg}: 没有这个目录`, 'err')
+          if (!hit.node.dir) return print(`cd: ${arg}: 不是目录`, 'err')
+          cwd = hit.path
+          cwdLabel.textContent = pathLabel(cwd)
+          commands.ls.run({ args: [], arg: '' })
+        }
+      },
+      pwd: { desc: '显示当前路径', run: () => print(pathLabel(cwd)) },
+      cat: {
+        desc: '查看文件摘要',
+        usage: 'cat <file>',
+        run: ({ arg }) => {
+          const hit = resolve(arg)
+          if (!arg || !hit) return print(`cat: ${arg || '缺少文件名'}: 没有这个文件`, 'err')
+          if (hit.node.dir) return print(`cat: ${arg}: 是一个目录，试试 ls`, 'err')
+          const [first, ...rest] = (hit.node.info ?? []).filter(Boolean)
+          if (first) print(first, 'accent')
+          rest.forEach((line) => print(line, 'muted'))
+          if (hit.node.href) printNodes(document.createTextNode('→ '), link(`open ${arg}`, hit.node.href))
+        }
+      },
+      open: {
+        desc: '打开对应页面',
+        usage: 'open [path]',
+        run: ({ arg }) => {
+          const hit = resolve(arg)
+          if (!hit?.node.href) return print(`open: ${arg}: 没有可打开的页面`, 'err')
+          print(`正在打开 ${hit.node.href} …`, 'ok')
+          if (/^https?:/.test(hit.node.href)) window.open(hit.node.href, '_blank', 'noopener')
+          else setTimeout(() => location.assign(hit.node.href!), 250)
+        }
+      },
+      search: {
+        desc: '按标题、摘要或标签搜索文章',
+        usage: 'search <词>',
+        run: ({ arg }) => {
+          const query = arg.toLowerCase()
+          if (!query) return print('search: 请输入关键词', 'err')
+          const posts = nodeAt(['blog'])?.children ?? []
+          const hits = posts.filter((post) => (post.info ?? []).join(' ').toLowerCase().includes(query))
+          if (!hits.length) return print(`没有找到与「${arg}」相关的文章`, 'muted')
+          print(`找到 ${hits.length} 篇：`, 'muted')
+          hits.forEach((post) => printNodes(link(post.info?.[0] ?? post.name, post.href), el('span', 'rt-dim', `  ${post.info?.[1] ?? ''}`)))
+        }
+      },
+      theme: {
+        desc: '切换深浅色',
+        usage: 'theme [dark|light]',
+        run: ({ arg }) => print(`主题已切换为 ${setTheme(arg)}`, 'ok')
+      },
+      history: { desc: '命令历史', run: () => history.forEach((cmd, i) => print(`${String(i + 1).padStart(3, ' ')}  ${cmd}`, 'muted')) },
+      date: { desc: '当前时间', run: () => print(new Date().toLocaleString('zh-CN')) },
+      echo: { desc: '原样输出', usage: 'echo <text>', run: ({ arg }) => print(arg) },
+      clear: { desc: '清屏（Ctrl+L）', run: () => log.replaceChildren() },
+      sudo: { desc: '提升权限', run: () => print('权限不足：本次操作已上报莱茵生命安保部门。', 'err') },
+      exit: { desc: '收起终端', run: () => setOpen(false) }
+    }
+
+    function run(raw: string) {
+      const text = raw.trim()
+      echoInput(text)
+      if (text) {
+        history.push(text)
+        historyIndex = -1
+        const [name, ...args] = text.split(/\s+/)
+        const spec = commands[name.toLowerCase()]
+        if (spec) spec.run({ args, arg: args.join(' ') })
+        else {
+          print(`command not found: ${name}`, 'err')
+          print('输入 help 查看可用命令', 'muted')
+        }
+      }
+      scroll.scrollTop = scroll.scrollHeight
+    }
+
+    function complete(value: string) {
+      const space = value.lastIndexOf(' ')
+      if (space < 0) {
+        const names = Object.keys(commands).filter((name) => name.startsWith(value))
+        return { head: '', partial: value, options: names.map((name) => `${name} `) }
+      }
+      const head = value.slice(0, space + 1)
+      const token = value.slice(space + 1)
+      const slash = token.lastIndexOf('/')
+      const dirPart = token.slice(0, slash + 1)
+      const partial = token.slice(slash + 1)
+      const dir = resolve(dirPart || '.')
+      const options = (dir?.node.children ?? [])
+        .filter((child) => child.name.startsWith(partial))
+        .map((child) => `${dirPart}${child.name}${child.dir ? '/' : ''}`)
+      return { head, partial: token, options }
+    }
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        const value = input.value
+        input.value = ''
+        run(value)
+      } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+        event.preventDefault()
+        if (!history.length) return
+        if (event.key === 'ArrowUp') historyIndex = historyIndex < 0 ? history.length - 1 : Math.max(0, historyIndex - 1)
+        else historyIndex = historyIndex < 0 || historyIndex >= history.length - 1 ? -1 : historyIndex + 1
+        input.value = historyIndex < 0 ? '' : history[historyIndex]
+      } else if (event.key === 'Tab') {
+        event.preventDefault()
+        const { head, partial, options } = complete(input.value)
+        if (options.length === 1) input.value = head + options[0]
+        else if (options.length > 1) {
+          let prefix = options[0]
+          for (const option of options) while (!option.startsWith(prefix)) prefix = prefix.slice(0, -1)
+          if (prefix.length > partial.length) input.value = head + prefix
+          else {
+            echoInput(input.value)
+            print(options.join('   '), 'muted')
+            scroll.scrollTop = scroll.scrollHeight
+          }
+        }
+      } else if (event.key === 'l' && event.ctrlKey) {
+        event.preventDefault()
+        log.replaceChildren()
+      } else if (event.key === 'c' && event.ctrlKey && input.selectionStart === input.selectionEnd) {
+        event.preventDefault()
+        echoInput(`${input.value}^C`)
+        input.value = ''
+      } else if (event.key === 'Escape' && !input.value) {
+        event.preventDefault()
+        setOpen(false)
+        bar.focus()
+      }
+    })
+
+    function setOpen(open: boolean) {
+      root.classList.toggle('is-open', open)
+      bar.setAttribute('aria-expanded', String(open))
+      body.inert = !open
+      if (open) setTimeout(() => input.focus({ preventScroll: true }), 200)
+      else input.blur()
+    }
+
+    bar.addEventListener('click', () => setOpen(!root.classList.contains('is-open')))
+    bar.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault()
+        setOpen(!root.classList.contains('is-open'))
+      }
+    })
+    scroll.addEventListener('click', (event) => {
+      if (!(event.target as HTMLElement).closest('a, button') && !getSelection()?.toString()) input.focus()
+    })
+    addEventListener('keydown', (event) => {
+      const target = event.target as HTMLElement
+      if (event.key !== '`' || target.closest('input, textarea, [contenteditable="true"]')) return
+      event.preventDefault()
+      setOpen(true)
+      root.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
+    })
+
+    const demos = ['help', 'whoami', 'ls blog', 'cat about.md', 'search unity', 'theme toggle']
+    if (reduced) peekText.textContent = demos[0]
+    else {
+      let demo = 0
+      let char = 0
+      const type = () => {
+        if (!root.classList.contains('is-open')) {
+          const target = demos[demo]
+          peekText.textContent = target.slice(0, char)
+          if (char++ < target.length) return setTimeout(type, 70 + Math.random() * 60)
+          demo = (demo + 1) % demos.length
+          char = 0
+          return setTimeout(type, 1600)
+        }
+        setTimeout(type, 600)
+      }
+      type()
+    }
+
+    print('提示：输入 help 开始，whoami 了解我。', 'muted')
+  }
+</script>
+
+<style>
+  .rt {
+    --rt-bg: #161614;
+    --rt-fg: #e8e6df;
+    --rt-muted: #8f8c84;
+    --rt-line: rgba(232, 230, 223, .14);
+    --rt-accent: #f0893e;
+    --rt-ok: #b5d334;
+    --rt-err: #f2665a;
+    position: relative;
+    border: 1px solid var(--rl-ink);
+    background: var(--rt-bg);
+    color: var(--rt-fg);
+    font-family: var(--rl-mono);
+    font-size: .8rem;
+  }
+  html.dark .rt { --rt-bg: #0f0f0e; border-color: var(--rl-line-strong); }
+  .rt::after { content: ''; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border-top: 2px solid var(--rt-accent); border-left: 2px solid var(--rt-accent); pointer-events: none; }
+  .rt-bar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 1rem; padding: .8rem 1rem; cursor: pointer; user-select: none; }
+  .rt-bar:focus-visible { outline: 2px solid var(--rt-accent); outline-offset: -2px; }
+  .rt-title { display: inline-flex; align-items: center; gap: .5rem; font-size: .62rem; font-weight: 700; letter-spacing: .18em; color: var(--rt-muted); }
+  .rt-title i { width: 6px; height: 6px; background: var(--rt-ok); }
+  .rt-peek, .rt-name { min-width: 0; overflow: hidden; white-space: nowrap; }
+  .rt-peek { display: flex; align-items: center; gap: .55rem; }
+  .rt-name { display: none; color: var(--rt-muted); font-size: .7rem; letter-spacing: .06em; }
+  .rt-sigil { color: var(--rt-accent); }
+  .rt-caret { width: .5rem; height: 1rem; background: var(--rt-accent); animation: rt-blink 1s steps(1) infinite; }
+  .rt-hint { font-size: .6rem; letter-spacing: .08em; color: var(--rt-muted); white-space: nowrap; }
+  .rt-hint kbd { padding: .05rem .35rem; border: 1px solid var(--rt-line); font-family: inherit; color: var(--rt-fg); }
+  .rt-hint-open { display: none; }
+  .rt-ctrl { display: flex; gap: 4px; }
+  .rt-ctrl span { width: 9px; height: 9px; border: 1px solid var(--rt-muted); }
+  .rt-ctrl span:last-child { background: var(--rt-accent); border-color: var(--rt-accent); }
+  .rt-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+  .rt-scroll { min-height: 0; overflow: hidden; }
+  .rt.is-open .rt-bar { border-bottom: 1px solid var(--rt-line); }
+  .rt.is-open .rt-body { grid-template-rows: 1fr; }
+  .rt.is-open .rt-scroll { max-height: 22rem; overflow-y: auto; padding: 1rem 1.1rem 1.1rem; }
+  .rt.is-open .rt-peek { display: none; }
+  .rt.is-open .rt-name { display: block; }
+  .rt.is-open .rt-hint-closed { display: none; }
+  .rt.is-open .rt-hint-open { display: inline; }
+  .rt-banner { margin-bottom: .9rem; padding-bottom: .9rem; border-bottom: 1px dashed var(--rt-line); line-height: 1.8; }
+  .rt-banner b { color: var(--rt-accent); }
+  .rt-banner span { color: var(--rt-muted); }
+  .rt-banner code { color: var(--rt-fg); }
+  .rt-log :global(.rt-line) { line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .rt-log :global(.is-muted), .rt-log :global(.rt-dim) { color: var(--rt-muted); }
+  .rt-log :global(.is-accent) { color: var(--rt-accent); font-weight: 600; }
+  .rt-log :global(.is-ok) { color: var(--rt-ok); }
+  .rt-log :global(.is-err) { color: var(--rt-err); }
+  .rt-log :global(.rt-prompt), .rt-input-row .rt-prompt { color: var(--rt-muted); }
+  .rt-log :global(.rt-ls) { display: flex; flex-wrap: wrap; gap: .15rem 1.4rem; }
+  .rt-log :global(.rt-link) { color: var(--rt-fg); text-decoration: underline; text-decoration-color: var(--rt-line); text-underline-offset: .2em; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+  .rt-log :global(.rt-link:hover) { color: var(--rt-accent); text-decoration-color: var(--rt-accent); }
+  .rt-log :global(.rt-link.is-dir) { color: var(--rt-accent); text-decoration: none; }
+  .rt-log :global(.rt-help) { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1rem; }
+  .rt-log :global(.rt-help-name) { color: var(--rt-accent); }
+  .rt-log :global(.rt-help-desc) { color: var(--rt-muted); }
+  .rt-input-row { display: flex; align-items: center; gap: .5rem; margin-top: .2rem; cursor: text; }
+  .rt-user { color: var(--rt-accent); }
+  .rt-host { color: var(--rt-fg); }
+  .rt-input-row input { flex: 1; min-width: 0; padding: 0; border: 0; outline: 0; background: transparent; color: var(--rt-fg); font: inherit; caret-color: var(--rt-accent); }
+  @keyframes rt-blink { 50% { opacity: 0; } }
+  @media (max-width: 640px) {
+    .rt-bar { grid-template-columns: auto minmax(0, 1fr) auto; }
+    .rt-hint { display: none; }
+    .rt-log :global(.rt-help) { grid-template-columns: 1fr; gap: 0; margin-bottom: .3rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rt-caret { animation: none; }
+    .rt-body { transition: none; }
+  }
+</style>

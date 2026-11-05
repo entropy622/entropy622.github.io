@@ -1,5 +1,4 @@
 ---
-import { Button } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
 
 const meta = {
@@ -9,10 +8,24 @@ const meta = {
 ---
 
 <PageLayout {meta}>
-  <div class='px-4 py-10 text-center sm:px-6 lg:px-8'>
-    <h1 class='block text-7xl font-bold sm:text-9xl'>404</h1>
-    <p class='mt-3 text-muted-foreground'>Oops, something went wrong.</p>
-    <p class='text-lg'>Sorry, we couldn't find your page.</p>
-    <Button title='Back to home' href='/' variant='ahead' class='mt-5' />
-  </div>
+  <main class='rl-404'>
+    <div class='rl-404-panel rl-panel'>
+      <span class='rl-tag' aria-hidden='true'>ERR-404</span>
+      <p class='rl-kicker'>ACCESS DENIED // FILE NOT FOUND</p>
+      <h1><span class='rl-plate'>404</span></h1>
+      <p class='rl-404-text'>档案不存在，或已被移出公开区域。</p>
+      <p class='rl-404-caution' aria-hidden='true'><span class='rl-hazard'></span>CAUTION · RETURN TO INDEX</p>
+      <a href='/' class='rl-404-back'>返回首页 <span aria-hidden='true'>→</span></a>
+    </div>
+  </main>
 </PageLayout>
+
+<style>
+  .rl-404 { display: grid; place-items: center; min-height: 55vh; }
+  .rl-404-panel { width: min(100%, 520px); padding: 2.4rem 2.2rem; }
+  .rl-404 h1 { margin: 1.2rem 0 .8rem; font-size: clamp(4rem, 14vw, 7rem); }
+  .rl-404-text { font-size: .9rem; color: hsl(var(--muted-foreground)); }
+  .rl-404-caution { display: flex; align-items: center; gap: .6rem; margin-top: 1.6rem; font: 700 .58rem/1 var(--rl-mono); letter-spacing: .16em; }
+  .rl-404-back { display: inline-flex; gap: 2rem; margin-top: 1.4rem; padding: .8rem 1rem; background: var(--rl-ink); color: var(--rl-paper); font: 600 .72rem/1 var(--rl-mono); letter-spacing: .1em; }
+  .rl-404-back:hover { background: var(--rl-accent); color: #fff; }
+</style>

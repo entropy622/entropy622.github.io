@@ -1,0 +1,35 @@
+<!-- Fixed decorative layer: dot grid, bar field, HUD frame. Never intercepts input. -->
+<div class='rl-backdrop' aria-hidden='true'>
+  <div class='rl-backdrop-dots'></div>
+  <div class='rl-backdrop-grid'></div>
+  <div class='rl-backdrop-bars'></div>
+</div>
+<div class='rl-hud' aria-hidden='true'>
+  <span class='rl-corner tl'></span><span class='rl-corner tr'></span>
+  <span class='rl-corner bl'></span><span class='rl-corner br'></span>
+  <span class='rl-hud-status left'>TERMINAL READY <span>// 个人终端</span></span>
+  <span class='rl-hud-status right'><i class='rl-status'></i>LIVE <b>RL-AENTRO/26</b> <span id='rl-clock'></span></span>
+  <span class='rl-hud-foot'>RL-AENTRO · PUBLIC ARCHIVE</span>
+  <span class='rl-ruler'></span>
+</div>
+
+<script is:inline>
+  (() => {
+    const clock = document.getElementById('rl-clock')
+    const ruler = document.querySelector('.rl-ruler')
+    const pad = (n) => String(n).padStart(2, '0')
+    const tick = () => {
+      if (!clock) return
+      const d = new Date()
+      clock.textContent = `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+    }
+    tick()
+    setInterval(tick, 1000)
+    const progress = () => {
+      const max = document.documentElement.scrollHeight - innerHeight
+      ruler?.style.setProperty('--rl-progress', `${max > 0 ? (scrollY / max) * 100 : 0}%`)
+    }
+    progress()
+    addEventListener('scroll', progress, { passive: true })
+  })()
+</script>

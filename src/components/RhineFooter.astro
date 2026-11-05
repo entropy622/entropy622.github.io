@@ -1,0 +1,31 @@
+---
+import { Icon } from 'astro-pure/user'
+import config from '@/site-config'
+
+const social = config.footer.social || []
+const year = new Date().getFullYear()
+---
+
+<footer class='rl-footer'>
+  <div class='rl-rule' aria-hidden='true'></div>
+  <div class='rl-footer-grid' style='margin-top:1.4rem'>
+    <div class='rl-file'>
+      <div>FILE NUMBER: <b>AE-{year}</b></div>
+      <div>CONFIDENTIALITY: <b>PUBLIC</b></div>
+      <div class='rl-file-bars' aria-hidden='true'><span></span><span></span><span></span></div>
+    </div>
+    <div class='rl-footer-mid'>
+      <div>© {year} {config.author} · 回首空城</div>
+      <div aria-hidden='true'>RHINE LAB STYLE · GAME / GRAPHICS / WEB DIVISION</div>
+    </div>
+    <div class='rl-footer-end'>
+      <div class='rl-footer-social'>
+        {social.map(({ label, href, icon }) => (
+          <a {href} rel='me' aria-label={label} title={label}><Icon name={icon} class='size-4' /></a>
+        ))}
+      </div>
+      <span class='rl-footer-meta'>POWERED BY ASTRO</span>
+      <span class='rl-barcode' aria-hidden='true'></span>
+    </div>
+  </div>
+</footer>
