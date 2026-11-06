@@ -282,18 +282,46 @@ html.rl-booting .rl-backdrop { content-visibility: hidden; }
 .rl-hud-status.right { right: 44px; }
 .rl-hud-status.right b { color: hsl(var(--foreground)); font-weight: 600; }
 .rl-hud-foot { position: absolute; right: 44px; bottom: 20px; display: flex; align-items: center; gap: .55rem; }
-.rl-ruler {
-  position: absolute; right: 16px; top: 32vh; width: 8px; height: 36vh;
-  background: repeating-linear-gradient(to bottom, var(--rl-line-strong) 0 1px, transparent 1px 9px);
-}
-.rl-ruler::after { content: ''; position: absolute; left: -4px; width: 12px; height: 2px; top: var(--rl-progress, 0%); background: var(--rl-accent); transition: top .15s linear; }
 .rl-hud > * { opacity: 0; transition: opacity .3s; }
-@media (min-width: 1200px) { .rl-hud .rl-corner, .rl-hud .rl-ruler { opacity: 1; } }
+@media (min-width: 1200px) { .rl-hud .rl-corner { opacity: 1; } }
 @media (min-width: 1480px) { .rl-hud .rl-hud-status, .rl-hud .rl-hud-foot { opacity: 1; } }
 @media (max-width: 760px) {
   .rl-backdrop-bars { width: 100vw; height: 55vh; opacity: calc(var(--rl-bars-opacity) * .6); }
   .rl-backdrop-grid { display: none; }
 }
+
+.rl-rail {
+  position: fixed; right: 14px; top: 50%; z-index: 40;
+  display: none; transform: translateY(-50%);
+  max-height: 70vh;
+}
+@media (min-width: 1200px) { .rl-rail.is-ready { display: block; } }
+.rl-rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: flex-end; }
+.rl-rail button {
+  position: relative; display: flex; align-items: center; justify-content: flex-end;
+  width: 34px; height: var(--rl-tick-h, 12px); padding: 0;
+  cursor: pointer;
+}
+.rl-rail button::before {
+  content: ''; width: 10px; height: 2px; background: var(--rl-line-strong);
+  transition: width .4s cubic-bezier(.22, 1, .36, 1), background .3s;
+}
+.rl-rail button[data-level='3']::before { width: 6px; }
+.rl-rail button:hover::before, .rl-rail button:focus-visible::before { width: 18px; background: var(--rl-accent-ink); }
+.rl-rail button[aria-current='true']::before { width: 24px; background: var(--rl-ink); }
+.rl-rail button:focus-visible { outline: none; }
+.rl-rail-tip {
+  position: fixed; right: 58px; z-index: 41; max-width: min(320px, 40vw);
+  padding: .5rem .8rem; border: 1px solid var(--rl-line-strong);
+  background: color-mix(in srgb, var(--rl-paper) 94%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font: 600 .78rem/1.35 var(--rl-sans); color: hsl(var(--foreground));
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  pointer-events: none; opacity: 0; transform: translate(6px, -50%);
+  transition: opacity .2s, transform .3s cubic-bezier(.22, 1, .36, 1);
+}
+.rl-rail-tip.is-on { opacity: 1; transform: translate(0, -50%); }
+.rl-rail-tip small { margin-right: .6rem; font: 500 .6rem/1 var(--rl-mono); letter-spacing: .06em; color: hsl(var(--muted-foreground)); }
 
 /* Live2D companion stays clear of the reading column. */
 @media (min-width: 769px) and (max-width: 1450px) {
@@ -314,5 +342,5 @@ html.rl-booting .rl-backdrop { content-visibility: hidden; }
 @media (prefers-reduced-motion: reduce) {
   html .animate { animation: none; opacity: 1; transform: none; }
   html { scroll-behavior: auto; }
-  html header-component, html a, html button { transition: none; }
+  html header-component, html a, html button, .rl-rail button::before, .rl-rail-tip { transition: none; }
 }

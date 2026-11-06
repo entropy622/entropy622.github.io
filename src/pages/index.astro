@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import { getBlogCollection } from 'astro-pure/server'
 import avatarImage from '@/assets/avatar.png'
 import RhineTerminal from '@/components/home/RhineTerminal.astro'
+import RhineOrbit from '@/components/RhineOrbit.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { sortPublicPosts } from '@/utils/blog'
 import '@/assets/styles/home-dossier.css'
@@ -22,17 +23,22 @@ const featured = [
 <PageLayout meta={{ title: '首页' }}>
   <main class='rl-home'>
     <section class='rl-hero animate' aria-labelledby='home-title'>
-      <p class='rl-kicker'>ACCESS LEVEL // PUBLIC</p>
-      <h1 id='home-title'><span class='rl-plate'>AENTRO</span><span class='sr-only'> 个人博客</span></h1>
-      <div class='rl-hero-link' aria-hidden='true'></div>
-      <p class='rl-hero-name'>
-        <Image src={avatarImage} alt='' width={64} height={64} loading='eager' />
-        回首空城 <span>游戏客户端 / 图形 / Web</span>
-      </p>
-      <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。</p>
-      <div class='rl-hero-actions'>
-        <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
-        <a href='/projects' class='rl-btn'>探索项目 <span aria-hidden='true'>↗</span></a>
+      <div class='rl-hero-text'>
+        <p class='rl-kicker'>ACCESS LEVEL // PUBLIC</p>
+        <h1 id='home-title'><span class='rl-plate'>AENTRO</span><span class='sr-only'> 个人博客</span></h1>
+        <div class='rl-hero-link' aria-hidden='true'></div>
+        <p class='rl-hero-name'>回首空城 <span>游戏客户端 / 图形 / Web</span></p>
+        <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。</p>
+        <div class='rl-hero-actions'>
+          <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
+          <a href='/projects' class='rl-btn'>探索项目 <span aria-hidden='true'>↗</span></a>
+        </div>
+      </div>
+      <div class='rl-portrait'>
+        <RhineOrbit class='rl-portrait-orbit' />
+        <div class='rl-portrait-frame'><Image src={avatarImage} alt='Aentro 的头像' width={224} height={224} loading='eager' /></div>
+        <span class='rl-portrait-plus' aria-hidden='true'>+</span>
+        <p class='rl-portrait-caption' aria-hidden='true'>PERSONAL PERSPECTIVE<br /><span>技术实践 · 创作记录</span></p>
       </div>
     </section>
 

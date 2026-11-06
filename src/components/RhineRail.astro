@@ -1,0 +1,102 @@
+<!-- Section rail: one tick per heading on the page; hover shows the title, click jumps there. -->
+<nav class='rl-rail' aria-label='页面章节'><ol></ol></nav>
+<div class='rl-rail-tip' aria-hidden='true'></div>
+
+<script is:inline>
+  (() => {
+    const rail = document.querySelector('.rl-rail')
+    const list = rail?.querySelector('ol')
+    const tip = document.querySelector('.rl-rail-tip')
+    if (!rail || !list || !tip) return
+
+    const HEADER_OFFSET = 88
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)')
+
+    const labelOf = (node) => {
+      const clone = node.cloneNode(true)
+      clone.querySelectorAll('.anchor, .sr-only, [aria-hidden="true"]').forEach((n) => n.remove())
+      return clone.textContent.replace(/\s+/g, ' ').trim()
+    }
+    const collect = () => {
+      const article = document.querySelector('article #content')
+      const root = article || document.querySelector('#main-container main') || document.querySelector('#main-container')
+      if (!root) return []
+      let nodes = Array.from(root.querySelectorAll(article ? 'h2, h3' : 'h1, h2'))
+        .filter((n) => n.getClientRects().length && !n.closest('nav, aside, #sidebar, toc-heading, [aria-hidden="true"]') && labelOf(n))
+      // Long articles keep only chapters so the ticks stay readable.
+      if (nodes.length > 32) nodes = nodes.filter((n) => n.tagName !== 'H3')
+      const title = document.querySelector('#main-container h1')
+      const entries = nodes.map((n) => ({ node: n, label: labelOf(n), level: n.tagName === 'H3' ? 3 : 2 }))
+      if (!entries.length || entries[0].node !== title) {
+        entries.unshift({ node: null, label: title ? labelOf(title) : document.title, level: 2 })
+      }
+      return entries
+    }
+
+    let entries = []
+    let buttons = []
+    let active = -1
+
+    const topOf = (entry) => (entry.node ? entry.node.getBoundingClientRect().top + scrollY - HEADER_OFFSET : 0)
+    const showTip = (i) => {
+      const box = buttons[i].getBoundingClientRect()
+      tip.innerHTML = ''
+      const index = document.createElement('small')
+      index.textContent = String(i + 1).padStart(2, '0')
+      tip.append(index, entries[i].label)
+      tip.style.top = `${box.top + box.height / 2}px`
+      tip.classList.add('is-on')
+    }
+    const hideTip = () => tip.classList.remove('is-on')
+
+    const sync = () => {
+      const probe = scrollY + innerHeight * 0.3
+      let next = 0
+      for (let i = 0; i < entries.length; i++) if (topOf(entries[i]) <= probe - HEADER_OFFSET) next = i
+      if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) next = entries.length - 1
+      if (next === active) return
+      buttons[active]?.removeAttribute('aria-current')
+      buttons[next]?.setAttribute('aria-current', 'true')
+      active = next
+    }
+
+    const build = () => {
+      entries = collect()
+      list.replaceChildren()
+      buttons = entries.map((entry, i) => {
+        const item = document.createElement('li')
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.dataset.level = String(entry.level)
+        button.setAttribute('aria-label', entry.label)
+        button.addEventListener('click', () => {
+          window.scrollTo({ top: Math.max(0, topOf(entry)), behavior: reduced.matches ? 'auto' : 'smooth' })
+        })
+        button.addEventListener('pointerenter', () => showTip(i))
+        button.addEventListener('focus', () => showTip(i))
+        button.addEventListener('pointerleave', hideTip)
+        button.addEventListener('blur', hideTip)
+        item.append(button)
+        list.append(item)
+        return button
+      })
+      rail.style.setProperty('--rl-tick-h', `${Math.max(6, Math.min(14, (innerHeight * 0.66) / Math.max(1, entries.length)))}px`)
+      rail.classList.toggle('is-ready', entries.length >= 2)
+      active = -1
+      sync()
+    }
+
+    let queued = false
+    addEventListener('scroll', () => {
+      if (queued) return
+      queued = true
+      requestAnimationFrame(() => {
+        queued = false
+        sync()
+      })
+    }, { passive: true })
+    addEventListener('resize', build)
+    addEventListener('load', build)
+    build()
+  })()
+</script>
