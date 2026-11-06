@@ -93,8 +93,8 @@
 .rl-entry-title { margin: .75rem 0 0; font-size: 1.12rem; font-weight: 750; line-height: 1.45; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .rl-entry-desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-top: .45rem; font-size: .84rem; line-height: 1.8; color: hsl(var(--muted-foreground)); }
 .rl-entry-tags { display: flex; flex-wrap: wrap; gap: .3rem .8rem; margin-top: .65rem; font: 500 .6rem/1.4 var(--rl-mono); letter-spacing: .04em; color: hsl(var(--muted-foreground)); }
-.rl-entry-cover { position: absolute; z-index: 0; top: 0; right: 0; width: 50%; height: 100%; object-fit: cover; opacity: .35; pointer-events: none; -webkit-mask-image: linear-gradient(to right, transparent, #000 70%); mask-image: linear-gradient(to right, transparent, #000 70%); transition: opacity .35s var(--rl-ease); }
-.rl-entry > a:hover .rl-entry-cover { opacity: .7; }
+.rl-entry-cover { position: absolute; z-index: 0; top: 0; right: 0; width: 50%; height: 100%; object-fit: cover; opacity: var(--rl-cover-opacity); filter: var(--rl-cover-filter); pointer-events: none; -webkit-mask-image: linear-gradient(to right, transparent, #000 70%); mask-image: linear-gradient(to right, transparent, #000 70%); transition: opacity .35s var(--rl-ease), filter .35s var(--rl-ease); }
+.rl-entry > a:hover .rl-entry-cover { opacity: var(--rl-cover-hover-opacity); }
 .rl-entry > a.has-cover .rl-entry-desc { margin-right: 4rem; }
 .rl-entry-arrow { align-self: center; color: hsl(var(--muted-foreground)); transition: transform .25s var(--rl-ease), color .2s; }
 .rl-entry > a:hover .rl-entry-arrow { transform: translateX(4px); color: var(--rl-accent-ink); }
