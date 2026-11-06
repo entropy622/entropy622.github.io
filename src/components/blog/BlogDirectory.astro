@@ -1,0 +1,68 @@
+---
+import type { Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+import { Paginator } from 'astro-pure/components/pages'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import PostEntry from '@/components/blog/PostEntry.astro'
+import DirectoryHeader from '@/components/DirectoryHeader.astro'
+import { postKindLabel, type PostKind } from '@/utils/blog'
+import '@/assets/styles/directories.css'
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+  uniqueTags: [string, number][]
+  kindCount: { tech: number; daily: number }
+  collectionsCount: number
+  activeKind?: PostKind
+}
+
+const { page, uniqueTags, kindCount, collectionsCount, activeKind } = Astro.props
+const meta = { description: '技术笔记与日常记录', title: activeKind ? postKindLabel[activeKind] : 'Blog' }
+---
+
+<PageLayout {meta}>
+  <main class='directory-page directory-blog'>
+    <DirectoryHeader title='文章' label='BLOG' number='01' description='技术笔记与日常记录，按时间倒序归档。' />
+    <div class='directory-blog-grid'>
+      <section aria-label='文章列表' class='animate' id='content'>
+        <div class='directory-blog-meta'>
+          <span>共 {collectionsCount} 篇{activeKind ? postKindLabel[activeKind] : '公开文章'}</span>
+          <span>第 {page.currentPage} / {page.lastPage} 页</span>
+        </div>
+        {page.data.length === 0 ? <p>还没有文章。</p> : <ol class='rl-entries'>{page.data.map((post) => <PostEntry {post} />)}</ol>}
+        <Paginator
+          {...(page.url.prev && { prevUrl: { text: '← 上一页', url: page.url.prev } })}
+          {...(page.url.next && { nextUrl: { text: '下一页 →', url: page.url.next } })}
+        />
+      </section>
+      <aside class='animate directory-blog-side' id='sidebar'>
+        <div class='directory-side-block'>
+          <h2>分区</h2>
+          <div class='directory-kinds' role='group' aria-label='文章分区'>
+            {(['tech', 'daily'] as const).map((kind) => (
+              <a
+                class:list={['directory-kind', `is-${kind}`]}
+                href={`/blog/category/${kind}`}
+                aria-current={activeKind === kind ? 'page' : undefined}
+                data-astro-prefetch
+              >
+                <span>{postKindLabel[kind]}</span>
+                <span class='directory-kind-count'>{String(kindCount[kind]).padStart(2, '0')}</span>
+              </a>
+            ))}
+          </div>
+          {activeKind && <a class='directory-side-more' href='/blog'>全部文章 <span aria-hidden='true'>→</span></a>}
+        </div>
+        {!!uniqueTags.length && (
+          <div class='directory-side-block'>
+            <h2>标签</h2>
+            <ul class='directory-tags'>
+              {uniqueTags.slice(0, 50).map(([tag, count]) => <li><a href={`/tags/${tag}`}>{tag}<span>{count}</span></a></li>)}
+            </ul>
+            <a class='directory-side-more' href='/tags'>全部标签 <span aria-hidden='true'>→</span></a>
+          </div>
+        )}
+      </aside>
+    </div>
+  </main>
+</PageLayout>

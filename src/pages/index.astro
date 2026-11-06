@@ -20,11 +20,11 @@ const projects = projectTracks.flatMap((track) => track.projects.map((project) =
 
 const divisions = [
   {
-    kind: 'tech', code: 'DIV-01', en: 'Tech Notes', cn: '技术笔记', unit: '篇', href: '/blog', more: '全部文章',
+    kind: 'tech', code: 'DIV-01', en: 'Tech Notes', cn: '技术笔记', unit: '篇', href: '/blog/category/tech', more: '全部文章',
     count: byKind('tech').length, entries: postEntries('tech')
   },
   {
-    kind: 'daily', code: 'DIV-02', en: 'Daily Log', cn: '日常', unit: '篇', href: '/blog', more: '全部文章',
+    kind: 'daily', code: 'DIV-02', en: 'Daily Log', cn: '日常', unit: '篇', href: '/blog/category/daily', more: '全部文章',
     count: byKind('daily').length, entries: postEntries('daily')
   },
   {
@@ -52,7 +52,7 @@ const featured = [
         <div class='rl-hero-text'>
           <h1 id='home-title' class='rl-hero-title'><span class='rl-display'>Aentro</span><i aria-hidden='true'></i><span class='sr-only'> 个人博客</span></h1>
           <p class='rl-hero-name'><span class='rl-plate'>回首空城</span><span>游戏客户端 / 图形 / Web</span></p>
-          <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链。这里存放我的技术笔记、日常记录，以及做过的作品。</p>
+          <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生。关注游戏开发、图形、Agent、Web。</p>
           <div class='rl-hero-actions'>
             <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
             <a href='/projects' class='rl-btn'>查看作品 <span aria-hidden='true'>↗</span></a>
@@ -65,12 +65,6 @@ const featured = [
         </figure>
       </div>
 
-      <dl class='rl-spec'>
-        <div><dt>Subject</dt><dd>回首空城 / Aentro</dd></div>
-        <div><dt>Base</dt><dd>香港中文大学（深圳）</dd></div>
-        <div><dt>Focus</dt><dd>UE · Unity · 实时渲染 · AI 工具链</dd></div>
-        <div><dt>Status</dt><dd><i class='rl-status' aria-hidden='true'></i>持续更新中</dd></div>
-      </dl>
     </section>
 
     <section class='rl-term-wrap animate' aria-label='交互式终端'>

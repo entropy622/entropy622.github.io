@@ -9,28 +9,23 @@
 .rl-hero-file { display: inline-flex; align-items: center; gap: .7rem; font: 500 .58rem/1 var(--rl-mono); letter-spacing: .16em; color: hsl(var(--muted-foreground)); }
 .rl-hero-file i { width: 1.6rem; height: 1px; background: var(--rl-line-strong); }
 .rl-hero { container-type: inline-size; }
-.rl-hero-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr); align-items: center; gap: 2rem; padding: 3.2rem 0 2.8rem; }
+.rl-hero-body { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr); align-items: center; gap: 2rem; padding: 1.8rem 0 1.2rem; }
 .rl-hero-text { position: relative; z-index: 1; }
 .rl-hero-title { display: flex; align-items: flex-end; margin: 0; font-size: clamp(3rem, 10.4cqi, 7rem); line-height: .84; }
 .rl-hero-title .rl-display { font-weight: 900; letter-spacing: -.025em; }
 .rl-hero-title i { width: .13em; height: .13em; margin: 0 0 .06em .07em; background: var(--rl-accent); flex: none; }
-.rl-hero-name { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem 1rem; margin-top: 1.7rem; }
+.rl-hero-name { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem 1rem; margin-top: 1.3rem; }
 .rl-hero-name .rl-plate { font-size: 1.05rem; letter-spacing: .14em; }
 .rl-hero-name > span:last-child { font: 500 .66rem/1 var(--rl-mono); letter-spacing: .12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
-.rl-hero-bio { max-width: 34rem; margin-top: 1.3rem; font-size: .95rem; line-height: 1.95; color: hsl(var(--muted-foreground)); }
-.rl-hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+.rl-hero-bio { max-width: 34rem; margin-top: 1rem; font-size: .95rem; line-height: 1.95; color: hsl(var(--muted-foreground)); }
+.rl-hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.4rem; }
 
-.rl-lens { position: relative; justify-self: end; display: grid; place-items: center; width: 100%; max-width: 440px; aspect-ratio: 1; margin: 0; isolation: isolate; }
+.rl-lens { position: relative; justify-self: end; display: grid; place-items: center; width: 100%; max-width: 340px; aspect-ratio: 1; margin: 0; isolation: isolate; }
 .rl-lens-orbit { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; }
 .rl-lens-frame { width: 50%; aspect-ratio: 1; padding: 7px; border: 1px solid var(--rl-line-strong); border-radius: 50%; background: var(--rl-sheet); box-shadow: var(--rl-shadow); }
 .rl-lens-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.rl-spec { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; background: var(--rl-sheet); border: 1px solid var(--rl-line-strong); box-shadow: var(--rl-shadow); }
-.rl-spec > div { padding: .95rem 1.1rem 1rem; min-width: 0; }
-.rl-spec > div + div { border-left: 1px solid var(--rl-line); }
-.rl-spec dt { font: 600 .55rem/1 var(--rl-mono); letter-spacing: .18em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
-.rl-spec dd { display: flex; align-items: center; gap: .5rem; margin: .55rem 0 0; font-size: .84rem; font-weight: 650; }
-
-.rl-term-wrap { margin-top: 1.5rem; animation-delay: 80ms; }
+.rl-term-wrap { margin-top: .75rem; animation-delay: 80ms; }
+.rl-term-wrap + .rl-section { margin-top: 2.5rem; }
 
 /* Sections */
 .rl-section { margin-top: 5rem; }
@@ -93,13 +88,10 @@
 
 @media (max-width: 960px) {
   .rl-divisions { grid-template-columns: minmax(0, 1fr); }
-  .rl-spec { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .rl-spec > div:nth-child(3) { border-left: 0; }
-  .rl-spec > div:nth-child(n + 3) { border-top: 1px solid var(--rl-line); }
 }
 @media (max-width: 760px) {
-  .rl-hero-body { grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 2.2rem 0 2rem; }
-  .rl-lens { justify-self: center; max-width: 340px; }
+  .rl-hero-body { grid-template-columns: minmax(0, 1fr); gap: .75rem; padding: 1.5rem 0 .75rem; }
+  .rl-lens { justify-self: center; max-width: 200px; }
   .rl-hero-file { display: none; }
   .rl-section { margin-top: 3.5rem; }
   .rl-section-note { display: none; }
@@ -107,10 +99,6 @@
 @media (max-width: 640px) {
   .rl-works { grid-template-columns: 1fr; gap: 1rem; }
   .rl-work-art { height: 180px; }
-}
-@media (max-width: 420px) {
-  .rl-spec { grid-template-columns: minmax(0, 1fr); }
-  .rl-spec > div + div { border-left: 0; border-top: 1px solid var(--rl-line); }
 }
 @media (prefers-reduced-motion: reduce) {
   .rl-work, .rl-work-art svg, .rl-division li a, .rl-division li a::before { transition: none; }

@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from 'astro'
+import { getBlogCollection, getUniqueTagsWithCount } from 'astro-pure/server'
+import BlogDirectory from '@/components/blog/BlogDirectory.astro'
+import config from '@/site-config'
+import { postKind, sortPublicPosts } from '@/utils/blog'
+
+export const prerender = true
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const collections = sortPublicPosts(await getBlogCollection())
+  const uniqueTags = getUniqueTagsWithCount(collections)
+  const kindCount = {
+    tech: collections.filter((post) => postKind(post) === 'tech').length,
+    daily: collections.filter((post) => postKind(post) === 'daily').length
+  }
+  return (['tech', 'daily'] as const).flatMap((kind) => {
+    const posts = collections.filter((post) => postKind(post) === kind)
+    return paginate(posts, {
+      pageSize: config.content.blogPageSize,
+      params: { kind },
+      props: { uniqueTags, kindCount, collectionsCount: posts.length, activeKind: kind }
+    })
+  })
+}) satisfies GetStaticPaths
+---
+
+<BlogDirectory {...Astro.props} />
