@@ -194,7 +194,24 @@ main .tag-list a { border-radius: 0 !important; font-family: var(--rl-mono); fon
 #main-container > div > a.rounded-lg.border:hover { background: var(--rl-ink); color: var(--rl-paper); }
 
 /* Article */
-body:has(article #content) .rl-backdrop-bars { opacity: calc(var(--rl-bars-opacity) * .45); }
+/* Reading pages: keep only the corner frame; ambient chrome steps back from the text. */
+body:has(article #content) .rl-backdrop-dots,
+body:has(article #content) .rl-backdrop-grid { display: none; }
+body:has(article #content) .rl-backdrop-bars {
+  width: 46vw; opacity: calc(var(--rl-bars-opacity) * .3);
+  -webkit-mask-image: linear-gradient(105deg, transparent 45%, #000 85%);
+  mask-image: linear-gradient(105deg, transparent 45%, #000 85%);
+}
+body:has(article #content) .rl-hud .rl-hud-status,
+body:has(article #content) .rl-hud .rl-hud-foot { opacity: 0; }
+@media (min-width: 769px) {
+  body:has(article #content) #waifu {
+    opacity: .5; transform: translateY(62%);
+    transition: transform .5s cubic-bezier(.22, 1, .36, 1), opacity .3s;
+  }
+  body:has(article #content) #waifu:hover { opacity: 1; transform: translateY(0); }
+  body:has(article #content) #waifu:not(:hover) #waifu-tips { visibility: hidden; }
+}
 .article-info > div:first-child { font-family: var(--rl-mono); letter-spacing: .04em; }
 .article-info h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; line-height: 1.25; letter-spacing: -.035em; color: hsl(var(--foreground)); }
 .article-info blockquote { border-left: 3px solid var(--rl-accent); padding-left: .9rem; font-style: normal; }
