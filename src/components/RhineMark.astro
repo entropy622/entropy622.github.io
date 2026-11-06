@@ -3,7 +3,15 @@ interface Props { class?: string }
 const { class: className } = Astro.props
 ---
 
-<svg class={className} viewBox='0 0 24 24' fill='none' aria-hidden='true' focusable='false'>
-  <path d='M19.27 7.8V16.2L12 20.4L4.73 16.2V7.8L12 3.6' stroke='currentColor' stroke-width='2.2' stroke-linejoin='miter' />
-  <rect x='10' y='10' width='4' height='4' fill='var(--rl-accent)' />
+<!-- The resting frame of the opening logo draw (OpeningSequence.astro). -->
+<svg class:list={['rl-mark', className]} viewBox='0 0 310 143' fill='none' aria-hidden='true' focusable='false'>
+  <path
+    d='M295 73C295 41 273 15 240 15C221 15 207 23 192 38C186 43 181 47 176 52C127 96 103 128 70 128C38 128 15 101 15 70C15 39 37 15 70 15C103 15 127 48 156 75C182 99 208 128 240 128C273 128 295 105 295 73Z'
+    stroke='currentColor'
+    stroke-width='26'
+    pathLength='1'
+    stroke-dasharray='.9725 .0275'
+    stroke-dashoffset='-.2115'
+  />
+  <path d='M47.6 70h50M72.6 45v50M214.1 70h46' stroke='var(--rl-accent)' stroke-width='15' />
 </svg>

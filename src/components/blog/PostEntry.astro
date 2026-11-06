@@ -1,0 +1,34 @@
+---
+import { Image } from 'astro:assets'
+import { render } from 'astro:content'
+import { postKind, postKindLabel, type BlogPost } from '@/utils/blog'
+
+interface Props { post: BlogPost }
+
+const { post } = Astro.props
+const { data } = post
+const { remarkPluginFrontmatter } = await render(post)
+const date = data.updatedDate ?? data.publishDate
+const kind = postKind(post)
+const pad = (n: number) => String(n).padStart(2, '0')
+---
+
+<li class:list={['rl-entry', `is-${kind}`]}>
+  <a href={`/blog/${post.id}`} class:list={{ 'has-cover': data.heroImage }} data-astro-prefetch>
+    {data.heroImage && (
+      <Image class='rl-entry-cover' src={data.heroImage.src} alt='' width={720} height={400} loading='lazy' aria-hidden='true' />
+    )}
+    <div class='rl-entry-body'>
+      <div class='rl-entry-meta'>
+        <time datetime={date.toISOString()}>{date.getFullYear()}.{pad(date.getMonth() + 1)}.{pad(date.getDate())}</time>
+        <span class:list={['rl-chip', `is-${kind}`]}>{postKindLabel[kind]}</span>
+        <span>{String(remarkPluginFrontmatter.minutesRead ?? '').toUpperCase()}</span>
+        {data.draft && <span class='rl-entry-draft'>DRAFT</span>}
+      </div>
+      <h2 class='rl-entry-title'>{data.title}</h2>
+      {data.description && data.description !== data.title && <p class='rl-entry-desc'>{data.description}</p>}
+      {data.tags.length > 0 && <p class='rl-entry-tags'>{data.tags.map((tag) => <span>#{tag}</span>)}</p>}
+    </div>
+    <span class='rl-entry-arrow' aria-hidden='true'>→</span>
+  </a>
+</li>

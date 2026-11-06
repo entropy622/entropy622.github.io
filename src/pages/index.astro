@@ -5,15 +5,35 @@ import avatarImage from '@/assets/avatar.png'
 import RhineTerminal from '@/components/home/RhineTerminal.astro'
 import RhineOrbit from '@/components/RhineOrbit.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { sortPublicPosts } from '@/utils/blog'
+import { projectTracks } from '@/data/projects'
+import { postKind, sortPublicPosts, type PostKind } from '@/utils/blog'
 import '@/assets/styles/home-dossier.css'
 
-const posts = sortPublicPosts(await getBlogCollection()).slice(0, 6)
+const posts = sortPublicPosts(await getBlogCollection())
 const postDate = (post: (typeof posts)[number]) => post.data.updatedDate ?? post.data.publishDate
-const dateLabel = (date: Date) => {
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
-}
+const pad = (n: number) => String(n).padStart(2, '0')
+const dateLabel = (date: Date) => `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
+const byKind = (kind: PostKind) => posts.filter((post) => postKind(post) === kind)
+const postEntries = (kind: PostKind) =>
+  byKind(kind).slice(0, 4).map((post) => ({ href: `/blog/${post.id}`, title: post.data.title, meta: dateLabel(postDate(post)) }))
+const projects = projectTracks.flatMap((track) => track.projects.map((project) => ({ ...project, track: track.title })))
+
+const divisions = [
+  {
+    kind: 'tech', code: 'DIV-01', en: 'Tech Notes', cn: '技术笔记', unit: '篇', href: '/blog', more: '全部文章',
+    count: byKind('tech').length, entries: postEntries('tech')
+  },
+  {
+    kind: 'daily', code: 'DIV-02', en: 'Daily Log', cn: '日常', unit: '篇', href: '/blog', more: '全部文章',
+    count: byKind('daily').length, entries: postEntries('daily')
+  },
+  {
+    kind: 'works', code: 'DIV-03', en: 'Works', cn: '作品', unit: '项', href: '/projects', more: '全部项目',
+    count: projects.length,
+    entries: projects.slice(0, 4).map((project) => ({ href: project.links[0]?.href, title: project.name, meta: project.track }))
+  }
+]
+
 const featured = [
   { title: 'Blender Copilot', stack: 'Blender / Python / LLM', href: 'https://github.com/entropy622/blender_copilot', kind: 'copilot', medium: 'GENERATIVE TOOLS' },
   { title: 'Unity 卡通渲染', stack: 'URP / HLSL / SDF', href: 'https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters', kind: 'shader', medium: 'REAL-TIME GRAPHICS' }
@@ -23,33 +43,79 @@ const featured = [
 <PageLayout meta={{ title: '首页' }}>
   <main class='rl-home'>
     <section class='rl-hero animate' aria-labelledby='home-title'>
-      <div class='rl-hero-text'>
-        <p class='rl-kicker'>ACCESS LEVEL // PUBLIC</p>
-        <h1 id='home-title'><span class='rl-plate'>AENTRO</span><span class='sr-only'> 个人博客</span></h1>
-        <div class='rl-hero-link' aria-hidden='true'></div>
-        <p class='rl-hero-name'>回首空城 <span>游戏客户端 / 图形 / Web</span></p>
-        <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链，也记录 Web 工程实践。</p>
-        <div class='rl-hero-actions'>
-          <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
-          <a href='/projects' class='rl-btn'>探索项目 <span aria-hidden='true'>↗</span></a>
+      <div class='rl-hero-top' aria-hidden='true'>
+        <span class='rl-kicker'>Rhine Lab · Personal Archive</span>
+        <span class='rl-hero-file'>FILE AE-{new Date().getFullYear()} <i></i> ACCESS LEVEL PUBLIC</span>
+      </div>
+
+      <div class='rl-hero-body'>
+        <div class='rl-hero-text'>
+          <h1 id='home-title' class='rl-hero-title'><span class='rl-display'>Aentro</span><i aria-hidden='true'></i><span class='sr-only'> 个人博客</span></h1>
+          <p class='rl-hero-name'><span class='rl-plate'>回首空城</span><span>游戏客户端 / 图形 / Web</span></p>
+          <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生，关注 UE/Unity 游戏开发、渲染技术与 AI 辅助工具链。这里存放我的技术笔记、日常记录，以及做过的作品。</p>
+          <div class='rl-hero-actions'>
+            <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
+            <a href='/projects' class='rl-btn'>查看作品 <span aria-hidden='true'>↗</span></a>
+          </div>
         </div>
+
+        <figure class='rl-lens'>
+          <RhineOrbit class='rl-lens-orbit' />
+          <div class='rl-lens-frame'><Image src={avatarImage} alt='Aentro 的头像' width={256} height={256} loading='eager' /></div>
+        </figure>
       </div>
-      <div class='rl-portrait'>
-        <RhineOrbit class='rl-portrait-orbit' />
-        <div class='rl-portrait-frame'><Image src={avatarImage} alt='Aentro 的头像' width={224} height={224} loading='eager' /></div>
-        <span class='rl-portrait-plus' aria-hidden='true'>+</span>
-        <p class='rl-portrait-caption' aria-hidden='true'>PERSONAL PERSPECTIVE<br /><span>技术实践 · 创作记录</span></p>
-      </div>
+
+      <dl class='rl-spec'>
+        <div><dt>Subject</dt><dd>回首空城 / Aentro</dd></div>
+        <div><dt>Base</dt><dd>香港中文大学（深圳）</dd></div>
+        <div><dt>Focus</dt><dd>UE · Unity · 实时渲染 · AI 工具链</dd></div>
+        <div><dt>Status</dt><dd><i class='rl-status' aria-hidden='true'></i>持续更新中</dd></div>
+      </dl>
     </section>
 
     <section class='rl-term-wrap animate' aria-label='交互式终端'>
       <RhineTerminal />
     </section>
 
+    <section class='rl-section' aria-labelledby='index-title'>
+      <header class='rl-section-head'>
+        <div>
+          <p class='rl-kicker'>01 / Archive Index</p>
+          <h2 id='index-title'>档案索引<span aria-hidden='true'>.</span></h2>
+        </div>
+        <p class='rl-section-note'>技术笔记、日常与作品，<br />按分区归档。</p>
+      </header>
+      <div class='rl-divisions'>
+        {divisions.map((division) => (
+          <article class:list={['rl-division', `is-${division.kind}`]}>
+            <header class='rl-division-head'>
+              <span>{division.code}</span>
+              <span class='rl-division-tab'>{division.cn}</span>
+            </header>
+            <div class='rl-division-title'>
+              <h3 class='rl-display'>{division.en}</h3>
+              <p><b>{pad(division.count)}</b>{division.unit}</p>
+            </div>
+            <ol>
+              {division.entries.map((entry) => (
+                <li>
+                  <a href={entry.href}>
+                    <span class='rl-division-meta'>{entry.meta}</span>
+                    <span class='rl-division-name'>{entry.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+            <a class='rl-division-more' href={division.href}>{division.more} <span aria-hidden='true'>→</span></a>
+          </article>
+        ))}
+      </div>
+    </section>
+
     <section class='rl-section' aria-labelledby='work-title'>
       <header class='rl-section-head'>
         <div>
-          <p class='rl-kicker'>01 / SELECTED WORKS</p>
+          <p class='rl-kicker'>02 / Selected Works</p>
           <h2 id='work-title'>从想法到实现<span aria-hidden='true'>.</span></h2>
         </div>
         <a href='/projects' class='rl-more'>全部项目 <span aria-hidden='true'>↗</span></a>
@@ -85,28 +151,6 @@ const featured = [
           </a>
         ))}
       </div>
-    </section>
-
-    <section class='rl-section' aria-labelledby='notes-title'>
-      <header class='rl-section-head'>
-        <div>
-          <p class='rl-kicker'>02 / FIELD NOTES</p>
-          <h2 id='notes-title'>记录，也是思考<span aria-hidden='true'>.</span></h2>
-        </div>
-        <a href='/blog' class='rl-more'>全部文章 <span aria-hidden='true'>↗</span></a>
-      </header>
-      <ol class='rl-log'>
-        {posts.map((post) => (
-          <li>
-            <a href={`/blog/${post.id}`}>
-              <time datetime={postDate(post).toISOString()}>{dateLabel(postDate(post))}</time>
-              <h3>{post.data.title}</h3>
-              {post.data.tags[0] && <span class='rl-log-tag'>{post.data.tags[0]}</span>}
-              <span class='rl-log-arrow' aria-hidden='true'>→</span>
-            </a>
-          </li>
-        ))}
-      </ol>
     </section>
   </main>
 </PageLayout>

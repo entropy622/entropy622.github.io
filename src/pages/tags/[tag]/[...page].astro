@@ -2,8 +2,9 @@
 import type { GetStaticPaths, Page } from 'astro'
 import type { CollectionEntry } from 'astro:content'
 
-import { Paginator, PostPreview } from 'astro-pure/components/pages'
+import { Paginator } from 'astro-pure/components/pages'
 import { getBlogCollection, getUniqueTags } from 'astro-pure/server'
+import PostEntry from '@/components/blog/PostEntry.astro'
 import DirectoryHeader from '@/components/DirectoryHeader.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import '@/assets/styles/directories.css'
@@ -40,13 +41,13 @@ const meta = {
 const paginationProps = {
   ...(page.url.prev && {
     prevUrl: {
-      text: `← Previous Tags`,
+      text: `← 上一页`,
       url: page.url.prev
     }
   }),
   ...(page.url.next && {
     nextUrl: {
-      text: `Next Tags →`,
+      text: `下一页 →`,
       url: page.url.next
     }
   })
@@ -57,10 +58,13 @@ const paginationProps = {
   <main class='directory-page directory-blog'>
     <DirectoryHeader title={`#${tag}`} label='TAG' number='05' description={`标签「${tag}」下的全部文章`} />
     <section id='content' class='animate' aria-label='Blog post list'>
-      <div class='directory-blog-meta'>共 {page.total} 篇 · 第 {page.currentPage} 页 · <a href='/tags'>全部标签 →</a></div>
-      <ul class='flex flex-col gap-y-3 text-start'>
-        {page.data.map((post) => <PostPreview {post} detailed />)}
-      </ul>
+      <div class='directory-blog-meta'>
+        <span>共 {page.total} 篇 · 第 {page.currentPage} 页</span>
+        <a href='/tags'>全部标签 →</a>
+      </div>
+      <ol class='rl-entries'>
+        {page.data.map((post) => <PostEntry {post} />)}
+      </ol>
       <Paginator {...paginationProps} />
     </section>
   </main>
