@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets'
-import { type CollectionEntry, type CollectionKey, render } from 'astro:content'
+import { render, type CollectionEntry, type CollectionKey } from 'astro:content'
 
 import { cn } from '../../utils'
 import { Button, FormattedDate, Icon } from '../user'
@@ -39,6 +39,8 @@ const postDate = data.updatedDate ?? data.publishDate
           alt={data.heroImage.alt || data.title}
           class='cover-image absolute end-0 top-0 z-0 h-2/3 w-full rounded-2xl object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-70 md:h-full md:w-3/5'
           loading='eager'
+          width={1280}
+          height={720}
           {...data.heroImage}
         />
       )
@@ -51,7 +53,7 @@ const postDate = data.updatedDate ?? data.publishDate
 
       {/* title */}
       <div class='flex justify-between flex-grow'>
-        <div class={detailed && 'font-medium'}>
+        <div class={detailed ? 'font-medium' : undefined}>
           {data.draft && <span class='text-red-500'>(Draft) </span>}
           {data.title}
         </div>
@@ -122,13 +124,18 @@ const postDate = data.updatedDate ?? data.publishDate
 
   <style>
     .post-preview {
-      --preview-highlight-final: var( --preview-highlight, hsl(var(--primary) / var(--un-text-opacity, 1))
+      --preview-highlight-final: var(
+        --preview-highlight,
+        hsl(var(--primary) / var(--un-text-opacity, 1))
       );
     }
     .post-preview:hover {
       & > a,
       & .tag-list a {
-        background-color: var( --preview-highlight-bg, hsl(var(--muted) / var(--un-bg-opacity, 1))) !important;
+        background-color: var(
+          --preview-highlight-bg,
+          hsl(var(--muted) / var(--un-bg-opacity, 1))
+        ) !important;
       }
       & > a,
       & .tag-list a:hover {
@@ -146,7 +153,11 @@ const postDate = data.updatedDate ?? data.publishDate
 
     @media (max-width: 768px) {
       .cover-image {
-        -webkit-mask-image: -webkit-linear-gradient(bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+        -webkit-mask-image: -webkit-linear-gradient(
+          bottom,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 100%
+        );
         -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
         mask-image: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
       }

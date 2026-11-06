@@ -5,6 +5,7 @@ import { defineConfig, svgoOptimizer } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
 
+import rehypeArticleNotes from './src/plugins/rehype-article-notes.ts'
 // Local integrations
 import rehypeAutolinkHeadings from './src/plugins/rehype-auto-link-headings.ts'
 // Shiki
@@ -55,9 +56,11 @@ export default defineConfig({
   // [Markdown]
   markdown: {
     remarkPlugins: [remarkMath],
+    remarkRehype: { footnoteLabel: '脚注', footnoteBackLabel: '返回正文' },
     rehypePlugins: [
       [rehypeKatex, {}],
       rehypeHeadingIds,
+      rehypeArticleNotes,
       [
         rehypeAutolinkHeadings,
         {

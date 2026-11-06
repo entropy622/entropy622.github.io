@@ -1,0 +1,75 @@
+.prose aside.article-note {
+  display: block;
+  position: static;
+  margin: 1.75rem 0;
+  border: 1px solid var(--rl-line-strong);
+  border-inline-start: 3px solid var(--rl-accent);
+  border-radius: 0;
+  background: hsl(var(--card) / 0.65);
+}
+.prose .article-note-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.9rem 1.1rem 0.55rem;
+  font-weight: 650;
+  line-height: 1.7;
+  color: hsl(var(--foreground));
+}
+.article-note-label {
+  flex: none;
+  color: var(--rl-accent-ink);
+  font: 600 0.68rem/1.7 var(--rl-mono);
+  letter-spacing: 0.1em;
+}
+.article-note-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.prose .article-note-body {
+  padding: 0 1.1rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.95;
+  overflow-wrap: anywhere;
+}
+.prose .article-note-body > :first-child {
+  margin-top: 0;
+}
+.prose .article-note-body > :last-child {
+  margin-bottom: 0;
+}
+.prose .article-note-body p {
+  margin-block: 0.8em;
+}
+.prose .article-note-body table {
+  font-size: 0.85em;
+}
+.prose .article-note-body :is(pre, .katex-display) {
+  max-width: 100%;
+}
+.prose .footnotes {
+  margin-top: 3rem;
+  font-size: 0.9rem;
+}
+.prose a[data-footnote-ref] {
+  font-family: var(--rl-mono);
+}
+.prose :is(.article-note, .footnotes li, .article-note-body [id]) {
+  scroll-margin-top: 6rem;
+}
+
+@media (max-width: 640px) {
+  .prose .article-note-heading {
+    padding: 0.8rem 0.85rem 0.5rem;
+    gap: 0.5rem;
+  }
+  .prose .article-note-body {
+    padding: 0 0.85rem 0.9rem;
+  }
+}
+@media print {
+  .prose .article-note {
+    break-inside: avoid;
+    background: transparent;
+  }
+}

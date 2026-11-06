@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#edece8"/>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" stroke="#141414" stroke-opacity=".07"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <g stroke="#141414" stroke-opacity=".4">
+    <path d="M64 116H1216M64 604H1216M744 116V604"/>
+    <path d="M64 56V80M52 68H76M1204 652H1228M1216 640V664"/>
+  </g>
+  <rect x="64" y="65" width="12" height="12" fill="#e46f24"/>
+  <g font-family="Consolas,monospace" font-size="18" letter-spacing="3" fill="#141414">
+    <text x="94" y="79">AENTRO / READING NOTES</text>
+    <text x="1002" y="79">NIPS 2017</text>
+    <text x="64" y="653" font-size="16">TRANSLATION + MODERN TRANSFORMER</text>
+    <text x="1088" y="653" font-size="16">2026.11</text>
+  </g>
+  <g font-family="Arial,Helvetica,sans-serif" fill="#141414" font-weight="700" letter-spacing="-4">
+    <text x="62" y="288" font-size="102">Attention</text>
+    <text x="64" y="382" font-size="72">Is All You Need</text>
+  </g>
+  <rect x="68" y="430" width="74" height="5" fill="#e46f24"/>
+  <text x="66" y="485" font-family="Arial,sans-serif" font-size="22" fill="#66645d">Q / K / V · RoPE · GQA · FlashAttention</text>
+  <g font-family="Consolas,monospace" font-size="17" letter-spacing="2" fill="#66645d">
+    <text x="798" y="170">SELF-ATTENTION</text>
+    <text x="808" y="557">softmax(QKᵀ / √dₖ) V</text>
+  </g>
+  <g stroke="#141414" stroke-width="2">
+    <path d="M836 264L1124 264M836 264L1124 344M836 264L1124 424" stroke="#e46f24" stroke-width="4"/>
+    <path d="M836 344L1124 264M836 344L1124 344M836 344L1124 424" opacity=".28"/>
+    <path d="M836 424L1124 264M836 424L1124 344M836 424L1124 424" opacity=".28"/>
+  </g>
+  <g fill="#edece8" stroke="#141414" stroke-width="2">
+    <rect x="798" y="238" width="76" height="52"/>
+    <rect x="798" y="318" width="76" height="52"/>
+    <rect x="798" y="398" width="76" height="52"/>
+    <rect x="1086" y="238" width="76" height="52"/>
+    <rect x="1086" y="318" width="76" height="52"/>
+    <rect x="1086" y="398" width="76" height="52"/>
+  </g>
+  <rect x="798" y="238" width="76" height="52" fill="#e46f24"/>
+  <g font-family="Consolas,monospace" font-size="22" text-anchor="middle" fill="#141414">
+    <text x="836" y="272" fill="white">q₁</text><text x="836" y="352">q₂</text><text x="836" y="432">q₃</text>
+    <text x="1124" y="272">k₁</text><text x="1124" y="352">k₂</text><text x="1124" y="432">k₃</text>
+  </g>
+</svg>

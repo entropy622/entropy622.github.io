@@ -4,10 +4,12 @@ import type { CollectionEntry } from 'astro:content'
 
 // Plugin styles
 import 'katex/dist/katex.min.css'
+import '@/assets/styles/article-notes.css'
+
+import config from 'virtual:config'
 
 import { MediumZoom } from 'astro-pure/advanced'
 import { ArticleBottom, Hero, TOC } from 'astro-pure/components/pages'
-import config from 'virtual:config'
 import PageLayout from '@/layouts/ContentLayout.astro'
 import Copyright from '@/components/Copyright.astro'
 
@@ -25,13 +27,7 @@ const {
   remarkPluginFrontmatter
 } = Astro.props
 
-const {
-  description,
-  heroImage,
-  publishDate,
-  title,
-  updatedDate
-} = data
+const { description, heroImage, publishDate, title, updatedDate } = data
 
 const heroSource = heroImage?.src as unknown
 const socialImage =

@@ -1,6 +1,5 @@
 ---
 import type { CollectionKey, InferEntrySchema } from 'astro:content'
-
 import config from 'virtual:config'
 
 import { cn, getFormattedDate } from '../../utils'
@@ -17,7 +16,13 @@ const {
   class: className
 } = Astro.props
 
-const image = typeof heroImage?.src === 'string' ? heroImage?.src : (heroImage?.src?.src ?? '')
+const heroSource = heroImage?.src as unknown
+const image =
+  typeof heroSource === 'string'
+    ? heroSource
+    : heroSource && typeof heroSource === 'object' && 'src' in heroSource
+      ? String(heroSource.src)
+      : ''
 
 const shares = {
   weibo: {
