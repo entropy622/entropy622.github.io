@@ -1,29 +1,23 @@
 ---
-import { Card } from 'astro-pure/user'
-
+import { Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/DirectoryLayout.astro'
+import { profile } from '@/data/profile'
 
 const headings = [
-  { depth: 2, slug: 'projects', text: '项目经历' },
-  { depth: 2, slug: 'skills', text: '专业技能' }
+  { depth: 2, slug: 'contact', text: '找到我' }
 ]
 ---
 
-<PageLayout title='关于我' label='ABOUT' number='04' description='回首空城 / Aentro · 技术实践与创作' {headings}>
-  <p class='lead'>一名关注游戏客户端、图形学和 Web 工程的计算机科学本科生。香港中文大学（深圳）在读。</p>
+<PageLayout title='关于我' label='ABOUT' number='04' description={`${profile.alias} / ${profile.name}`} metaDescription={profile.bio} {headings}>
+  <p class='lead'>{profile.bio}</p>
 
-  <h2 id='projects'>项目经历</h2>
-  <div class='grid gap-3 sm:grid-cols-2'>
-    <Card as='a' heading='Unity 仿崩铁卡通渲染' subheading='Unity URP / HLSL / SDF · GitHub 80+ Stars' href='https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters' />
-    <Card as='a' heading='Blender Copilot' subheading='Blender / Python / LLM · Graph Code 节点表示' href='https://github.com/entropy622/blender_copilot' />
-    <Card as='a' heading='EntroRenderer' subheading='C++ / OpenGL · 轻量级渲染器' href='https://github.com/entropy622/EntroRenderer' />
-    <Card heading='GameJam 作品' subheading='Unity / C# / Game AI · LD56、LD58' />
+  <h2 id='contact'>找到我</h2>
+  <div class='about-social'>
+    {profile.social.map(({ icon, label, href }) => (
+      <a class='rl-btn' href={href} target='_blank' rel='noreferrer'>
+        <span class='about-social-label'><Icon name={icon} class='size-5' />{label}</span>
+        <span aria-hidden='true'>↗</span>
+      </a>
+    ))}
   </div>
-
-  <h2 id='skills'>专业技能</h2>
-  <ul class='space-y-2 text-muted-foreground'>
-    <li><strong>游戏开发</strong>：UE5 / UnLua、Unity / C#、Shader</li>
-    <li><strong>Web开发</strong>：React</li>
-    <li><strong>编程语言</strong>：Lua、C++、C#、Python、TypeScript</li>
-  </ul>
 </PageLayout>

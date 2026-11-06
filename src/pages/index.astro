@@ -6,6 +6,7 @@ import RhineTerminal from '@/components/home/RhineTerminal.astro'
 import RhineOrbit from '@/components/RhineOrbit.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
 import { projectTracks } from '@/data/projects'
+import { profile } from '@/data/profile'
 import { postKind, sortPublicPosts, type PostKind } from '@/utils/blog'
 import '@/assets/styles/home-dossier.css'
 
@@ -51,8 +52,8 @@ const featured = [
       <div class='rl-hero-body'>
         <div class='rl-hero-text'>
           <h1 id='home-title' class='rl-hero-title'><span class='rl-display'>Aentro</span><i aria-hidden='true'></i><span class='sr-only'> 个人博客</span></h1>
-          <p class='rl-hero-name'><span class='rl-plate'>回首空城</span><span>游戏客户端 / 图形 / Web</span></p>
-          <p class='rl-hero-bio'>香港中文大学（深圳）计算机科学与技术本科生。关注游戏开发、图形、Agent、Web。</p>
+          <p class='rl-hero-name'><span class='rl-plate'>{profile.alias}</span><span>{profile.focus}</span></p>
+          <p class='rl-hero-bio'>{profile.bio}</p>
           <div class='rl-hero-actions'>
             <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
             <a href='/projects' class='rl-btn'>查看作品 <span aria-hidden='true'>↗</span></a>

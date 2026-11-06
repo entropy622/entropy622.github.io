@@ -2,6 +2,7 @@
 import { Icon } from 'astro-pure/user'
 import RhineMark from '@/components/RhineMark.astro'
 import config from '@/site-config'
+import { profile } from '@/data/profile'
 
 const social = config.footer.social || []
 const menu = config.header.menu ?? []
@@ -15,7 +16,7 @@ const year = new Date().getFullYear()
       <RhineMark />
       <div>
         <b>AENTRO</b>
-        <span>回首空城 · 技术笔记、日常与作品</span>
+        <span>{profile.alias} · {profile.focus}</span>
       </div>
     </div>
     <nav class='rl-footer-nav' aria-label='页脚导航'>

@@ -3,17 +3,17 @@ import type { MarkdownHeading } from 'astro'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import DirectoryHeader from '@/components/DirectoryHeader.astro'
 import '@/assets/styles/directories.css'
-interface Props { title: string; description?: string; headings?: MarkdownHeading[]; label: string; number: string }
-const { title, description, headings = [], label, number } = Astro.props
+interface Props { title: string; description?: string; metaDescription?: string; headings?: MarkdownHeading[]; label: string; number: string }
+const { title, description, metaDescription = description, headings = [], label, number } = Astro.props
 ---
-<BaseLayout meta={{ title, description }}>
+<BaseLayout meta={{ title, description: metaDescription }}>
   <main class:list={['directory-page', `directory-${label.toLowerCase()}`]}>
     <DirectoryHeader {title} {description} {label} {number} />
-    <div class='directory-grid'>
-      <nav class='directory-sections' aria-label='本页目录'>
+    <div class:list={['directory-grid', { 'is-single-column': headings.length < 2 }]}>
+      {headings.length > 1 && <nav class='directory-sections' aria-label='本页目录'>
         <span class='directory-kicker' aria-hidden='true'>IN THIS FILE</span>
         {headings.map((heading, index) => <a href={`#${heading.slug}`}><span aria-hidden='true'>{String(index + 1).padStart(2, '0')}</span>{heading.text}</a>)}
-      </nav>
+      </nav>}
       <div class='directory-body'><slot /></div>
     </div>
   </main>

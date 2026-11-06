@@ -1,10 +1,11 @@
 import type { Config, IntegrationUserConfig, ThemeUserConfig } from 'astro-pure/types'
+import { profile } from './data/profile'
 
 /** Personal site configuration. Keep template integrations opt-in. */
 export const theme: ThemeUserConfig = {
-  title: 'Aentro',
-  author: 'Aentro',
-  description: '游戏、图形学与 Web 技术的学习记录。',
+  title: profile.name,
+  author: profile.name,
+  description: profile.bio,
   favicon: '/images/avatar.png',
   socialCard: '/images/social-card.png',
   locale: {
@@ -32,7 +33,7 @@ export const theme: ThemeUserConfig = {
     links: [],
     credits: false,
     social: [
-      { icon: 'github', label: 'GitHub', href: 'https://github.com/entropy622' },
+      ...profile.social.map((social) => ({ ...social })),
       { icon: 'rss', label: 'RSS', href: '/rss.xml' }
     ]
   },
@@ -50,8 +51,8 @@ export const integ: IntegrationUserConfig = {
   links: {
     logbook: [],
     applyTip: [
-      { name: '名称', val: 'Aentro' },
-      { name: '简介', val: '游戏、图形学与 Web 技术的学习记录。' },
+      { name: '名称', val: profile.name },
+      { name: '简介', val: profile.bio },
       { name: '链接', val: 'https://entropy622.github.io/' },
       { name: '头像', val: 'https://entropy622.github.io/images/avatar.png' }
     ],

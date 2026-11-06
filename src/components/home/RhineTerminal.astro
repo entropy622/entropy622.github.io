@@ -1,6 +1,7 @@
 ---
 import { getBlogCollection, getUniqueTags } from 'astro-pure/server'
 import { projectTracks } from '@/data/projects'
+import { profile } from '@/data/profile'
 import { sortPublicPosts } from '@/utils/blog'
 
 interface FsNode {
@@ -64,7 +65,7 @@ const fs: FsNode = {
     {
       name: 'about.md',
       href: '/about',
-      info: ['回首空城 / Aentro', '香港中文大学（深圳）计算机科学与技术本科生', '游戏客户端 · 渲染技术 · AI 辅助工具链 · Web 工程']
+      info: [`${profile.alias} / ${profile.name}`, profile.bio, ...profile.social.map(({ label, href }) => `${label}  ${href}`)]
     },
     { name: 'links.md', href: '/links', info: ['友情链接，以及本站 Live2D 模型的作者名单'] }
   ]
@@ -96,6 +97,8 @@ const fs: FsNode = {
 </div>
 
 <script>
+  import { profile } from '@/data/profile'
+
   interface FsNode {
     name: string
     dir?: boolean
@@ -194,11 +197,11 @@ const fs: FsNode = {
       whoami: {
         desc: '简短的自我介绍',
         run: () => {
-          print('回首空城 / Aentro', 'accent')
-          print('ROLE   游戏客户端 · 图形 · Web')
-          print('BASE   香港中文大学（深圳）· 计算机科学与技术')
-          print('FOCUS  UE / Unity · 实时渲染 · AI 辅助工具链')
-          printNodes(document.createTextNode('LINK   '), link('github.com/entropy622', 'https://github.com/entropy622'))
+          print(`${profile.alias} / ${profile.name}`, 'accent')
+          print(profile.bio)
+          for (const social of profile.social) {
+            printNodes(document.createTextNode('LINK   '), link(social.label, social.href))
+          }
         }
       },
       ls: {

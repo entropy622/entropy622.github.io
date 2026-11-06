@@ -18,6 +18,7 @@
 
 /* Section rail + body */
 .directory-grid { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 2.5rem; align-items: start; }
+.directory-grid.is-single-column { grid-template-columns: minmax(0, 1fr); }
 .directory-sections { position: sticky; top: 6.5rem; display: flex; flex-direction: column; border-left: 1px solid var(--rl-line-strong); }
 .directory-kicker { padding-left: .9rem; margin-bottom: .6rem; font: 600 .54rem/1 var(--rl-mono); letter-spacing: .16em; color: hsl(var(--muted-foreground)); }
 .directory-sections a { position: relative; display: flex; gap: .7rem; padding: .55rem 0 .55rem .9rem; font-size: .82rem; }
@@ -47,6 +48,8 @@
 .directory-body section[aria-label='GitHub Activities'] .activity-heading { color: hsl(var(--foreground)); font-size: 1.1rem; font-weight: 700; }
 
 /* About */
+.directory-about .about-social { display: flex; flex-wrap: wrap; gap: .8rem; }
+.directory-about .about-social-label { display: inline-flex; align-items: center; gap: .6rem; }
 .directory-about .directory-body > .grid > :is(a, div) { padding: 1.25rem; background: var(--rl-sheet); border: 1px solid var(--rl-line-strong); border-top: 3px solid var(--rl-ink); box-shadow: var(--rl-shadow); }
 .directory-about .directory-body > .grid > a { transition: border-color .2s, transform .3s var(--rl-ease); }
 .directory-about .directory-body > .grid > a:hover { border-color: var(--rl-accent); transform: translateY(-2px); }
