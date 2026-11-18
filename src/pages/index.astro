@@ -1,151 +1,70 @@
 ---
 import { Image } from 'astro:assets'
 import { getBlogCollection } from 'astro-pure/server'
-import avatarImage from '@/assets/avatar.png'
+import avatar from '@/assets/avatar.png'
+import station from '@/assets/field-station.webp'
 import RhineTerminal from '@/components/home/RhineTerminal.astro'
-import RhineOrbit from '@/components/RhineOrbit.astro'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import { projectTracks } from '@/data/projects'
 import { profile } from '@/data/profile'
-import { postKind, sortPublicPosts, type PostKind } from '@/utils/blog'
+import { projectTracks } from '@/data/projects'
+import { postKind, postKindLabel, sortPublicPosts, type BlogPost } from '@/utils/blog'
 import '@/assets/styles/home-dossier.css'
 
-const posts = sortPublicPosts(await getBlogCollection())
-const postDate = (post: (typeof posts)[number]) => post.data.updatedDate ?? post.data.publishDate
-const pad = (n: number) => String(n).padStart(2, '0')
-const dateLabel = (date: Date) => `${date.getFullYear()}.${pad(date.getMonth() + 1)}.${pad(date.getDate())}`
-const byKind = (kind: PostKind) => posts.filter((post) => postKind(post) === kind)
-const postEntries = (kind: PostKind) =>
-  byKind(kind).slice(0, 4).map((post) => ({ href: `/blog/${post.id}`, title: post.data.title, meta: dateLabel(postDate(post)) }))
-const projects = projectTracks.flatMap((track) => track.projects.map((project) => ({ ...project, track: track.title })))
-
-const divisions = [
-  {
-    kind: 'tech', code: 'DIV-01', en: 'Tech Notes', cn: '技术笔记', unit: '篇', href: '/blog/category/tech', more: '全部文章',
-    count: byKind('tech').length, entries: postEntries('tech')
-  },
-  {
-    kind: 'daily', code: 'DIV-02', en: 'Daily Log', cn: '日常', unit: '篇', href: '/blog/category/daily', more: '全部文章',
-    count: byKind('daily').length, entries: postEntries('daily')
-  },
-  {
-    kind: 'works', code: 'DIV-03', en: 'Works', cn: '作品', unit: '项', href: '/projects', more: '全部项目',
-    count: projects.length,
-    entries: projects.slice(0, 4).map((project) => ({ href: project.links[0]?.href, title: project.name, meta: project.track }))
-  }
-]
-
-const featured = [
-  { title: 'Blender Copilot', stack: 'Blender / Python / LLM', href: 'https://github.com/entropy622/blender_copilot', kind: 'copilot', medium: 'GENERATIVE TOOLS' },
-  { title: 'Unity 卡通渲染', stack: 'URP / HLSL / SDF', href: 'https://github.com/entropy622/Unity-URP-Shader-For-Starrail-Characters', kind: 'shader', medium: 'REAL-TIME GRAPHICS' }
-]
+const [cover, ...entries] = sortPublicPosts(await getBlogCollection())
+const dateOf = (post: BlogPost) => post.data.updatedDate ?? post.data.publishDate
+const dateLabel = (post: BlogPost) => dateOf(post).toISOString().slice(0,10).replaceAll('-', '.')
+// When a paper title opens a bilingual headline, set its translation note on a separate line.
+const headline = cover?.data.title.match(/^([A-Za-z][A-Za-z0-9 :,-]{8,}?)\s+([\p{Script=Han}].*)$/u)
+const selected = ['Blender Copilot', 'Unity 仿崩铁卡通渲染']
+const projects = selected.flatMap(name => projectTracks.flatMap(track => track.projects.filter(p => p.name === name)))
 ---
 
 <PageLayout meta={{ title: '首页' }}>
-  <main class='rl-home'>
-    <section class='rl-hero animate' aria-labelledby='home-title'>
-      <div class='rl-hero-top' aria-hidden='true'>
-        <span class='rl-kicker'>Rhine Lab · Personal Archive</span>
-        <span class='rl-hero-file'>FILE AE-{new Date().getFullYear()} <i></i> ACCESS LEVEL PUBLIC</span>
-      </div>
-
-      <div class='rl-hero-body'>
-        <div class='rl-hero-text'>
-          <h1 id='home-title' class='rl-hero-title'><span class='rl-display'>Aentro</span><i aria-hidden='true'></i><span class='sr-only'> 个人博客</span></h1>
-          <p class='rl-hero-name'><span class='rl-plate'>{profile.alias}</span><span>{profile.focus}</span></p>
-          <p class='rl-hero-bio'>{profile.bio}</p>
-          <div class='rl-hero-actions'>
-            <a href='/blog' class='rl-btn is-solid'>阅读文章 <span aria-hidden='true'>→</span></a>
-            <a href='/projects' class='rl-btn'>查看作品 <span aria-hidden='true'>↗</span></a>
-          </div>
-        </div>
-
-        <figure class='rl-lens'>
-          <RhineOrbit class='rl-lens-orbit' />
-          <div class='rl-lens-frame'><Image src={avatarImage} alt='Aentro 的头像' width={256} height={256} loading='eager' /></div>
+  <main class='journal'>
+    <header class='mast'>
+      <div class='mast-name'><i aria-hidden='true'></i><b>{profile.alias}的手记</b><span>FIELD JOURNAL</span></div>
+      <a href='/about' class='author'><Image src={avatar} width={52} height={52} alt='' loading='eager' />关于 Aentro <span aria-hidden='true'>↗</span></a>
+    </header>
+    {cover && <article class='cover'>
+      <a class='cover-link' href={`/blog/${cover.id}`} aria-labelledby='cover-title'>
+        <figure class='station'>
+          <Image src={station} alt='' widths={[640, 960, 1320]} sizes='(max-width: 700px) 100vw, 620px' loading='eager' fetchpriority='high' />
+          <figcaption aria-hidden='true'>PL. 01 <i></i> 野外观测站</figcaption>
         </figure>
-      </div>
-
-    </section>
-
-    <section class='rl-term-wrap animate' aria-label='交互式终端'>
-      <RhineTerminal />
-    </section>
-
-    <section class='rl-section' aria-labelledby='index-title'>
-      <header class='rl-section-head'>
-        <div>
-          <p class='rl-kicker'>01 / Archive Index</p>
-          <h2 id='index-title'>档案索引<span aria-hidden='true'>.</span></h2>
+        <div class='cover-type'>
+          <div class='cover-meta'><strong>最新文章</strong><span>{postKindLabel[postKind(cover)]}</span><time datetime={dateOf(cover).toISOString()}>{dateLabel(cover)}</time></div>
+          <h1 id='cover-title'><span>{headline?.[1] ?? cover.data.title}</span>{headline && <> <small>{headline[2]}</small></>}</h1>
+          <span class='cover-read'>阅读文章 <span aria-hidden='true'>→</span></span>
         </div>
-        <p class='rl-section-note'>技术笔记、日常与作品，<br />按分区归档。</p>
-      </header>
-      <div class='rl-divisions'>
-        {divisions.map((division) => (
-          <article class:list={['rl-division', `is-${division.kind}`]}>
-            <header class='rl-division-head'>
-              <span>{division.code}</span>
-              <span class='rl-division-tab'>{division.cn}</span>
-            </header>
-            <div class='rl-division-title'>
-              <h3 class='rl-display'>{division.en}</h3>
-              <p><b>{pad(division.count)}</b>{division.unit}</p>
-            </div>
-            <ol>
-              {division.entries.map((entry) => (
-                <li>
-                  <a href={entry.href}>
-                    <span class='rl-division-meta'>{entry.meta}</span>
-                    <span class='rl-division-name'>{entry.title}</span>
-                  </a>
-                </li>
-              ))}
-            </ol>
-            <a class='rl-division-more' href={division.href}>{division.more} <span aria-hidden='true'>→</span></a>
-          </article>
-        ))}
-      </div>
-    </section>
+      </a>
+    </article>}
 
-    <section class='rl-section' aria-labelledby='work-title'>
-      <header class='rl-section-head'>
-        <div>
-          <p class='rl-kicker'>02 / Selected Works</p>
-          <h2 id='work-title'>从想法到实现<span aria-hidden='true'>.</span></h2>
-        </div>
-        <a href='/projects' class='rl-more'>全部项目 <span aria-hidden='true'>↗</span></a>
-      </header>
-      <div class='rl-works'>
-        {featured.map((project, index) => (
-          <a href={project.href} class:list={['rl-work', project.kind]}>
-            <div class='rl-work-art' aria-hidden='true'>
-              <span class='rl-work-index'>PANEL-0{index + 1}</span>
-              <span class='rl-work-medium'>{project.medium}</span>
-              {project.kind === 'copilot' ? (
-                <svg viewBox='0 0 420 220' fill='none'>
-                  <g stroke='currentColor' stroke-width='1.2'>
-                    <path d='M210 28 296 76V158L210 206 124 158V76ZM124 76 210 125 296 76M210 125V206' />
-                    <path d='M167 52 253 101V182M253 52 167 101V182M124 117 210 166 296 117' opacity='.35' />
-                    <circle cx='210' cy='117' r='99' stroke-dasharray='2 7' opacity='.5' />
-                  </g>
-                  <rect x='205' y='120' width='10' height='10' fill='var(--rl-accent)' />
-                </svg>
-              ) : (
-                <svg viewBox='0 0 420 220' fill='none'>
-                  <circle cx='210' cy='110' r='86' stroke='currentColor' stroke-width='1.2' />
-                  <path d='M210 24A86 86 0 0 1 210 196C255 154 255 66 210 24Z' fill='currentColor' opacity='.85' />
-                  <path d='M210 24C165 66 165 154 210 196' stroke='currentColor' />
-                  <ellipse cx='210' cy='110' rx='120' ry='31' stroke='var(--rl-accent)' stroke-width='1.4' transform='rotate(-28 210 110)' />
-                </svg>
-              )}
-            </div>
-            <div class='rl-work-caption'>
-              <div><h3>{project.title}</h3><p>{project.stack}</p></div>
-              <span class='rl-work-arrow' aria-hidden='true'>↗</span>
-            </div>
-          </a>
-        ))}
-      </div>
-    </section>
+    <div class='desk'>
+      <section class='notes' aria-labelledby='notes-title'>
+        <header class='section-line'><h2 id='notes-title'>近期手记</h2><a href='/blog'>全部文章 <span aria-hidden='true'>→</span></a></header>
+        <ol class='note-list'>
+          {entries.slice(0, 4).map(post => <li>
+            <a href={`/blog/${post.id}`}>
+              <time datetime={dateOf(post).toISOString()}>{dateLabel(post)}</time>
+              <h3>{post.data.title}</h3>
+              <span class='note-arrow' aria-hidden='true'>↗</span>
+            </a>
+          </li>)}
+        </ol>
+        <nav class='browse' aria-label='按分类浏览'><span>分类</span><a href='/blog/category/tech'>技术笔记 ↗</a><a href='/blog/category/daily'>日常 ↗</a></nav>
+      </section>
+
+      <section class='workbench' aria-labelledby='work-title'>
+        <header class='section-line'><h2 id='work-title'>作品台</h2><a href='/projects'>全部作品 <span aria-hidden='true'>→</span></a></header>
+        {projects.map((project, index) => <a href={project.links[0].href} class='work'>
+          <span class:list={['work-icon', { 'is-render': index === 1 }]} aria-hidden='true'>
+            {index === 0 ? <svg viewBox='0 0 64 64' fill='none' stroke='currentColor' stroke-width='1.8'><path d='m32 8 20 12v24L32 56 12 44V20Zm0 24 20-12M32 32 12 20m20 12v24M22 14l20 12v12L22 50M42 14 22 26v12l20 12'/></svg> : <svg viewBox='0 0 64 64' fill='none' stroke='currentColor' stroke-width='1.5'><circle cx='32' cy='32' r='20'/><path d='M29 12c20 9 19 31 1 40 29-1 29-38-1-40Z' fill='currentColor'/><ellipse cx='32' cy='32' rx='30' ry='8' transform='rotate(-27 32 32)'/></svg>}
+          </span>
+          <div><h3>{project.name}</h3><p>{index === 0 ? '让 LLM 编辑 Blender 蓝图' : '在 URP 中复现角色光影'}</p></div>
+          <span class='work-arrow' aria-hidden='true'>↗</span>
+        </a>)}
+      </section>
+    </div>
+    <section class='terminal-slot' aria-label='交互式终端'><RhineTerminal /></section>
   </main>
 </PageLayout>
