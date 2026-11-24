@@ -40,6 +40,23 @@ npm run dev
 node --test src/plugins/rehype-article-notes.test.mjs
 ```
 
+## 导出单篇离线 HTML / KM 上传包
+
+如需将已构建的单篇文章保留本站 Rhine 样式并导出为可独立上传（如腾讯 KM HTML 上传）的离线 `zip` 包，可运行：
+
+```bash
+npm run build
+npm run export:km -- nylon-pull-and-tear
+```
+
+也可以直接传入 `--build` 一步完成构建与打包：
+
+```bash
+npm run export:km -- nylon-pull-and-tear --build
+```
+
+脚本位于 `scripts/export-km.mjs`，会自动移除个人博客导航、返回按钮、页脚、底部版权卡片、上下篇翻页、开屏动画与 Live2D，将所有 CSS、字体、WebP 图片、KaTeX 公式字体与视频转为纯英文相对路径打包至 `exports/<slug>-km.zip`（同时生成 `exports/<slug>-km/index.html` 便于本地双击预览），并校验压缩包不超过 KM 的 50 MB 限制。`exports/` 已加入 `.gitignore`，不会污染仓库。
+
 ## 发布
 
 向 `entropy622/entropy622.github.io` 的 `main` 分支提交即可触发 Actions：使用 Bun 安装依赖，执行检查和静态构建，再将 `dist` 发布到 GitHub Pages。

@@ -17,7 +17,7 @@ tags:
 
 ## 一、先看实机效果
 
-先直接一段实机操作视频：
+实机操作视频：
 
 <video controls autoplay loop muted playsinline preload="metadata" style="width:100%;border-radius:6px;" src="/media/nylon-pull-and-tear/01_full_demo.mp4"></video>
 
