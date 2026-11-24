@@ -2,13 +2,14 @@
 /**
  * Export a built Astro blog post (`dist/blog/<slug>/index.html`) into a
  * self-contained, offline-ready HTML folder and ZIP archive suitable for
- * Tencent KM HTML upload (root `index.html`, pure-ASCII filenames, < 50 MB).
+ * Tencent KM HTML upload (root `index.html`, pure-ASCII filenames,
+ * single file <= 20 MB, total ZIP <= 50 MB, zero root-absolute paths).
  *
  * Usage:
- *   npm run export:km -- <slug> [--out <dir>] [--brand <text>] [--sub <text>] [--build] [--max-mb <n>]
+ *   npm run export:km -- <slug> [--out <dir>] [--brand <text>] [--sub <text>] [--build] [--max-mb <n>] [--max-single-mb <n>]
  */
 
-import { execSync } from 'node:child_process'
+import { execFileSync, execSync } from 'node:child_process'
 import {
   copyFileSync,
   existsSync,
@@ -34,6 +35,7 @@ function parseArgs(argv) {
     hudLabel: '技术分享',
     hudCode: 'TECH-REPORT',
     maxMb: 50,
+    maxSingleMb: 20,
     build: false
   }
   for (let i = 0; i < argv.length; i++) {
@@ -45,19 +47,21 @@ function parseArgs(argv) {
     else if (arg === '--hud-label' && argv[i + 1]) opts.hudLabel = argv[++i]
     else if (arg === '--hud-code' && argv[i + 1]) opts.hudCode = argv[++i]
     else if (arg === '--max-mb' && argv[i + 1]) opts.maxMb = Number(argv[++i])
+    else if (arg === '--max-single-mb' && argv[i + 1]) opts.maxSingleMb = Number(argv[++i])
     else if (arg === '-h' || arg === '--help') {
       console.log(
         [
           'Usage: npm run export:km -- <slug> [options]',
           '',
           'Options:',
-          '  --build              Run `npm run build` before exporting',
-          '  --out <dir>          Output directory (default: ./exports)',
-          '  --brand <text>       Top-left header brand text (default: TECH REPORT)',
-          '  --sub <text>         Top-left header subtitle (default: TECHNICAL<br>ARTICLE)',
-          '  --hud-label <text>   Top-left HUD label (default: 技术分享)',
-          '  --hud-code <text>    Top-right HUD code (default: TECH-REPORT)',
-          '  --max-mb <n>         Max allowed ZIP size in MB (default: 50)'
+          '  --build               Run `npm run build` before exporting',
+          '  --out <dir>           Output directory (default: ./exports)',
+          '  --brand <text>        Top-left header brand text (default: TECH REPORT)',
+          '  --sub <text>          Top-left header subtitle (default: TECHNICAL<br>ARTICLE)',
+          '  --hud-label <text>    Top-left HUD label (default: 技术分享)',
+          '  --hud-code <text>     Top-right HUD code (default: TECH-REPORT)',
+          '  --max-mb <n>          Max allowed total ZIP size in MB (default: 50)',
+          '  --max-single-mb <n>   Max allowed single file size in MB (default: 20)'
         ].join('\n')
       )
       process.exit(0)
@@ -83,6 +87,90 @@ function ensureAsciiName(rawName, used) {
 
 function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+function compressVideoToLimit(srcPath, dstPath, maxBytes) {
+  // Probe duration to pick a safe target bitrate (~88% of maxBytes)
+  const targetBytes = Math.floor(maxBytes * 0.85)
+  let durationSec = 15
+  try {
+    const out = execFileSync(
+      'ffprobe',
+      ['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', srcPath],
+      { encoding: 'utf8' }
+    ).trim()
+    const parsed = Number(out)
+    if (Number.isFinite(parsed) && parsed > 0.5) durationSec = parsed
+  } catch {
+    // Fallback to CRF encoding if ffprobe unavailable
+  }
+  const targetKbps = Math.max(1500, Math.floor((targetBytes * 8) / durationSec / 1000))
+  const maxRateKbps = Math.floor(targetKbps * 1.15)
+  const bufSizeKbps = maxRateKbps * 2
+
+  console.log(
+    `Compressing ${basename(srcPath)} (${(statSync(srcPath).size / (1024 * 1024)).toFixed(2)} MB > ${(maxBytes / (1024 * 1024)).toFixed(0)} MB) -> target ~${targetKbps} kbps (keeping native resolution)...`
+  )
+  execFileSync(
+    'ffmpeg',
+    [
+      '-y',
+      '-i',
+      srcPath,
+      '-c:v',
+      'libx264',
+      '-preset',
+      'slow',
+      '-crf',
+      '20',
+      '-maxrate',
+      `${maxRateKbps}k`,
+      '-bufsize',
+      `${bufSizeKbps}k`,
+      '-pix_fmt',
+      'yuv420p',
+      '-movflags',
+      '+faststart',
+      '-an',
+      '-loglevel',
+      'error',
+      dstPath
+    ],
+    { stdio: 'inherit' }
+  )
+
+  // Safety second pass with stricter CRF if still above single-file limit
+  if (statSync(dstPath).size > maxBytes) {
+    const stricterKbps = Math.floor(targetKbps * 0.78)
+    console.log(`Re-tightening ${basename(srcPath)} to ${stricterKbps} kbps to fit strictly under limit...`)
+    execFileSync(
+      'ffmpeg',
+      [
+        '-y',
+        '-i',
+        srcPath,
+        '-c:v',
+        'libx264',
+        '-preset',
+        'slow',
+        '-b:v',
+        `${stricterKbps}k`,
+        '-maxrate',
+        `${Math.floor(stricterKbps * 1.1)}k`,
+        '-bufsize',
+        `${stricterKbps * 2}k`,
+        '-pix_fmt',
+        'yuv420p',
+        '-movflags',
+        '+faststart',
+        '-an',
+        '-loglevel',
+        'error',
+        dstPath
+      ],
+      { stdio: 'inherit' }
+    )
+  }
 }
 
 // --- Minimal standards-compliant ZIP writer (zero external dependencies) ---
@@ -128,11 +216,10 @@ function writeZip(srcDir, zipPath) {
     const data = storeOnly ? raw : deflateRawSync(raw, { level: 6 })
     const crc = crc32(raw)
 
-    // Local file header (30 bytes + filename)
     const lfh = Buffer.alloc(30)
     lfh.writeUInt32LE(0x04034b50, 0)
-    lfh.writeUInt16LE(20, 4) // version needed
-    lfh.writeUInt16LE(0x0800, 6) // UTF-8 flag
+    lfh.writeUInt16LE(20, 4)
+    lfh.writeUInt16LE(0x0800, 6)
     lfh.writeUInt16LE(method, 8)
     lfh.writeUInt16LE(0, 10)
     lfh.writeUInt16LE(0, 12)
@@ -144,7 +231,6 @@ function writeZip(srcDir, zipPath) {
 
     localParts.push(lfh, nameBuf, data)
 
-    // Central directory header (46 bytes + filename)
     const cdh = Buffer.alloc(46)
     cdh.writeUInt32LE(0x02014b50, 0)
     cdh.writeUInt16LE(20, 4)
@@ -204,6 +290,7 @@ function main() {
   const safeSlug = opts.slug.replace(/[^A-Za-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '') || 'article'
   const pkgDir = join(opts.outDir, `${safeSlug}-km`)
   const zipPath = join(opts.outDir, `${safeSlug}-km.zip`)
+  const maxSingleBytes = Math.floor(opts.maxSingleMb * 1024 * 1024)
 
   if (existsSync(pkgDir)) rmSync(pkgDir, { recursive: true, force: true })
   mkdirSync(join(pkgDir, 'assets'), { recursive: true })
@@ -230,12 +317,10 @@ function main() {
   html = html.replace(/<script\b[^>]*src="\/_astro\/(?:ThemeProvider|page)[^"]*"[^>]*><\/script>/g, '')
   html = html.replace(/<link\b[^>]*href="\/_astro\/PFSearch[^"]*"[^>]*>/g, '')
 
+  // KM-iframe safe video/image styling (avoid position:fixed full-page modals inside KM auto-height iframe)
   const extraHeadCss = `<style>
-.km-lightbox{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:hsl(var(--background)/0.88);backdrop-filter:blur(6px);cursor:zoom-out;padding:24px}
-.km-lightbox.open{display:flex}
-.km-lightbox img{max-width:94vw;max-height:92vh;object-fit:contain;border-radius:8px;box-shadow:0 16px 48px rgba(0,0,0,.28)}
-.prose img{cursor:zoom-in}
-.prose video{display:block;width:100%;border-radius:6px;background:#0f172a}
+.prose video{display:block;width:100%;max-width:100%;border-radius:6px;background:#0f172a}
+.prose img{max-width:100%;height:auto}
 </style>`
   html = html.replace('</head>', `${extraHeadCss}\n</head>`)
 
@@ -286,9 +371,8 @@ function main() {
   // 11. Convert remaining inline <script type="module"> to classic IIFE <script> for file:// + KM compatibility
   html = html.replace(/<script type="module">([\s\S]*?)<\/script>/g, (_, code) => `<script>(()=>{${code.trim()}})();</script>`)
 
-  // 12. Inject lightweight offline toast + click-to-zoom lightbox
+  // 12. Inject lightweight offline toast handler for theme switcher
   const offlineHelperJs = `
-<div class="km-lightbox" id="km-lightbox" aria-hidden="true"><img alt="preview" /></div>
 <script>
 (() => {
   document.addEventListener('toast', (e) => {
@@ -300,32 +384,13 @@ function main() {
     document.body.appendChild(el);
     setTimeout(() => el.remove(), e.detail?.time || 2200);
   });
-
-  const box = document.getElementById('km-lightbox');
-  const boxImg = box?.querySelector('img');
-  if (box && boxImg) {
-    document.querySelectorAll('.prose img').forEach((img) => {
-      img.addEventListener('click', () => {
-        boxImg.src = img.currentSrc || img.src;
-        boxImg.alt = img.alt || '';
-        box.classList.add('open');
-        box.setAttribute('aria-hidden', 'false');
-      });
-    });
-    const close = () => {
-      box.classList.remove('open');
-      box.setAttribute('aria-hidden', 'true');
-    };
-    box.addEventListener('click', close);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-  }
 })();
 </script>
 `
   html = html.replace('</body>', `${offlineHelperJs}\n</body>`)
 
   // 13. Bundle CSS files & fonts (pruning redundant KaTeX .woff/.ttf fallbacks when .woff2 exists)
-  const usedCss = new Set()
+  const usedAssets = new Set()
   const usedFonts = new Set()
   const fontMap = new Map()
 
@@ -353,7 +418,7 @@ function main() {
       return `url("${fontMap.get(srcAsset)}")`
     })
 
-    const cssName = ensureAsciiName(basename(srcCss), usedCss)
+    const cssName = ensureAsciiName(basename(srcCss), usedAssets)
     writeFileSync(join(pkgDir, 'assets', cssName), cssText, 'utf8')
     return `./assets/${cssName}`
   }
@@ -362,6 +427,19 @@ function main() {
     if (!href.startsWith('/')) return full
     const newHref = bundleCss(href)
     return full.replace(`href="${href}"`, `href="${newHref}"`)
+  })
+
+  // 13b. Bundle root-absolute SVG sprite icons (`<use href="/icons/code.svg#...">`) into ./assets/
+  const iconMap = new Map()
+  html = html.replace(/(<use\b[^>]*\b(?:xlink:)?href=")(\/[^"#]+)(#[^"]*)?(")/g, (_, p1, iconPath, hash = '', p4) => {
+    if (!iconMap.has(iconPath)) {
+      const srcIcon = join(DIST_DIR, decodeURIComponent(iconPath).replace(/^\/+/, ''))
+      if (!existsSync(srcIcon)) throw new Error(`Missing SVG sprite in dist: ${srcIcon}`)
+      const fname = ensureAsciiName(basename(srcIcon), usedAssets)
+      copyFileSync(srcIcon, join(pkgDir, 'assets', fname))
+      iconMap.set(iconPath, `./assets/${fname}`)
+    }
+    return `${p1}${iconMap.get(iconPath)}${hash}${p4}`
   })
 
   // 14. Bundle images (src + srcset) into ./images/
@@ -395,7 +473,7 @@ function main() {
     return `srcset="${rewritten}"`
   })
 
-  // 15. Bundle <video> / <source> media into ./media/
+  // 15. Bundle <video> / <source> media into ./media/, auto-compressing videos > maxSingleMb (KM 20 MB single-file cap)
   const usedVids = new Set()
   const vidMap = new Map()
 
@@ -405,7 +483,13 @@ function main() {
       const srcVid = join(DIST_DIR, decodeURIComponent(url).replace(/^\/+/, ''))
       if (!existsSync(srcVid)) throw new Error(`Missing media in dist: ${srcVid}`)
       const fname = ensureAsciiName(basename(srcVid), usedVids)
-      copyFileSync(srcVid, join(pkgDir, 'media', fname))
+      const dstVid = join(pkgDir, 'media', fname)
+      const sz = statSync(srcVid).size
+      if (sz > maxSingleBytes && extname(srcVid).toLowerCase() === '.mp4') {
+        compressVideoToLimit(srcVid, dstVid, maxSingleBytes)
+      } else {
+        copyFileSync(srcVid, dstVid)
+      }
       vidMap.set(url, `./media/${fname}`)
     }
     return vidMap.get(url)
@@ -420,12 +504,13 @@ function main() {
   const outHtmlPath = join(pkgDir, 'index.html')
   writeFileSync(outHtmlPath, html, 'utf8')
 
-  // 16. Automated integrity verification
+  // 16. Automated integrity verification (aligned with KM check.py rules)
   const forbidden = [
     'entropy622.github.io',
     'cdn.jsdelivr.net',
     '"/_astro/',
     '"/media/',
+    '"/icons/',
     '/live2d',
     '/tags/',
     '/rss.xml',
@@ -438,8 +523,12 @@ function main() {
   const leaks = forbidden.filter((s) => html.includes(s))
   if (leaks.length) throw new Error(`Forbidden personal-blog/CDN strings remained: ${leaks.join(', ')}`)
 
+  // Verify zero root-absolute src/href paths remain in index.html
+  const absMatches = [...html.matchAll(/(?:src|href)="(\/[a-zA-Z0-9][^"]*)"/g)].map((m) => m[1])
+  if (absMatches.length) throw new Error(`Root-absolute paths remained: ${[...new Set(absMatches)].join(', ')}`)
+
   const relRefs = new Set()
-  for (const m of html.matchAll(/(?:src|href)="(\.\/[^"]+)"/g)) relRefs.add(m[1])
+  for (const m of html.matchAll(/(?:src|href)="(\.\/[^"#]+)(?:#[^"]*)?"/g)) relRefs.add(m[1])
   for (const m of html.matchAll(/srcset="([^"]+)"/g)) {
     for (const part of m[1].split(',')) {
       const tok = part.trim().split(/\s+/)[0]
@@ -455,6 +544,14 @@ function main() {
   const divClose = (bodyNoScript.match(/<\/div>/g) || []).length
   if (divOpen !== divClose) throw new Error(`Unbalanced <div> tags: open=${divOpen}, close=${divClose}`)
 
+  // Verify single-file size limit (KM 20 MB cap)
+  for (const { full, rel } of collectFiles(pkgDir)) {
+    const sz = statSync(full).size
+    if (sz > maxSingleBytes) {
+      throw new Error(`Single file ${rel} (${(sz / (1024 * 1024)).toFixed(2)} MB) exceeds ${opts.maxSingleMb} MB KM limit`)
+    }
+  }
+
   // 17. Create ZIP archive
   if (existsSync(zipPath)) rmSync(zipPath, { force: true })
   const entryCount = writeZip(pkgDir, zipPath)
@@ -464,8 +561,8 @@ function main() {
   console.log(`Slug     : ${opts.slug}`)
   console.log(`Preview  : ${outHtmlPath}`)
   console.log(`ZIP      : ${zipPath}`)
-  console.log(`Size     : ${zipMb.toFixed(2)} MB (limit: ${opts.maxMb} MB)`)
-  console.log(`Entries  : ${entryCount} (CSS=${usedCss.size}, Fonts=${usedFonts.size}, Images=${usedImgs.size}, Media=${usedVids.size})`)
+  console.log(`Size     : ${zipMb.toFixed(2)} MB (limit: ${opts.maxMb} MB, max single: ${opts.maxSingleMb} MB)`)
+  console.log(`Entries  : ${entryCount} (Assets=${usedAssets.size}, Fonts=${usedFonts.size}, Images=${usedImgs.size}, Media=${usedVids.size})`)
 
   if (zipMb > opts.maxMb) {
     console.error(`Warning: ZIP size (${zipMb.toFixed(2)} MB) exceeds ${opts.maxMb} MB limit!`)

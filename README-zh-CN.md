@@ -55,7 +55,7 @@ npm run export:km -- nylon-pull-and-tear
 npm run export:km -- nylon-pull-and-tear --build
 ```
 
-脚本位于 `scripts/export-km.mjs`，会自动移除个人博客导航、返回按钮、页脚、底部版权卡片、上下篇翻页、开屏动画与 Live2D，将所有 CSS、字体、WebP 图片、KaTeX 公式字体与视频转为纯英文相对路径打包至 `exports/<slug>-km.zip`（同时生成 `exports/<slug>-km/index.html` 便于本地双击预览），并校验压缩包不超过 KM 的 50 MB 限制。`exports/` 已加入 `.gitignore`，不会污染仓库。
+脚本位于 `scripts/export-km.mjs`，会自动移除个人博客导航、返回按钮、页脚、底部版权卡片、上下篇翻页、开屏动画与 Live2D，将所有 CSS、字体、SVG 图标雪碧图、WebP 图片、KaTeX 公式字体与视频转为纯英文相对路径打包至 `exports/<slug>-km.zip`（同时生成 `exports/<slug>-km/index.html` 便于本地双击预览），对超过 KM 单文件 20 MB 限制的视频自动调用 `ffmpeg` 保原生分辨率压缩，并校验单文件 ≤ 20 MB、总包 ≤ 50 MB。`exports/` 已加入 `.gitignore`，不会污染仓库。
 
 ## 发布
 
